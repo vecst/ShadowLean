@@ -6,6 +6,7 @@ import RequestProject.ExplicitSpectralRate
 import RequestProject.RpowCorollaries
 import RequestProject.HeadTailZeta
 import RequestProject.SpinFactorCrossNorm
+import RequestProject.DiagonalZeta
 
 open scoped BigOperators
 open scoped Real

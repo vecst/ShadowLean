@@ -36,6 +36,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.partial_sum_decomposition
 #print axioms ResidueSlices.zeta_certified_bounds
 
+-- Diagonal suppression and uniform diagonal estimate
+#print axioms ResidueSlices.diagGap_pos
+#print axioms ResidueSlices.re_pow_le_cos
+#print axioms ResidueSlices.channelRatio_diagonal_bound
+#print axioms ResidueSlices.spectralGap_diagonal_bound
+#print axioms ResidueSlices.diagonal_slice_ratio_bound
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj

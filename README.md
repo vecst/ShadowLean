@@ -80,12 +80,21 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `associator_eq` | Closed-form associator = local rotation packet (tree_indexed_shadow.tex) |
 | `jordan_identity` | Jordan identity (holds for arbitrary bilinear B; symmetry hypothesis retained but unused) |
 
+### `RequestProject/DiagonalZeta.lean` — uniform diagonal suppression
+| Lean declaration | Paper claim |
+|---|---|
+| `diagGap`, `diagGap_pos` | Suppression constant `c_g = (1 − cos(2π/g))/4 > 0` |
+| `re_pow_le_cos` | Nontrivial primitive-root powers have `Re ≤ cos(2π/g)` |
+| `channelRatio_diagonal_bound` | Uniform off-axis suppression on the diagonal: channel ratio`^N ≤ exp(−c_g·N^(1−1/g))` for `1 ≤ n ≤ N` (residue_packetization.tex, Lemma [diag-suppression]) |
+| `spectralGap_diagonal_bound` | The spectral gap obeys the same stretched-exponential bound |
+| `diagonal_slice_ratio_bound` | **Uniform diagonal estimate**: one threshold in `N` gives error `≤ 4(g−1)·exp(−c_g·N^(1−1/g))·n^(−k/g)` for every `1 ≤ n ≤ N` simultaneously |
+
 ## Provenance
 
 - Original construction posted publicly: GitHub `vecst/pasNthRoot` (2016-09-06);
   r/math post `co7o64` (2019).
 - Aristotle (Harmonic) runs: `4a932f3e`, `8ebd5541`, `078c8fcd`, `d1b648d0`,
-  `d5e443bd` — see `ARISTOTLE_SUMMARY.md`. `ExplicitSpectralRate.lean` and
+  `d5e443bd`, `30895d95` — see `ARISTOTLE_SUMMARY.md`. `ExplicitSpectralRate.lean` and
   `RpowCorollaries.lean` were developed and verified locally.
 - Independent third-party audit (build, axiom, claim-correspondence) performed
   2026-07-19 on the initial three-module core: claim status *exact*.
