@@ -89,13 +89,23 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `spectralGap_diagonal_bound` | The spectral gap obeys the same stretched-exponential bound |
 | `diagonal_slice_ratio_bound` | **Uniform diagonal estimate**: one threshold in `N` gives error `≤ 4(g−1)·exp(−c_g·N^(1−1/g))·n^(−k/g)` for every `1 ≤ n ≤ N` simultaneously |
 
+### `RequestProject/ReversedApproximants.lean` — shifted/reversed approximants
+| Lean declaration | Paper claim |
+|---|---|
+| `qIdx`, `epsIdx`, `revA` | Reversal degree `q_N`, endpoint indicator `ε_N`, reversed polynomials `A_N`/`B_N` (residue_slice_rational_approximation.tex) |
+| `revA_eq_slice` | Corrected forward-slice relation, `1 ≤ k < g` (Lemma [forward-slice-relation], repaired per audit finding 7.1) |
+| `revB_eq_slice` | `k = 0` denominator identity with explicit `ε_N` endpoint correction (nonzero iff `g ∣ N`) |
+| `revA_pos` | Strict positivity / pole-freeness of the approximant family on `(0,∞)` |
+| `tendsto_reversed_ratio` | Positive-axis convergence `R_N(x;k,g) → x^(k/g)` |
+
 ## Provenance
 
 - Original construction posted publicly: GitHub `vecst/pasNthRoot` (2016-09-06);
   r/math post `co7o64` (2019).
 - Aristotle (Harmonic) runs: `4a932f3e`, `8ebd5541`, `078c8fcd`, `d1b648d0`,
-  `d5e443bd`, `30895d95` — see `ARISTOTLE_SUMMARY.md`. `ExplicitSpectralRate.lean` and
-  `RpowCorollaries.lean` were developed and verified locally.
+  `d5e443bd`, `30895d95`, `566d2ac1` — see `ARISTOTLE_SUMMARY.md`.
+  `ExplicitSpectralRate.lean` and `RpowCorollaries.lean` were developed and
+  verified locally.
 - Independent third-party audit (build, axiom, claim-correspondence) performed
   2026-07-19 on the initial three-module core: claim status *exact*.
 

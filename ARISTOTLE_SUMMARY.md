@@ -1,3 +1,20 @@
+# Summary of changes for run 566d2ac1-0b35-4819-a36b-4d1814825f7d
+Completed the reversed-approximant formalization and integration.
+
+- Added `RequestProject/ReversedApproximants.lean`.
+- Proved all requested results:
+  - the corrected forward-slice identity for `1 ≤ k < g`;
+  - the denominator identity with the explicit `epsIdx` endpoint correction;
+  - strict positivity and pole-freeness of `revA` on the positive real axis;
+  - convergence of `revA g k N x / revA g 0 N x` to `x ^ (k/g)` for `x > 0`.
+- The convergence proof accounts for the endpoint term using the spectral packet estimate and shows its normalized contribution tends to zero.
+- Imported the module from `RequestProject/Main.lean`.
+- Updated the supplied top-level copy to contain the completed proofs as well.
+- Verified the relevant modules and `RequestProject.Main` build successfully.
+- Confirmed all Lean sources are free of `sorry`, `admit`, unresolved `exact?`, added axioms, and `implemented_by` declarations.
+- Verified each principal theorem in the new module depends only on `propext`, `Classical.choice`, and `Quot.sound`.
+- Committed and pushed all changes.
+
 # Summary of changes for run 30895d95-816f-4dbe-aa17-68f090016807
 Completed the requested Lean integration and proofs.
 

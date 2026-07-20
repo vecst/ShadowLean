@@ -43,6 +43,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.spectralGap_diagonal_bound
 #print axioms ResidueSlices.diagonal_slice_ratio_bound
 
+-- Reversed approximants (corrected endpoint treatment)
+#print axioms ResidueSlices.revA_eq_slice
+#print axioms ResidueSlices.revB_eq_slice
+#print axioms ResidueSlices.revA_pos
+#print axioms ResidueSlices.tendsto_reversed_ratio
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj

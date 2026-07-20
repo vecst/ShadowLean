@@ -7,6 +7,7 @@ import RequestProject.RpowCorollaries
 import RequestProject.HeadTailZeta
 import RequestProject.SpinFactorCrossNorm
 import RequestProject.DiagonalZeta
+import RequestProject.ReversedApproximants
 
 open scoped BigOperators
 open scoped Real
