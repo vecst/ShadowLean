@@ -99,6 +99,16 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `revA_pos` | Strict positivity / pole-freeness of the approximant family on `(0,∞)` |
 | `tendsto_reversed_ratio` | Positive-axis convergence `R_N(x;k,g) → x^(k/g)` |
 
+### `RequestProject/RationalZeta.lean` — rational-exponent diagonal ζ
+| Lean declaration | Paper claim |
+|---|---|
+| `sVal`, `mixedKernel`, `diagZeta` | Rational exponent `s = m + k/g`, mixed kernel `𝒯_{s,N}`, diagonal approximant `Z_N(s)` |
+| `tendsto_tailTerm` | `T_{m,N}(x) → x^(−m)` for `x > 0` |
+| `tendsto_mixedKernel` | `𝒯_{s,N}(x) → x^(−s)` for `x > 0` (pointwise form of Thm. [Uniform approximation]) |
+| `tendsto_diagZeta` | **Diagonal approximation to ζ(s)**: `Z_N(s) → ζ(s)` for rational `s > 1` — the composition theorem completing the flagship chain |
+| `diagZeta_error_bound` | The three-term error estimate: `N^(1−s)/(s−1) + C·N^(2m−1)·2^(−N) + D·N·exp(−c_g·N^(1−1/g))` for all sufficiently large `N` |
+| `real_rpow_tsum_tail_bound`, `headTerm_uniform_bound`, `mixedKernel_diagonal_error` | Supporting estimates: rpow p-series tail; uniform head-term decay; uniform diagonal kernel error |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -110,13 +120,9 @@ are pointwise in a fixed `x` (or `t`) unless stated otherwise.
   approximants; principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]`.
 - The geometric rate for the reversed approximants (combined factor
   `max(ρ, s/(1+s))^N`) — an explicit stretch goal in the source.
-- The rational-exponent diagonal zeta theorem `Z_N(s) → ζ(s)`: its two
-  ingredients (integer head–tail bound; uniform diagonal slice estimate with
-  eventually-satisfied threshold) are certified separately, but no theorem
-  composes them.
-- Uniform recovery `T_{m,N}(x) → x^{−m}` and the mixed head–tail
-  approximation `T_{s,N}(x) → x^{−s}` (the exact identity is certified; these
-  limits are not).
+- The *compact-uniform* forms of `T_{m,N} → x^(−m)` and `𝒯_{s,N} → x^(−s)`
+  (the pointwise limits and the diagonal ζ composition are certified in
+  `RationalZeta.lean`; uniformity on compacts is not).
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.

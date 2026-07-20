@@ -8,6 +8,7 @@ import RequestProject.HeadTailZeta
 import RequestProject.SpinFactorCrossNorm
 import RequestProject.DiagonalZeta
 import RequestProject.ReversedApproximants
+import RequestProject.RationalZeta
 
 open scoped BigOperators
 open scoped Real

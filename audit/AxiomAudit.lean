@@ -50,6 +50,15 @@ import RequestProject.Main
 #print axioms ResidueSlices.revA_pos
 #print axioms ResidueSlices.tendsto_reversed_ratio
 
+-- Rational-exponent diagonal zeta
+#print axioms ResidueSlices.tendsto_tailTerm
+#print axioms ResidueSlices.tendsto_mixedKernel
+#print axioms ResidueSlices.tendsto_diagZeta
+#print axioms ResidueSlices.diagZeta_error_bound
+#print axioms ResidueSlices.real_rpow_tsum_tail_bound
+#print axioms ResidueSlices.headTerm_uniform_bound
+#print axioms ResidueSlices.mixedKernel_diagonal_error
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj
