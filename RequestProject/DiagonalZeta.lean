@@ -183,4 +183,31 @@ theorem diagonal_slice_ratio_bound
               exact mul_le_mul_of_nonneg_left ( spectralGap_diagonal_bound ( by linarith ) hω ( by linarith ) ( by linarith ) ) ( sub_nonneg_of_le ( by norm_cast; linarith ) );
           exact h_bound.trans ( mul_le_mul_of_nonneg_right ( by nlinarith [ show ( g : ℝ ) ≥ 2 by norm_cast, spectralGap_diagonal_bound hg hω hn1 hnN ] ) ( by positivity ) )
 
+/-- The diagonal threshold is met for all sufficiently large `N`: combined
+with `diagonal_slice_ratio_bound`, this yields the paper's unconditional
+"for all sufficiently large `N`" form of the uniform diagonal estimate. -/
+theorem diagonal_threshold_eventually {g : ℕ} (hg : 2 ≤ g) :
+    ∃ N₀ : ℕ, ∀ N ≥ N₀, ((g : ℝ) - 1) *
+      Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))) ≤ 1 / 2 := by
+  have hpos : 0 < diagGap g := diagGap_pos hg
+  have hexp : (0 : ℝ) < 1 - (g : ℝ)⁻¹ := by
+    have h1 : (1 : ℝ) < g := by exact_mod_cast (by linarith : 1 < g)
+    have := inv_lt_one_of_one_lt₀ h1
+    linarith
+  have h1 : Filter.Tendsto (fun N : ℕ => (N : ℝ) ^ (1 - (g : ℝ)⁻¹))
+      Filter.atTop Filter.atTop :=
+    (tendsto_rpow_atTop hexp).comp tendsto_natCast_atTop_atTop
+  have h2 : Filter.Tendsto
+      (fun N : ℕ => Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))))
+      Filter.atTop (nhds 0) :=
+    Real.tendsto_exp_atBot.comp
+      (Filter.tendsto_neg_atTop_atBot.comp (h1.const_mul_atTop hpos))
+  have h3 : Filter.Tendsto
+      (fun N : ℕ => ((g : ℝ) - 1) *
+        Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))))
+      Filter.atTop (nhds 0) := by
+    simpa using h2.const_mul ((g : ℝ) - 1)
+  exact Filter.eventually_atTop.mp
+    (h3.eventually_le_const (by norm_num : (0 : ℝ) < 1 / 2))
+
 end ResidueSlices

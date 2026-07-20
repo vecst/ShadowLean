@@ -78,7 +78,7 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `mul_conj` | Generic-norm relation `x ∘ x̄ = (q_B(x), 0)` |
 | `cross_norm_identity`, `signed_mul_conj` | **Cross-Norm Identity** (cross_norm_identity_shadow.tex, Prop. 1) |
 | `associator_eq` | Closed-form associator = local rotation packet (tree_indexed_shadow.tex) |
-| `jordan_identity` | Jordan identity (holds for arbitrary bilinear B; symmetry hypothesis retained but unused) |
+| `jordan_identity` | Jordan identity, exported for **arbitrary** bilinear B (no symmetry hypothesis — a strengthening discovered during formalization) |
 
 ### `RequestProject/DiagonalZeta.lean` — uniform diagonal suppression
 | Lean declaration | Paper claim |
@@ -87,6 +87,7 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `re_pow_le_cos` | Nontrivial primitive-root powers have `Re ≤ cos(2π/g)` |
 | `channelRatio_diagonal_bound` | Uniform off-axis suppression on the diagonal: channel ratio`^N ≤ exp(−c_g·N^(1−1/g))` for `1 ≤ n ≤ N` (residue_packetization.tex, Lemma [diag-suppression]) |
 | `spectralGap_diagonal_bound` | The spectral gap obeys the same stretched-exponential bound |
+| `diagonal_threshold_eventually` | The diagonal threshold `(g−1)·exp(−c_g·N^(1−1/g)) ≤ ½` holds for all sufficiently large `N` — making the uniform diagonal estimate unconditional in its "eventually" form |
 | `diagonal_slice_ratio_bound` | **Uniform diagonal estimate**: one threshold in `N` gives error `≤ 4(g−1)·exp(−c_g·N^(1−1/g))·n^(−k/g)` for every `1 ≤ n ≤ N` simultaneously |
 
 ### `RequestProject/ReversedApproximants.lean` — shifted/reversed approximants
@@ -97,6 +98,31 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `revB_eq_slice` | `k = 0` denominator identity with explicit `ε_N` endpoint correction (nonzero iff `g ∣ N`) |
 | `revA_pos` | Strict positivity / pole-freeness of the approximant family on `(0,∞)` |
 | `tendsto_reversed_ratio` | Positive-axis convergence `R_N(x;k,g) → x^(k/g)` |
+
+## Not machine-checked (coverage boundary)
+
+For honesty in both directions: the following paper claims are **not**
+certified by any theorem in this repository (boundary confirmed by an
+independent statement-fidelity audit, 2026-07-19). Convergence theorems here
+are pointwise in a fixed `x` (or `t`) unless stated otherwise.
+
+- Compact-uniform convergence of the forward slice ratios or the reversed
+  approximants; principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]`.
+- The geometric rate for the reversed approximants (combined factor
+  `max(ρ, s/(1+s))^N`) — an explicit stretch goal in the source.
+- The rational-exponent diagonal zeta theorem `Z_N(s) → ζ(s)`: its two
+  ingredients (integer head–tail bound; uniform diagonal slice estimate with
+  eventually-satisfied threshold) are certified separately, but no theorem
+  composes them.
+- Uniform recovery `T_{m,N}(x) → x^{−m}` and the mixed head–tail
+  approximation `T_{s,N}(x) → x^{−s}` (the exact identity is certified; these
+  limits are not).
+- From the rational-approximation paper: Padé identification, monotonicity,
+  node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
+  and ray-root pole geometry.
+- Spin factor: bilinearity as exported lemmas, full power-associativity,
+  conjugation as an involution, the inverse formula, and the downstream
+  cross-norm closure and tree-indexed transport theorems.
 
 ## Provenance
 

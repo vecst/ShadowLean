@@ -42,6 +42,7 @@ import RequestProject.Main
 #print axioms ResidueSlices.channelRatio_diagonal_bound
 #print axioms ResidueSlices.spectralGap_diagonal_bound
 #print axioms ResidueSlices.diagonal_slice_ratio_bound
+#print axioms ResidueSlices.diagonal_threshold_eventually
 
 -- Reversed approximants (corrected endpoint treatment)
 #print axioms ResidueSlices.revA_eq_slice

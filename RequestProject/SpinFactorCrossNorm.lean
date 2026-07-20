@@ -111,11 +111,11 @@ theorem mul_self_assoc (x : ℝ × V) :
 
 /-
 **Jordan identity** (`shadow_spin_factor.tex`, Cor. [Jordan identity]):
-`(x∘x)∘(x∘y) = x∘((x∘x)∘y)`. The stated symmetry hypothesis is retained
-from the requested result, although the exact expansion shows that this
-particular identity holds without it.
+`(x∘x)∘(x∘y) = x∘((x∘x)∘y)`. The exact expansion shows this particular
+identity requires no symmetry of `B`, so none is assumed: the discovered
+generalization is exported as stated.
 -/
-theorem jordan_identity (_hB : B.IsSymm) (x y : ℝ × V) :
+theorem jordan_identity (x y : ℝ × V) :
     mul B (mul B x x) (mul B x y) = mul B x (mul B (mul B x x) y) := by
       unfold mul;
       simp +decide [add_comm, add_left_comm, add_assoc, mul_left_comm];
