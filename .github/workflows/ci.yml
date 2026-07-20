@@ -19,8 +19,8 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build
-        run: lake build
+      - name: Build (warnings as errors)
+        run: lake build --wfail
 
       - name: Axiom audit
         run: |

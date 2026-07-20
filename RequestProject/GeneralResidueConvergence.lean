@@ -126,7 +126,7 @@ theorem tendsto_general_slice_ratio_of_dominance
       norm_num [ show ( 1 + t : ℂ ) ≠ 0 by norm_cast; linarith ];
       exact squeeze_zero ( fun _ => norm_nonneg _ ) ( fun N => norm_sum_le _ _ ) ( by simpa using tendsto_finset_sum _ fun x hx => Filter.Tendsto.norm ( h_limit x ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hx |>.1 ) ) ( by aesop ) |>.2 ) );
   convert Complex.continuous_re.continuousAt.tendsto.comp ( h_limit.1.div h_limit.2 _ ) |> ( fun h => h.div_const ( t ^ k : ℝ ) ) using 2 <;> norm_num [ ← h_sums ];
-  rw [ div_div_div_cancel_right₀ ( by norm_cast; positivity ) ] ; norm_cast ; simp +decide [ mul_assoc, mul_comm, mul_left_comm, hg.ne', ht.ne' ] ; ring;
+  rw [ div_div_div_cancel_right₀ ( by norm_cast; positivity ) ] ; norm_cast ; simp +decide [ mul_assoc, mul_comm ] ; ring;
   simp +decide [mul_assoc, mul_comm, mul_left_comm, hg.ne', ht.ne']
 
 /-- The spectral-dominance hypothesis follows automatically for any primitive

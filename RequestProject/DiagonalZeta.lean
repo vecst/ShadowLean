@@ -64,7 +64,7 @@ lemma re_pow_le_cos {g : ℕ} (hg : 2 ≤ g) {ω : ℂ} (hω : IsPrimitiveRoot �
       have h_exp : ∃ m : ℤ, 0 < m ∧ m < g ∧ ω ^ a = Complex.exp (2 * Real.pi * Complex.I * m / g) := by
         refine' ⟨ a * k % g, _, _, _ ⟩ <;> norm_num [ hk.1, ← Complex.exp_nat_mul ];
         · refine' lt_of_le_of_ne ( Int.emod_nonneg _ ( by positivity ) ) ( Ne.symm _ );
-          intro H; have := Int.dvd_of_emod_eq_zero H; simp_all +decide [ Int.gcd_eq_right ] ;
+          intro H; have := Int.dvd_of_emod_eq_zero H; simp_all +decide ;
           -- Since $g \mid a * k$ and $\gcd(k, g) = 1$, it follows that $g \mid a$.
           have h_div : (g : ℤ) ∣ a := by
             exact Int.dvd_of_dvd_mul_left_of_gcd_one this ( by simpa [ Int.gcd_comm ] using hk.2 );
