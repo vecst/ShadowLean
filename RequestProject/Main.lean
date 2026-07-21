@@ -10,6 +10,7 @@ import RequestProject.DiagonalZeta
 import RequestProject.ReversedApproximants
 import RequestProject.RationalZeta
 import RequestProject.CompactUniform
+import RequestProject.ReversedRate
 
 open scoped BigOperators
 open scoped Real

@@ -66,6 +66,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.tendstoUniformlyOn_mixedKernel
 #print axioms ResidueSlices.tendstoUniformlyOn_reversed_ratio
 
+-- Reversed-approximant combined rate
+#print axioms ResidueSlices.combinedRate_mem_unitInterval
+#print axioms ResidueSlices.endpointCorrection_geometric_bound
+#print axioms ResidueSlices.reversed_ratio_geometric_bound
+#print axioms ResidueSlices.reversed_ratio_isBigO
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj

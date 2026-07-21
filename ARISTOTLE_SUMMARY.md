@@ -1,3 +1,50 @@
+# Summary of changes for run 1377ab1f-2b86-4a6c-92b1-f95d3ffd5ab1
+Completed and integrated `RequestProject/ReversedRate.lean`, preserving all requested theorem statements and the exact `epsIdx` endpoint correction. `RequestProject/Main.lean` now imports the new module.
+
+Proved all four principal theorems:
+
+```lean
+theorem ResidueSlices.combinedRate_mem_unitInterval
+    {g : ℕ} (hg : 0 < g) {x : ℝ} (hx : 0 < x) :
+    0 ≤ combinedRate g x ∧ combinedRate g x < 1
+```
+
+```lean
+theorem ResidueSlices.endpointCorrection_geometric_bound
+    {g : ℕ} (hg : 0 < g) {x : ℝ} (hx : 0 < x) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∃ N₀ : ℕ, ∀ N ≥ N₀,
+      |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)|
+        ≤ C * (revT g x / (1 + revT g x)) ^ N
+```
+
+```lean
+theorem ResidueSlices.reversed_ratio_geometric_bound
+    {g k : ℕ} (hg : 0 < g) (hk : k < g) {x : ℝ} (hx : 0 < x) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∃ N₀ : ℕ, ∀ N ≥ N₀,
+      |revA g k N x / revA g 0 N x - x ^ ((k : ℝ) / (g : ℝ))|
+        ≤ C * (combinedRate g x) ^ N
+```
+
+```lean
+theorem ResidueSlices.reversed_ratio_isBigO
+    {g k : ℕ} (hg : 0 < g) (hk : k < g) {x : ℝ} (hx : 0 < x) :
+    (fun N : ℕ => revA g k N x / revA g 0 N x - x ^ ((k : ℝ) / (g : ℝ)))
+      =O[Filter.atTop] (fun N : ℕ => (combinedRate g x) ^ N)
+```
+
+The proofs cover the `k = 0` identity separately, establish geometric decay of the endpoint correction, control the denominator once the correction is at most `1/2`, and combine the forward spectral rate and endpoint rate using their maximum. The relevant `g = 1`, `ρ = 0`, and initial-index boundaries are accommodated without altering the statements.
+
+Verification completed:
+- The new module and `RequestProject.Main` compile under warnings-as-errors.
+- The full project build succeeds.
+- No `sorry`, `admit`, unresolved `exact?`, new axioms, or `implemented_by` declarations remain in `RequestProject`.
+- Each of the four principal theorems depends exactly on the permitted axioms:
+  - `propext`
+  - `Classical.choice`
+  - `Quot.sound`
+
+All changes were committed and pushed in commit `1227e71`.
+
 # Summary of changes for run cef7423d-574b-4e52-95fb-a4b7fecc3699
 Completed the compact-uniform convergence development and integration.
 

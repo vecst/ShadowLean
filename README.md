@@ -118,6 +118,15 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `tendstoUniformlyOn_mixedKernel` | `𝒯_{s,N}(x) → x^(−s)` uniformly on compact `K` — the full Thm. [Uniform approximation of rational powers] |
 | `tendstoUniformlyOn_reversed_ratio` | Reversed approximants `R_N(x;k,g) → x^(k/g)` uniformly on compact `K` (Thm. [Geometric convergence], uniform clause) |
 
+### `RequestProject/ReversedRate.lean` — combined geometric rate
+| Lean declaration | Paper claim |
+|---|---|
+| `revT`, `combinedRate` | The reversal variable `t = (x⁻¹)^(1/g)` and combined rate `R = max(ρ, t/(1+t))`, `ρ = spectralGap g t (exp 2πi/g)` |
+| `combinedRate_mem_unitInterval` | `0 ≤ R < 1` (all boundaries, incl. `g = 1`, `ρ = 0`) |
+| `endpointCorrection_geometric_bound` | The corrected `ε_N` endpoint term decays at rate `r = t/(1+t)` |
+| `reversed_ratio_geometric_bound` | `\|R_N(x;k,g) − x^(k/g)\| ≤ C·R^N` eventually — the paper's `O(max(ρ, t/(1+t))^N)` combined rate |
+| `reversed_ratio_isBigO` | The same, in Mathlib `IsBigO` form at `atTop` |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -127,8 +136,6 @@ compact-uniform additions).
 
 - Principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]` (all convergence
   theorems here are over positive real inputs).
-- The geometric rate for the reversed approximants (combined factor
-  `max(ρ, s/(1+s))^N`) — an explicit stretch goal in the source.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
