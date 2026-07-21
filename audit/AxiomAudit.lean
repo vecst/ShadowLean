@@ -79,6 +79,11 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_pair_intersection
 #print axioms ResidualCertificate.residual_finset_intersection
 #print axioms ResidualCertificate.sqrt_ten_certificate
+#print axioms ResidualCertificate.pow_residual_relative_bound
+#print axioms ResidualCertificate.fractional_residual_relative_bound
+#print axioms ResidualCertificate.residual_positive_enclosure
+#print axioms ResidualCertificate.residual_negative_enclosure
+#print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm

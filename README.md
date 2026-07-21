@@ -140,6 +140,15 @@ values. All statements use natural-power arithmetic only — no `Real.rpow`.
 | `residual_finset_intersection` | Nonempty finite family: `s.sup' L ≤ T ≤ s.inf' U` (empty case excluded via `Finset.Nonempty`) |
 | `sqrt_ten_certificate` | Worked example: `(79/25)² ≤ 10 ≤ (16/5)²`, hence `79/25 ≤ √10 ≤ 16/5` |
 
+Quantitative relative-error bounds (same module, natural-power / no-calculus):
+| Lean declaration | Statement |
+|---|---|
+| `pow_residual_relative_bound` | `\|r^b − 1\| ≤ η < 1` ⟹ `\|r − 1\| ≤ η / (b(1−η))` (via `r^b−1 = (r−1)·∑_{j<b} r^j`) |
+| `fractional_residual_relative_bound` | Generator-facing: residual `\|x^a·A^b − 1\| ≤ η` ⟹ `\|A/T − 1\| ≤ η / (b(1−η))` |
+| `residual_positive_enclosure` | Overshoot (`x^a·A^b ≥ 1`): `A/(1+ε) ≤ T ≤ A`, `ε = η/(b(1−η))` |
+| `residual_negative_enclosure` | Undershoot (`x^a·A^b ≤ 1`), `ε < 1`: `A ≤ T ≤ A/(1−ε)` (positivity of `1−ε` proved, not assumed) |
+| `sqrt_ten_bracket_via_interface` | `31622/10000 ≤ √10 ≤ 31623/10000`, proved *through* `residual_bracket` (`x=1/10, a=1, b=2`) |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**

@@ -1,3 +1,69 @@
+# Summary of changes for run 0e56a7be-91f5-41fc-ba34-4163a77103f0
+Completed and integrated the residual-certificate extension.
+
+Changes:
+- Saved the supplied extension as `RequestProject/ResidualCertificate.lean`, preserving all existing declarations and proofs.
+- Proved all five appended targets without `sorry`, `admit`, or new axioms.
+- The square-root example genuinely invokes `residual_bracket` with `x = 1/10`, `a = 1`, `b = 2`, and `T = Real.sqrt 10`; its endpoint obligations are discharged by exact arithmetic.
+- Imported the module through `RequestProject/Main.lean`.
+- Added all five declarations to `audit/AxiomAudit.lean`.
+- Removed one pre-existing unused simp argument encountered during warnings-as-errors integration.
+
+Final theorem signatures:
+```lean
+theorem ResidualCertificate.pow_residual_relative_bound {r η : ℝ} {b : ℕ}
+    (hr : 0 < r) (hb : 0 < b) (hη0 : 0 ≤ η)
+    (hres : |r ^ b - 1| ≤ η) (hη1 : η < 1) :
+    |r - 1| ≤ η / ((b : ℝ) * (1 - η))
+```
+
+```lean
+theorem ResidualCertificate.fractional_residual_relative_bound
+    {x A T η : ℝ} {a b : ℕ}
+    (hx : 0 < x) (hA : 0 < A) (hT : 0 < T) (hb : 0 < b)
+    (hunit : x ^ a * T ^ b = 1) (hη0 : 0 ≤ η)
+    (hres : |x ^ a * A ^ b - 1| ≤ η) (hη1 : η < 1) :
+    |A / T - 1| ≤ η / ((b : ℝ) * (1 - η))
+```
+
+```lean
+theorem ResidualCertificate.residual_positive_enclosure
+    {x A T η : ℝ} {a b : ℕ}
+    (hx : 0 < x) (hA : 0 < A) (hT : 0 < T) (hb : 0 < b)
+    (hunit : x ^ a * T ^ b = 1) (hη0 : 0 ≤ η)
+    (hres : |x ^ a * A ^ b - 1| ≤ η) (hη1 : η < 1)
+    (hpos : 0 ≤ x ^ a * A ^ b - 1) :
+    A / (1 + η / ((b : ℝ) * (1 - η))) ≤ T ∧ T ≤ A
+```
+
+```lean
+theorem ResidualCertificate.residual_negative_enclosure
+    {x A T η : ℝ} {a b : ℕ}
+    (hx : 0 < x) (hA : 0 < A) (hT : 0 < T) (hb : 0 < b)
+    (hunit : x ^ a * T ^ b = 1) (hη0 : 0 ≤ η)
+    (hres : |x ^ a * A ^ b - 1| ≤ η) (hη1 : η < 1)
+    (hneg : x ^ a * A ^ b - 1 ≤ 0)
+    (hε1 : η / ((b : ℝ) * (1 - η)) < 1) :
+    A ≤ T ∧ T ≤ A / (1 - η / ((b : ℝ) * (1 - η)))
+```
+
+```lean
+theorem ResidualCertificate.sqrt_ten_bracket_via_interface :
+    (31622 : ℝ) / 10000 ≤ Real.sqrt 10 ∧
+      Real.sqrt 10 ≤ 31623 / 10000
+```
+
+Verification:
+- `RequestProject.ResidualCertificate` compiles with warnings treated as errors.
+- `RequestProject.Main` builds successfully.
+- Source scans found no proof placeholders or prohibited declarations in the new module or audit.
+- Each of the five theorems depends exactly on:
+  - `propext`
+  - `Classical.choice`
+  - `Quot.sound`
+
+Committed and pushed as `ff5e940`.
+
 # Summary of changes for run 1377ab1f-2b86-4a6c-92b1-f95d3ffd5ab1
 Completed and integrated `RequestProject/ReversedRate.lean`, preserving all requested theorem statements and the exact `epsIdx` endpoint correction. `RequestProject/Main.lean` now imports the new module.
 
