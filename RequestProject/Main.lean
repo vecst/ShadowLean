@@ -11,6 +11,7 @@ import RequestProject.ReversedApproximants
 import RequestProject.RationalZeta
 import RequestProject.CompactUniform
 import RequestProject.ReversedRate
+import RequestProject.ResidualCertificate
 
 open scoped BigOperators
 open scoped Real

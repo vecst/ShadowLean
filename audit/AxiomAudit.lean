@@ -72,6 +72,14 @@ import RequestProject.Main
 #print axioms ResidueSlices.reversed_ratio_geometric_bound
 #print axioms ResidueSlices.reversed_ratio_isBigO
 
+-- Residual certificate interface (generator-agnostic)
+#print axioms ResidualCertificate.residual_order_lower
+#print axioms ResidualCertificate.residual_order_upper
+#print axioms ResidualCertificate.residual_bracket
+#print axioms ResidualCertificate.residual_pair_intersection
+#print axioms ResidualCertificate.residual_finset_intersection
+#print axioms ResidualCertificate.sqrt_ten_certificate
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj

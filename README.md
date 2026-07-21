@@ -127,6 +127,19 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `reversed_ratio_geometric_bound` | `\|R_N(x;k,g) − x^(k/g)\| ≤ C·R^N` eventually — the paper's `O(max(ρ, t/(1+t))^N)` combined rate |
 | `reversed_ratio_isBigO` | The same, in Mathlib `IsBigO` form at `atTop` |
 
+### `RequestProject/ResidualCertificate.lean` — generator-agnostic certification interface
+A standalone module (imports only Mathlib) giving an order-certificate
+interface for positive fractional powers `T = x^(−a/g)`, usable by any
+generator (binomial slices, Poisson kernels, …) that produces bracketing
+values. All statements use natural-power arithmetic only — no `Real.rpow`.
+| Lean declaration | Statement |
+|---|---|
+| `residual_order_lower` / `residual_order_upper` | From `x^a·A^b ≤ 1` (resp. `≥ 1`) and `x^a·T^b = 1`, deduce `A ≤ T` (resp. `T ≤ A`) |
+| `residual_bracket` | `x^a·L^b ≤ 1 ≤ x^a·U^b` ⟹ `L ≤ T ≤ U` |
+| `residual_pair_intersection` | Two brackets containing `T` intersect to `max Lᵢ ≤ T ≤ min Uᵢ` |
+| `residual_finset_intersection` | Nonempty finite family: `s.sup' L ≤ T ≤ s.inf' U` (empty case excluded via `Finset.Nonempty`) |
+| `sqrt_ten_certificate` | Worked example: `(79/25)² ≤ 10 ≤ (16/5)²`, hence `79/25 ≤ √10 ≤ 16/5` |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
