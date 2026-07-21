@@ -1,3 +1,20 @@
+# Summary of changes for run cef7423d-574b-4e52-95fb-a4b7fecc3699
+Completed the compact-uniform convergence development and integration.
+
+- Replaced `RequestProject/RationalZeta.lean` with the supplied lint-clean version without other changes.
+- Added and completed `RequestProject/CompactUniform.lean`, proving:
+  - the compact uniform spectral-gap bound;
+  - compact-uniform convergence of forward slice ratios;
+  - compact-uniform recovery by `tailTerm`;
+  - compact-uniform convergence of `mixedKernel`;
+  - compact-uniform convergence of reversed approximants.
+- Added supporting proofs for antitonicity of `headTerm` and uniform negligibility of the reversed endpoint correction.
+- Imported `RequestProject.CompactUniform` from `RequestProject/Main.lean`.
+- Removed the remaining unused simp arguments encountered during the build.
+- Verified `RequestProject.CompactUniform` and `RequestProject.Main` build successfully, with no `sorry`, `admit`, unresolved `exact?`, or unused-simp warnings.
+- Verified all five principal CompactUniform theorems depend only on `propext`, `Classical.choice`, and `Quot.sound`.
+- Committed and pushed all changes.
+
 # Summary of changes for run 673d46f8-7b3e-430b-b9cd-8a6f5dc45ca7
 Completed the rational diagonal zeta development and integration.
 

@@ -109,20 +109,26 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `diagZeta_error_bound` | The three-term error estimate: `N^(1−s)/(s−1) + C·N^(2m−1)·2^(−N) + D·N·exp(−c_g·N^(1−1/g))` for all sufficiently large `N` |
 | `real_rpow_tsum_tail_bound`, `headTerm_uniform_bound`, `mixedKernel_diagonal_error` | Supporting estimates: rpow p-series tail; uniform head-term decay; uniform diagonal kernel error |
 
+### `RequestProject/CompactUniform.lean` — compact-uniform convergence
+| Lean declaration | Paper claim |
+|---|---|
+| `exists_uniform_spectralGap` | On compact `K ⊆ (0,∞)`, the subordinate spectral gap is uniformly `< 1` |
+| `tendstoUniformlyOn_slice_ratio` | Forward slice ratios `→ x^(−k/g)` **uniformly** on compact `K ⊆ (0,∞)` (Thm. [slice-ratio], uniform clause) |
+| `tendstoUniformlyOn_tailTerm` | `T_{m,N}(x) → x^(−m)` uniformly on compact `K ⊆ (0,∞)` |
+| `tendstoUniformlyOn_mixedKernel` | `𝒯_{s,N}(x) → x^(−s)` uniformly on compact `K` — the full Thm. [Uniform approximation of rational powers] |
+| `tendstoUniformlyOn_reversed_ratio` | Reversed approximants `R_N(x;k,g) → x^(k/g)` uniformly on compact `K` (Thm. [Geometric convergence], uniform clause) |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
 certified by any theorem in this repository (boundary confirmed by an
-independent statement-fidelity audit, 2026-07-19). Convergence theorems here
-are pointwise in a fixed `x` (or `t`) unless stated otherwise.
+independent statement-fidelity audit, 2026-07-19, and re-checked after the
+compact-uniform additions).
 
-- Compact-uniform convergence of the forward slice ratios or the reversed
-  approximants; principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]`.
+- Principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]` (all convergence
+  theorems here are over positive real inputs).
 - The geometric rate for the reversed approximants (combined factor
   `max(ρ, s/(1+s))^N`) — an explicit stretch goal in the source.
-- The *compact-uniform* forms of `T_{m,N} → x^(−m)` and `𝒯_{s,N} → x^(−s)`
-  (the pointwise limits and the diagonal ζ composition are certified in
-  `RationalZeta.lean`; uniformity on compacts is not).
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.

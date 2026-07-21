@@ -59,6 +59,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.headTerm_uniform_bound
 #print axioms ResidueSlices.mixedKernel_diagonal_error
 
+-- Compact-uniform convergence
+#print axioms ResidueSlices.exists_uniform_spectralGap
+#print axioms ResidueSlices.tendstoUniformlyOn_slice_ratio
+#print axioms ResidueSlices.tendstoUniformlyOn_tailTerm
+#print axioms ResidueSlices.tendstoUniformlyOn_mixedKernel
+#print axioms ResidueSlices.tendstoUniformlyOn_reversed_ratio
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj
