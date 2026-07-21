@@ -12,6 +12,7 @@ import RequestProject.RationalZeta
 import RequestProject.CompactUniform
 import RequestProject.ReversedRate
 import RequestProject.ResidualCertificate
+import RequestProject.SlitPlane
 
 open scoped BigOperators
 open scoped Real

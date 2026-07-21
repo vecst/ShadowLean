@@ -1,3 +1,37 @@
+# Summary of changes for run 500f4a23-42a9-47c2-9519-2613f090825e
+Completed the slit-plane development and integration.
+
+- Added and proved `RequestProject/SlitPlane.lean` (and synchronized the supplied top-level `SlitPlane.lean`).
+- Proved the complex spectral-dominance theorem in the principal sector.
+- Proved principal-branch convergence of the complex residue-slice ratio on `Complex.slitPlane`.
+- Imported `RequestProject.SlitPlane` through `RequestProject/Main.lean`.
+- Added both theorems to `audit/AxiomAudit.lean` while retaining its existing audit entries.
+- Verified the module under warnings-as-errors, built `RequestProject.SlitPlane` and `RequestProject.Main`, and confirmed there are no proof placeholders or prohibited declarations.
+
+Final theorem signatures:
+```lean
+theorem ResidueSlices.norm_one_add_root_mul_lt {g ℓ : ℕ} (hg : 0 < g)
+    (hℓ0 : ℓ ≠ 0) (hℓg : ℓ < g) {s : ℂ} (hs : s ≠ 0)
+    (harg : |s.arg| < Real.pi / (g : ℝ)) :
+    ‖1 + Complex.exp (2 * Real.pi * Complex.I * (ℓ : ℂ) / (g : ℂ)) * s‖
+      < ‖1 + s‖
+```
+
+```lean
+theorem ResidueSlices.tendsto_slice_ratio_cpow {g k : ℕ}
+    (hg : 0 < g) (hk : k < g) {x : ℂ} (hx : x ∈ Complex.slitPlane) :
+    Filter.Tendsto
+      (fun N : ℕ => slice g k N x⁻¹ / slice g 0 N x⁻¹)
+      Filter.atTop (nhds (x ^ ((k : ℂ) / (g : ℂ))))
+```
+
+Axiom dependencies for each theorem are exactly:
+- `propext`
+- `Classical.choice`
+- `Quot.sound`
+
+All changes were committed and pushed in commit `65cf8db`.
+
 # Summary of changes for run 0e56a7be-91f5-41fc-ba34-4163a77103f0
 Completed and integrated the residual-certificate extension.
 

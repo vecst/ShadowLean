@@ -72,6 +72,10 @@ import RequestProject.Main
 #print axioms ResidueSlices.reversed_ratio_geometric_bound
 #print axioms ResidueSlices.reversed_ratio_isBigO
 
+-- Slit-plane (principal-branch complex) convergence
+#print axioms ResidueSlices.norm_one_add_root_mul_lt
+#print axioms ResidueSlices.tendsto_slice_ratio_cpow
+
 -- Residual certificate interface (generator-agnostic)
 #print axioms ResidualCertificate.residual_order_lower
 #print axioms ResidualCertificate.residual_order_upper

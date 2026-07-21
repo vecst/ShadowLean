@@ -149,6 +149,12 @@ Quantitative relative-error bounds (same module, natural-power / no-calculus):
 | `residual_negative_enclosure` | Undershoot (`x^a·A^b ≤ 1`), `ε < 1`: `A ≤ T ≤ A/(1−ε)` (positivity of `1−ε` proved, not assumed) |
 | `sqrt_ten_bracket_via_interface` | `31622/10000 ≤ √10 ≤ 31623/10000`, proved *through* `residual_bracket` (`x=1/10, a=1, b=2`) |
 
+### `RequestProject/SlitPlane.lean` — principal-branch (complex) convergence
+| Lean declaration | Paper claim |
+|---|---|
+| `norm_one_add_root_mul_lt` | Complex spectral dominance in the principal sector: `\|arg s\| < π/g`, `s ≠ 0` ⟹ `\|1 + ω^ℓ s\| < \|1 + s\|` for every `ℓ ≠ 0` |
+| `tendsto_slice_ratio_cpow` | **Principal-branch convergence on the slit plane**: for `x ∈ ℂ∖(−∞,0]`, `slice g k N x⁻¹ / slice g 0 N x⁻¹ → x^(k/g)` (Thm. [Principal-branch convergence]) |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -156,8 +162,9 @@ certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and re-checked after the
 compact-uniform additions).
 
-- Principal-branch (slit-plane) convergence on `ℂ∖(−∞,0]` (all convergence
-  theorems here are over positive real inputs).
+- On the slit plane, only the *forward slice ratio* is certified
+  (`tendsto_slice_ratio_cpow`, pointwise); the reversed/endpoint `A_N/B_N`
+  form over ℂ and *local uniformity* on `ℂ∖(−∞,0]` are not.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
