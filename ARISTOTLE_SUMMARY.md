@@ -1,3 +1,69 @@
+# Summary of changes for run 5b57946b-e256-46d1-8f66-b41bc16ab405
+Added `RequestProject/SlitPlaneReversed.lean` and imported it through `RequestProject/Main.lean`.
+
+Proved Targets 1–5, including all four priority pointwise results. The exact reversed quotient and the special `k = 0` constant-`1` convention were preserved.
+
+Final proved signatures:
+
+```lean
+theorem ResidueSlices.revAComplex_eq_slice {g k N : ℕ} (hg : 0 < g)
+    (hk1 : 1 ≤ k) (hkg : k < g) {x : ℂ} (hx : x ≠ 0) :
+    revAComplex g k N x = x ^ qIdx g N * slice g k N x⁻¹
+```
+
+```lean
+theorem ResidueSlices.revBComplex_eq_slice {g N : ℕ} (hg : 0 < g)
+    (hN : 1 ≤ N) {x : ℂ} (hx : x ≠ 0) :
+    revAComplex g 0 N x =
+      x ^ qIdx g N *
+        (slice g 0 N x⁻¹ -
+          (epsIdx g N : ℂ) * (x⁻¹) ^ (qIdx g N + 1))
+```
+
+```lean
+theorem ResidueSlices.tendsto_endpointCorrection_cpow {g : ℕ}
+    (hg : 2 ≤ g) {x : ℂ} (hx : x ∈ Complex.slitPlane) :
+    Filter.Tendsto
+      (fun N : ℕ =>
+        (epsIdx g N : ℂ) * (x⁻¹) ^ (qIdx g N + 1) /
+          slice g 0 N x⁻¹)
+      Filter.atTop (nhds 0)
+```
+
+```lean
+theorem ResidueSlices.tendsto_reversed_ratio_cpow {g k : ℕ}
+    (hg : 0 < g) (hk : k < g) {x : ℂ}
+    (hx : x ∈ Complex.slitPlane) :
+    Filter.Tendsto
+      (fun N : ℕ => reversedRatioComplex g k N x)
+      Filter.atTop (nhds (x ^ ((k : ℂ) / (g : ℂ))))
+```
+
+```lean
+theorem ResidueSlices.tendstoUniformlyOn_slice_ratio_cpow {g k : ℕ}
+    (hg : 0 < g) (hk : k < g) {K : Set ℂ}
+    (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    TendstoUniformlyOn
+      (fun N x => slice g k N x⁻¹ / slice g 0 N x⁻¹)
+      (fun x => x ^ ((k : ℂ) / (g : ℂ)))
+      Filter.atTop K
+```
+
+Targets 6–7 were attempted but not closed. Their original statements remain preserved in a disabled block rather than being weakened or left as active proof placeholders. Thus all active declarations in the delivered module are free of `sorry` and `admit`.
+
+Added all five proved principal theorems to `audit/AxiomAudit.lean`. Each depends exactly on:
+- `propext`
+- `Classical.choice`
+- `Quot.sound`
+
+Verification completed:
+- `RequestProject/SlitPlaneReversed.lean` passes with warnings treated as errors.
+- `RequestProject/Main.lean` passes with warnings treated as errors.
+- `audit/AxiomAudit.lean` builds and reports the dependencies above.
+- No active `sorry`, `admit`, new axioms, or `implemented_by` declarations remain in the integrated files.
+
+All work was committed and pushed.
+
 # Summary of changes for run 500f4a23-42a9-47c2-9519-2613f090825e
 Completed the slit-plane development and integration.
 

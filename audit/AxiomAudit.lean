@@ -76,6 +76,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.norm_one_add_root_mul_lt
 #print axioms ResidueSlices.tendsto_slice_ratio_cpow
 
+-- Reversed approximant over the slit plane (Targets 1-5; 6-7 disabled/open)
+#print axioms ResidueSlices.revAComplex_eq_slice
+#print axioms ResidueSlices.revBComplex_eq_slice
+#print axioms ResidueSlices.tendsto_endpointCorrection_cpow
+#print axioms ResidueSlices.tendsto_reversed_ratio_cpow
+#print axioms ResidueSlices.tendstoUniformlyOn_slice_ratio_cpow
+
 -- Residual certificate interface (generator-agnostic)
 #print axioms ResidualCertificate.residual_order_lower
 #print axioms ResidualCertificate.residual_order_upper

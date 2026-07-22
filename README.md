@@ -155,6 +155,17 @@ Quantitative relative-error bounds (same module, natural-power / no-calculus):
 | `norm_one_add_root_mul_lt` | Complex spectral dominance in the principal sector: `\|arg s\| < π/g`, `s ≠ 0` ⟹ `\|1 + ω^ℓ s\| < \|1 + s\|` for every `ℓ ≠ 0` |
 | `tendsto_slice_ratio_cpow` | **Principal-branch convergence on the slit plane**: for `x ∈ ℂ∖(−∞,0]`, `slice g k N x⁻¹ / slice g 0 N x⁻¹ → x^(k/g)` (Thm. [Principal-branch convergence]) |
 
+### `RequestProject/SlitPlaneReversed.lean` — reversed approximant over ℂ
+The paper's *actual* approximant `A_N/B_N` on the slit plane (`revAComplex`,
+with the faithful `k=0` cancellation convention — over ℂ the literal `0/0`
+is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
+| Lean declaration | Paper claim |
+|---|---|
+| `revAComplex_eq_slice` / `revBComplex_eq_slice` | Complex reversal identities (numerator; denominator with the `g∣N` endpoint) |
+| `tendsto_endpointCorrection_cpow` | The deleted endpoint term → 0 pointwise on the slit plane (`g ≥ 2`) |
+| `tendsto_reversed_ratio_cpow` | **Reversed approximant convergence**: `reversedRatioComplex g k N x → x^(k/g)` on `ℂ∖(−∞,0]` — the paper's slit-plane theorem for the real approximant |
+| `tendstoUniformlyOn_slice_ratio_cpow` | Forward slice ratio → `x^(k/g)` **uniformly** on compact `K ⊆ ℂ∖(−∞,0]` |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -162,9 +173,12 @@ certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and re-checked after the
 compact-uniform additions).
 
-- On the slit plane, only the *forward slice ratio* is certified
-  (`tendsto_slice_ratio_cpow`, pointwise); the reversed/endpoint `A_N/B_N`
-  form over ℂ and *local uniformity* on `ℂ∖(−∞,0]` are not.
+- Slit-plane local uniformity is certified for the *forward slice ratio*
+  (`tendstoUniformlyOn_slice_ratio_cpow`) but not yet for the reversed
+  `A_N/B_N` approximant: its pointwise convergence is certified
+  (`tendsto_reversed_ratio_cpow`), while the compact-uniform reversed
+  version and the uniform endpoint-suppression lemma (Targets 6–7,
+  disabled in `SlitPlaneReversed.lean`) remain open.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
