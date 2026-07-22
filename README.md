@@ -166,6 +166,17 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendsto_reversed_ratio_cpow` | **Reversed approximant convergence**: `reversedRatioComplex g k N x → x^(k/g)` on `ℂ∖(−∞,0]` — the paper's slit-plane theorem for the real approximant |
 | `tendstoUniformlyOn_slice_ratio_cpow` | Forward slice ratio → `x^(k/g)` **uniformly** on compact `K ⊆ ℂ∖(−∞,0]` |
 
+### `RequestProject/MetallicCutoff.lean` — metallic-ratio recurrence (in progress)
+Deterministic foundation for a selector-controlled heavy-tail experiment, on
+the recurrence `P_{N+1}=δP_N+Q_N, Q_{N+1}=P_N+Q_N`, `R_N=P_N/Q_N`, with the
+silver ratio `u=1+√2` and `B=3+2√2=u²`. Exact-algebra core proved; the
+static-pole and asymptotic targets (residue, uniform moving pole, fixed-point
+error, and the flagship cutoff constant `1/2`) are **not yet certified**.
+| Lean declaration | Statement |
+|---|---|
+| `state_neg_one_even` / `state_neg_one_odd` | Exact parity degeneration at the static pole `δ=−1`: `state(−1)(2m)=(2^m,0)`, `state(−1)(2m+1)=(−2^m,2^m)` |
+| `silver_identities` | `βu=2`, `B=u²`, `B·(3−2√2)=1` — the normalization for every later limit |
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -179,6 +190,11 @@ compact-uniform additions).
   (`tendsto_reversed_ratio_cpow`), while the compact-uniform reversed
   version and the uniform endpoint-suppression lemma (Targets 6–7,
   disabled in `SlitPlaneReversed.lean`) remain open.
+- Metallic-cutoff recurrence: the static-pole residue, the uniform
+  moving-pole estimate, fixed-point existence/uniqueness, the scaled
+  fixed-point error `→ 4u`, and the flagship cutoff constant `→ 1/2`
+  (`MetallicCutoff.lean` Targets 3–8) — not yet certified; only the exact
+  parity/silver algebra (Targets 1–2) is proved.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.

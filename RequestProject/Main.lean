@@ -14,6 +14,7 @@ import RequestProject.ReversedRate
 import RequestProject.ResidualCertificate
 import RequestProject.SlitPlane
 import RequestProject.SlitPlaneReversed
+import RequestProject.MetallicCutoff
 
 open scoped BigOperators
 open scoped Real

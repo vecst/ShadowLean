@@ -96,6 +96,11 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
+-- Metallic-cutoff recurrence (Targets 1-2; 3-8 open, omitted from file)
+#print axioms MetallicCutoff.state_neg_one_even
+#print axioms MetallicCutoff.state_neg_one_odd
+#print axioms MetallicCutoff.silver_identities
+
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm
 #print axioms SpinFactor.mul_conj

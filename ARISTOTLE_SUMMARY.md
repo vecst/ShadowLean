@@ -1,3 +1,47 @@
+# Summary of changes for run c9a773ca-5787-4cb6-be9e-17e118a9663f
+Added `RequestProject/MetallicCutoff.lean`, imported it through `RequestProject/Main.lean`, and added every completed target declaration to `audit/AxiomAudit.lean`.
+
+Completed as real top-level declarations:
+
+```lean
+theorem MetallicCutoff.state_neg_one_even (m : ℕ) :
+    state (-1) (2 * m) = ((2 : ℝ) ^ m, 0)
+```
+
+```lean
+theorem MetallicCutoff.state_neg_one_odd (m : ℕ) :
+    state (-1) (2 * m + 1) = (-((2 : ℝ) ^ m), (2 : ℝ) ^ m)
+```
+
+```lean
+theorem MetallicCutoff.silver_identities :
+    0 < silver ∧
+    beta * silver = 2 ∧
+    spectralBase = silver ^ 2 ∧
+    spectralBase * spectralRatio = 1
+```
+
+Targets left out because they were not completed:
+- Target 3: `ratio_three_closed_form`
+- Target 4: `even_pole_residue`
+- Target 5: `tendsto_even_moving_pole`
+- Target 6: `eventually_unique_even_fixed_point`
+- Target 7: `tendsto_even_fixed_point_error`
+- Target 8: `tendsto_even_pulse_cutoff`
+
+None of these omitted targets is present as a declaration, placeholder, or disabled/commented-out theorem statement in `RequestProject/MetallicCutoff.lean`.
+
+Validation completed:
+- `RequestProject/MetallicCutoff.lean` passes `lake env lean` with warnings treated as errors.
+- The complete project, including `RequestProject.Main`, builds successfully.
+- The completed module and its integration contain no `sorry`, `admit`, `proof_placeholder`, custom axioms, `implemented_by`, or unresolved `exact?`.
+- Axiom audit results for each returned target are exactly:
+  - `MetallicCutoff.state_neg_one_even`: `propext`, `Classical.choice`, `Quot.sound`
+  - `MetallicCutoff.state_neg_one_odd`: `propext`, `Classical.choice`, `Quot.sound`
+  - `MetallicCutoff.silver_identities`: `propext`, `Classical.choice`, `Quot.sound`
+
+All retained changes were committed and pushed.
+
 # Summary of changes for run 5b57946b-e256-46d1-8f66-b41bc16ab405
 Added `RequestProject/SlitPlaneReversed.lean` and imported it through `RequestProject/Main.lean`.
 
