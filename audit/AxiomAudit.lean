@@ -82,6 +82,8 @@ import RequestProject.Main
 #print axioms ResidueSlices.tendsto_endpointCorrection_cpow
 #print axioms ResidueSlices.tendsto_reversed_ratio_cpow
 #print axioms ResidueSlices.tendstoUniformlyOn_slice_ratio_cpow
+#print axioms ResidueSlices.tendstoUniformlyOn_endpointCorrection_cpow
+#print axioms ResidueSlices.tendstoUniformlyOn_reversed_ratio_cpow
 
 -- Residual certificate interface (generator-agnostic)
 #print axioms ResidualCertificate.residual_order_lower

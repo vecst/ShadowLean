@@ -1083,8 +1083,601 @@ theorem tendstoUniformlyOn_slice_ratio_cpow {g k : ℕ}
   · rw [ Metric.tendstoUniformlyOn_iff ];
     exact fun ε hε => Filter.Eventually.of_forall fun N x hx => False.elim <| hK_nonempty ⟨x, hx⟩
 
-/- Targets 6–7 are preserved below but disabled because their compact-uniform endpoint proof remains open.
-Targets 1–5 are fully proved.
+/-- Uniform packet bound for the zeroth slice: on a compact subset of the slit
+plane, `‖ g · slice g 0 N x⁻¹ - (1 + s)^N ‖ ≤ (g-1) ρ^N ‖ 1 + s ‖^N` with a
+uniform spectral gap `ρ < 1`, where `s = (x⁻¹)^(1/g)`.  This mirrors
+`hpacket_complex_0` in the Target 5 proof, uniformized by compactness. -/
+lemma exists_uniform_complexSpectralGap {g : ℕ} (hg : 0 < g)
+    {K : Set ℂ} (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    ∃ ρ : ℝ, 0 ≤ ρ ∧ ρ < 1 ∧ ∀ N : ℕ, ∀ x ∈ K,
+      ‖(g : ℂ) * slice g 0 N x⁻¹ - (1 + (x⁻¹) ^ ((g : ℂ)⁻¹)) ^ N‖
+        ≤ ((g : ℝ) - 1) * ρ ^ N * ‖(1 : ℂ) + (x⁻¹) ^ ((g : ℂ)⁻¹)‖ ^ N := by
+  -- Define sFn x = (x⁻¹)^(1/g)
+  let sFn : ℂ → ℂ := fun x => (x⁻¹) ^ ((g : ℂ)⁻¹)
+  -- ω is a primitive g-th root of unity
+  let ω := Complex.exp (2 * Real.pi * Complex.I / (g : ℂ))
+  have hω : IsPrimitiveRoot ω g := Complex.isPrimitiveRoot_exp g hg.ne'
+  -- Nonzero in slit plane
+  have ne_zero_of_slitPlane : ∀ x ∈ Complex.slitPlane, x ≠ 0 := by
+    intro x hx
+    simp [Complex.slitPlane] at hx
+    rcases hx with hx | hx <;> intro rfl <;> simp_all
+  -- Inverse of slit plane is in slit plane
+  have inv_slitPlane : ∀ x ∈ Complex.slitPlane, x⁻¹ ∈ Complex.slitPlane := by
+    intro x hx
+    simp only [Complex.slitPlane] at hx ⊢
+    have hne : x ≠ 0 := ne_zero_of_slitPlane x hx
+    have hnormSq_pos : 0 < Complex.normSq x := Complex.normSq_pos.mpr hne
+    rcases hx with hx | hx <;> [left;right]
+    · simp [Complex.inv_re]; exact div_pos hx hnormSq_pos
+    · rw [Complex.inv_im]; exact div_ne_zero (neg_ne_zero.mpr hx) (ne_of_gt hnormSq_pos)
+  -- sFn is continuous on K
+  have hsFn_cont : ContinuousOn sFn K := by
+    apply ContinuousOn.cpow
+    · exact continuousOn_id.inv₀ fun x hx => ne_zero_of_slitPlane x (hKslit hx)
+    · exact continuousOn_const
+    · intro x hx
+      exact inv_slitPlane x (hKslit hx)
+  -- imageK is compact
+  let imageK := sFn '' K
+  have himageK_compact : IsCompact imageK := hK.image_of_continuousOn hsFn_cont
+  by_cases hK_empty : K = ∅
+  · use 0; simp [hK_empty]
+  · have hK_nonempty : K.Nonempty := Set.nonempty_iff_ne_empty.mpr hK_empty
+    have himage_nonempty : imageK.Nonempty := hK_nonempty.image _
+    -- For s in imageK, s ≠ 0 and |arg s| < π/g
+    have hs_in_slit : ∀ s ∈ imageK, s ≠ 0 ∧ |s.arg| < Real.pi / (g : ℝ) := by
+      intro s hs
+      obtain ⟨x, hx, rfl⟩ := hs
+      have hslit := inv_slitPlane x (hKslit hx)
+      have hx_ne : x ≠ 0 := ne_zero_of_slitPlane x (hKslit hx)
+      have hs_pow : ((x⁻¹) ^ ((g : ℂ)⁻¹)) ^ g = x⁻¹ := by
+        rw [← Complex.cpow_nat_mul, mul_comm]; norm_num [hg.ne']
+      refine ⟨?_, ?_⟩
+      · aesop
+      · have hs_arg_inner : |Complex.arg (x⁻¹)| < Real.pi := by
+          have hs_arg : |Complex.arg x| < Real.pi := by
+            have hxslit := hKslit hx
+            simp only [Complex.slitPlane, Set.mem_setOf_eq] at hxslit
+            cases hxslit <;> simp_all +decide [ Complex.arg ]
+            · split_ifs <;> norm_num [ abs_lt ]
+              · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+              · linarith
+              · linarith
+            · split_ifs <;> norm_num [ abs_lt ]
+              · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+              · exact ⟨ by linarith [ Real.neg_pi_div_two_le_arcsin ( -x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ), Real.pi_pos ], div_neg_of_neg_of_pos ( neg_neg_of_pos ( lt_of_le_of_ne ‹_› ( Ne.symm ‹_› ) ) ) ( norm_pos_iff.mpr ( show x ≠ 0 from by aesop ) ) ⟩
+              · exact ⟨ div_pos ( neg_pos.mpr ( lt_of_not_ge ‹_› ) ) ( norm_pos_iff.mpr ( by aesop ) ), by linarith [ Real.pi_pos, Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ) ] ⟩
+          rw [ Complex.arg_inv ]
+          split_ifs <;> simp_all +decide [ abs_lt ]
+        have hs_arg_eq : Complex.arg ((x⁻¹) ^ ((g : ℂ)⁻¹)) = Complex.arg (x⁻¹) / (g : ℝ) := by
+          change ((x⁻¹) ^ ((g : ℂ)⁻¹)).arg = Complex.arg (x⁻¹) / (g : ℝ)
+          convert Complex.arg_mul_cos_add_sin_mul_I _ _ using 2
+          rotate_left
+          exact ‖x⁻¹‖ ^ ( ( g : ℝ ) ⁻¹ )
+          · exact Real.rpow_pos_of_pos ( norm_pos_iff.mpr ( inv_ne_zero hx_ne ) ) _
+          · constructor <;> nlinarith [ abs_lt.mp hs_arg_inner, show ( g : ℝ ) ≥ 1 by norm_cast, mul_div_cancel₀ ( Complex.arg (x⁻¹) ) ( by positivity : ( g : ℝ ) ≠ 0 ) ]
+          · rw [ Complex.cpow_def_of_ne_zero ( inv_ne_zero hx_ne ) ]
+            rw [ Complex.log ] ; ring_nf
+            rw [ Complex.exp_eq_exp_re_mul_sin_add_cos ] ; norm_num ; ring_nf
+            rw [ Real.rpow_def_of_pos ( inv_pos.mpr ( norm_pos_iff.mpr hx_ne ) ) ] ; norm_num ; ring_nf
+        rw [ hs_arg_eq, abs_div, abs_of_nonneg ( by positivity : ( 0 : ℝ ) ≤ g ) ] ; gcongr
+    -- Define complexSpectralGap
+    let complexSpectralGap (s : ℂ) : ℝ :=
+      let ω : ℂ := Complex.exp (2 * Real.pi * Complex.I / (g : ℂ))
+      let channels := (Finset.range g \ {0}).image (fun a => ‖1 + s * ω ^ a‖ / ‖1 + s‖)
+      (insert 0 channels).max' ⟨0, Finset.mem_insert_self 0 channels⟩
+    -- Show 1 + s ≠ 0 for s ∈ imageK
+    have h1_plus_s_ne_zero : ∀ s ∈ imageK, (1 + s) ≠ 0 := by
+      intro s hs
+      have ⟨hs_ne, hs_arg⟩ := hs_in_slit s hs
+      intro h
+      have : s = -1 := by linear_combination h
+      rw [this] at hs_arg
+      simp only [Complex.arg_neg_one, abs_of_nonneg Real.pi_pos.le] at hs_arg
+      exact not_le.mpr hs_arg (div_le_self Real.pi_pos.le (by norm_cast))
+    -- Channel ratios are < 1 for s in imageK
+    have hchannel_lt_one : ∀ s ∈ imageK, ∀ a ∈ Finset.range g \ {0}, ‖1 + s * ω ^ a‖ / ‖1 + s‖ < 1 := by
+      intro s hs a ha
+      have ⟨hs_ne, hs_arg⟩ := hs_in_slit s hs
+      have ha' := Finset.mem_sdiff.mp ha
+      have ha_lt := Finset.mem_range.mp ha'.1
+      rw [div_lt_one]
+      · have ha0 := Finset.mem_singleton.not.mp ha'.2
+        have heq : ω ^ a = Complex.exp (2 * Real.pi * Complex.I * (a : ℂ) / (g : ℂ)) := by
+          rw [← Complex.exp_nat_mul]
+          field_simp
+        simp only [heq]
+        simpa [mul_comm] using norm_one_add_root_mul_lt hg ha0 ha_lt hs_ne hs_arg
+      · exact norm_pos_iff.mpr (h1_plus_s_ne_zero s hs)
+    -- Channel ratios are continuous on imageK
+    have hchannel_cont : ∀ a < g, a ≠ 0 → ContinuousOn (fun s : ℂ => ‖1 + s * ω ^ a‖ / ‖1 + s‖) imageK := fun a _ _ =>
+      ContinuousOn.div (Continuous.norm (continuous_const.add (continuous_id.mul continuous_const))).continuousOn
+        (Continuous.norm (continuous_const.add continuous_id)).continuousOn
+        (fun s hs => norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs))
+    -- The spectral gap function is continuous on imageK
+    have hcomplexSpectralGap_cont : ContinuousOn (fun s : ℂ => complexSpectralGap s) imageK := by
+      refine' ContinuousOn.congr _ _
+      exact fun s => (Insert.insert 0 ((Finset.range g \ {0}).image fun a => ‖1 + s * ω ^ a‖ / ‖1 + s‖)).max' ⟨0, Finset.mem_insert_self 0 _⟩
+      · intro s hs
+        refine' tendsto_order.2 ⟨ _, _ ⟩
+        · intro a' ha'
+          simp_all +decide [Finset.max']
+          rcases ha' with ( ha' | ⟨ a, ⟨ ha₁, ha₂ ⟩, ha₃ ⟩ )
+          · exact Or.inl ha'
+          · refine' Or.inr _
+            have h_cont : Filter.Tendsto (fun x : ℂ => ‖1 + x * ω ^ a‖ / ‖1 + x‖) (nhdsWithin s imageK) (nhds (‖1 + s * ω ^ a‖ / ‖1 + s‖)) :=
+              Filter.Tendsto.div ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const) )
+                ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id) )
+                ( norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs) )
+            filter_upwards [ h_cont.eventually ( lt_mem_nhds ha₃ ) ] with x hx using ⟨ a, ⟨ ha₁, ha₂ ⟩, hx ⟩
+        · intro a' ha'
+          simp_all +decide [Finset.max']
+          have h_cont_at : ∀ x < g, x ≠ 0 → ContinuousAt (fun b : ℂ => ‖1 + b * ω ^ x‖ / ‖1 + b‖) s := fun x hx_lt hx_ne =>
+            ContinuousAt.div ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const )
+              ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id )
+              ( norm_ne_zero_iff.mpr <| h1_plus_s_ne_zero s hs )
+          have h_exists_eps : ∀ x < g, x ≠ 0 → ∃ ε > 0, ∀ b, dist b s < ε → ‖1 + b * ω ^ x‖ / ‖1 + b‖ < a' := by
+            intro x hx_lt hx_ne
+            have hchan_at_s : ‖1 + s * ω ^ x‖ / ‖1 + s‖ < a' := ha'.2 _ x hx_lt hx_ne rfl
+            exact Metric.mem_nhds_iff.mp ( ContinuousAt.preimage_mem_nhds ( h_cont_at x hx_lt hx_ne ) ( Iio_mem_nhds hchan_at_s ) )
+          choose! ε hε₁ hε₂ using h_exists_eps
+          by_cases h_empty : Finset.filter (fun x => x ≠ 0) (Finset.range g) = ∅
+          · simp_all +decide
+          · obtain ⟨x₀, hx₀⟩ : ∃ x₀ ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ∀ x ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ε x₀ ≤ ε x := by
+              exact Finset.exists_min_image _ _ ( Finset.nonempty_of_ne_empty h_empty )
+            have hx₀_valid : x₀ < g ∧ x₀ ≠ 0 := by simpa [Finset.mem_filter] using hx₀.1
+            have hε₀_pos : ε x₀ > 0 := hε₁ x₀ hx₀_valid.1 hx₀_valid.2
+            filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (Metric.ball_mem_nhds s hε₀_pos)] with b hb₁ hb₂ a x hx_lt hx_ne hx_eq
+            have hdist : dist b s < ε x₀ := hb₂.out
+            have hx₀_le : ε x₀ ≤ ε x := hx₀.2 x (Finset.mem_filter.mpr ⟨Finset.mem_range.mpr hx_lt, hx_ne⟩)
+            exact hx_eq ▸ hε₂ x hx_lt hx_ne b (hdist.trans_le hx₀_le)
+      · intro s hs
+        rfl
+    -- Use compactness to find max spectral gap
+    obtain ⟨s₀, hs₀⟩ := IsCompact.exists_isMaxOn himageK_compact himage_nonempty hcomplexSpectralGap_cont
+    -- The spectral gap is < 1 for each s in imageK
+    have hspectral_lt_one : ∀ s ∈ imageK, complexSpectralGap s < 1 := by
+      intro s hs
+      simp only [complexSpectralGap]
+      simp_all +decide [Finset.max']
+      exact fun a x hx hx' hx'' => hx''.symm ▸ hchannel_lt_one s hs x hx hx'
+    have hρ_lt_one : complexSpectralGap s₀ < 1 := hspectral_lt_one s₀ hs₀.1
+    -- Nonnegativity of complexSpectralGap
+    have hρ_nonneg : 0 ≤ complexSpectralGap s₀ := by
+      simp only [complexSpectralGap]
+      exact Finset.le_max' _ _ (Finset.mem_insert_self 0 _)
+    -- Use ρ = complexSpectralGap s₀
+    use complexSpectralGap s₀
+    refine ⟨hρ_nonneg, hρ_lt_one, ?_⟩
+    -- Prove the packet bound
+    intro N x hx
+    have hs : sFn x ∈ imageK := Set.mem_image_of_mem sFn hx
+    -- Use roots_of_unity_filter for k=0
+    have hfilter := roots_of_unity_filter (N := N) hg (k := 0) (by linarith) hω (sFn x)
+    have h0 : (0 : ℕ) ∈ Finset.range g := Finset.mem_range.mpr hg
+    rw [← Finset.add_sum_erase _ _ h0] at hfilter
+    simp only [pow_zero, mul_one] at hfilter
+    have hdiff : (g : ℂ) * slice g 0 N ((sFn x) ^ g) - (1 + sFn x) ^ N =
+        ∑ a ∈ (Finset.range g).erase 0, ω ^ (a * (g - 0)) * (1 + sFn x * ω ^ a) ^ N := by
+      linear_combination -hfilter
+    have hs_pow_x : (sFn x) ^ g = x⁻¹ := by
+      rw [← Complex.cpow_nat_mul, mul_comm]; norm_num [hg.ne']
+    rw [hs_pow_x] at hdiff
+    have hsFn_eq : sFn x = (x⁻¹) ^ ((g : ℂ)⁻¹) := rfl
+    rw [hsFn_eq] at hdiff
+    rw [hdiff]
+    refine le_trans (norm_sum_le _ _) ?_
+    have hterm : ∀ a ∈ (Finset.range g).erase 0,
+        ‖ω ^ (a * (g - 0)) * (1 + sFn x * ω ^ a) ^ N‖ ≤
+          complexSpectralGap s₀ ^ N * ‖1 + sFn x‖ ^ N := by
+      intro a ha
+      obtain ⟨ha0, harange⟩ := Finset.mem_erase.mp ha
+      have h1 : ‖ω ^ (a * (g - 0))‖ = 1 := by
+        rw [norm_pow, hω.norm'_eq_one hg.ne', one_pow]
+      rw [norm_mul, h1, one_mul, norm_pow]
+      have hchan : ‖1 + sFn x * ω ^ a‖ / ‖1 + sFn x‖ ≤ complexSpectralGap (sFn x) := by
+        simp only [complexSpectralGap]
+        have hmem : (‖1 + sFn x * ω ^ a‖ / ‖1 + sFn x‖) ∈ Insert.insert 0 ((Finset.range g \ {0}).image fun a => ‖1 + sFn x * ω ^ a‖ / ‖1 + sFn x‖) :=
+          Finset.mem_insert_of_mem (Finset.mem_image.mpr ⟨a, Finset.mem_sdiff.mpr ⟨harange, by simpa using ha0⟩, rfl⟩)
+        exact Finset.le_max' _ _ hmem
+      have hpos : 0 < ‖1 + sFn x‖ := norm_pos_iff.mpr (h1_plus_s_ne_zero (sFn x) hs)
+      have hchan' : ‖1 + sFn x * ω ^ a‖ ≤ complexSpectralGap (sFn x) * ‖1 + sFn x‖ := by
+        rwa [div_le_iff₀ hpos] at hchan
+      have hrho_bound : complexSpectralGap (sFn x) ≤ complexSpectralGap s₀ := hs₀.2 hs
+      have hsg_nonneg : 0 ≤ complexSpectralGap (sFn x) := by
+        simp only [complexSpectralGap]
+        exact Finset.le_max' _ _ (Finset.mem_insert_self 0 _)
+      calc ‖1 + sFn x * ω ^ a‖ ^ N ≤ (complexSpectralGap (sFn x) * ‖1 + sFn x‖) ^ N := pow_le_pow_left₀ (norm_nonneg _) hchan' N
+        _ ≤ (complexSpectralGap s₀ * ‖1 + sFn x‖) ^ N := by gcongr
+        _ = complexSpectralGap s₀ ^ N * ‖1 + sFn x‖ ^ N := mul_pow (complexSpectralGap s₀) ‖1 + sFn x‖ N
+    refine le_trans (Finset.sum_le_card_nsmul _ _ _ hterm) ?_
+    rw [Finset.card_erase_of_mem (Finset.mem_range.mpr hg), Finset.card_range, nsmul_eq_mul]
+    rw [Nat.cast_sub hg, Nat.cast_one, mul_assoc]
+
+/-- Uniform lower bound on the zeroth-slice denominator over a compact subset of
+the slit plane.  Mirrors the denominator control used in Target 5 with the
+uniform complex spectral gap. -/
+lemma sliceZero_uniform_lower {g : ℕ} (hg : 2 ≤ g)
+    {K : Set ℂ} (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    ∃ c : ℝ, 0 < c ∧ ∃ N₀ : ℕ, ∀ N ≥ N₀, ∀ x ∈ K,
+      c * ‖(1 : ℂ) + (x⁻¹) ^ ((g : ℂ)⁻¹)‖ ^ N ≤ ‖slice g 0 N x⁻¹‖ := by
+  obtain ⟨ρ, hρ0, hρ1, hpack⟩ :=
+    exists_uniform_complexSpectralGap (show 0 < g by omega) hK hKslit
+  have hg1_nonneg : (0 : ℝ) ≤ (g : ℝ) - 1 := by
+    have : (1 : ℝ) ≤ (g : ℝ) := by exact_mod_cast Nat.one_le_of_lt hg
+    linarith
+  have hgR_pos : (0 : ℝ) < (g : ℝ) := by
+    have : (0 : ℕ) < g := by omega
+    exact_mod_cast this
+  -- eventually (g-1) ρ^N ≤ 1/2
+  have hlim : Filter.Tendsto (fun N : ℕ => ((g : ℝ) - 1) * ρ ^ N) Filter.atTop (nhds 0) := by
+    simpa using tendsto_const_nhds.mul (tendsto_pow_atTop_nhds_zero_of_lt_one hρ0 hρ1)
+  obtain ⟨N₀, hN₀⟩ :=
+    Filter.eventually_atTop.mp (hlim.eventually (ge_mem_nhds (by norm_num : (0 : ℝ) < 1 / 2)))
+  refine ⟨1 / (2 * g), by positivity, N₀, ?_⟩
+  intro N hN x hx
+  set s : ℂ := (x⁻¹) ^ ((g : ℂ)⁻¹) with hs
+  have hpk := hpack N x hx
+  rw [← hs] at hpk
+  have hg0 : ((g : ℝ) - 1) * ρ ^ N ≤ 1 / 2 := hN₀ N hN
+  have h1s_nonneg : (0 : ℝ) ≤ ‖(1 : ℂ) + s‖ ^ N := by positivity
+  -- reverse triangle inequality
+  have hrt := norm_sub_norm_le (((1 : ℂ) + s) ^ N) ((g : ℂ) * slice g 0 N x⁻¹)
+  rw [norm_pow] at hrt
+  have hpk' : ‖((1 : ℂ) + s) ^ N - (g : ℂ) * slice g 0 N x⁻¹‖
+      ≤ ((g : ℝ) - 1) * ρ ^ N * ‖(1 : ℂ) + s‖ ^ N := by
+    rw [norm_sub_rev]; exact hpk
+  have hgslice : (g : ℝ) * ‖slice g 0 N x⁻¹‖ = ‖(g : ℂ) * slice g 0 N x⁻¹‖ := by
+    rw [norm_mul, Complex.norm_natCast]
+  have hlb : ‖(1 : ℂ) + s‖ ^ N - ((g : ℝ) - 1) * ρ ^ N * ‖(1 : ℂ) + s‖ ^ N
+      ≤ (g : ℝ) * ‖slice g 0 N x⁻¹‖ := by
+    rw [hgslice]; linarith [hrt, hpk']
+  have hhalf : (1 / 2 : ℝ) * ‖(1 : ℂ) + s‖ ^ N
+      ≤ ‖(1 : ℂ) + s‖ ^ N - ((g : ℝ) - 1) * ρ ^ N * ‖(1 : ℂ) + s‖ ^ N := by
+    nlinarith [hg0, h1s_nonneg]
+  have hfinal : (1 / 2 : ℝ) * ‖(1 : ℂ) + s‖ ^ N ≤ (g : ℝ) * ‖slice g 0 N x⁻¹‖ :=
+    le_trans hhalf hlb
+  have key : ‖(1 : ℂ) + s‖ ^ N ≤ 2 * (g : ℝ) * ‖slice g 0 N x⁻¹‖ := by nlinarith [hfinal]
+  calc 1 / (2 * (g : ℝ)) * ‖(1 : ℂ) + s‖ ^ N
+      ≤ 1 / (2 * (g : ℝ)) * (2 * (g : ℝ) * ‖slice g 0 N x⁻¹‖) := by
+        apply mul_le_mul_of_nonneg_left key (by positivity)
+    _ = ‖slice g 0 N x⁻¹‖ := by field_simp
+
+/-- Uniform bound on the endpoint numerator over a compact subset of the slit
+plane.  Mirrors the numerator bound `hnum_bound` in the pointwise Target 3. -/
+lemma endpointNumerator_uniform_bound {g : ℕ} (hg : 2 ≤ g)
+    {K : Set ℂ} (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    ∃ D : ℝ, 0 ≤ D ∧ ∀ N : ℕ, ∀ x ∈ K,
+      ‖(epsIdx g N : ℂ)‖ * ‖(x⁻¹) ^ (qIdx g N + 1)‖
+        ≤ D * ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖ ^ N := by
+  have hg_pos : 0 < g := by omega
+  have ne_zero_of_slitPlane : ∀ x ∈ Complex.slitPlane, x ≠ 0 := by
+    intro x hx
+    simp [Complex.slitPlane] at hx
+    rcases hx with hx | hx <;> intro rfl <;> simp_all
+  have inv_slitPlane : ∀ x ∈ Complex.slitPlane, x⁻¹ ∈ Complex.slitPlane := by
+    intro x hx
+    simp only [Complex.slitPlane] at hx ⊢
+    have hne : x ≠ 0 := ne_zero_of_slitPlane x hx
+    have hnormSq_pos : 0 < Complex.normSq x := Complex.normSq_pos.mpr hne
+    rcases hx with hx | hx <;> [left; right]
+    · simp [Complex.inv_re]; exact div_pos hx hnormSq_pos
+    · rw [Complex.inv_im]; exact div_ne_zero (neg_ne_zero.mpr hx) (ne_of_gt hnormSq_pos)
+  -- t(x) = ‖(x⁻¹)^(1/g)‖ is continuous on K, hence bounded above by some T
+  have hsFn_cont : ContinuousOn (fun x : ℂ => ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖) K := by
+    apply ContinuousOn.norm
+    apply ContinuousOn.cpow
+    · exact continuousOn_id.inv₀ fun x hx => ne_zero_of_slitPlane x (hKslit hx)
+    · exact continuousOn_const
+    · intro x hx
+      have h := inv_slitPlane x (hKslit hx)
+      simp only [Complex.slitPlane, Set.mem_setOf_eq] at h ⊢
+      exact h
+  obtain ⟨T, hT⟩ := hK.bddAbove_image hsFn_cont
+  refine ⟨(max 1 T) ^ g, by positivity, ?_⟩
+  intro N x hx
+  set s : ℂ := (x⁻¹) ^ ((g : ℂ)⁻¹) with hs_def
+  set t : ℝ := ‖s‖ with ht_def
+  have ht_nonneg : 0 ≤ t := norm_nonneg _
+  have hx_ne_zero : x ≠ 0 := ne_zero_of_slitPlane x (hKslit hx)
+  have hs_pow : s ^ g = x⁻¹ := by
+    rw [hs_def, ← Complex.cpow_nat_mul, mul_comm]; norm_num [hg_pos.ne']
+  -- t ≤ T (from the compact upper bound)
+  have ht_le_T : t ≤ T := by
+    have : ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖ ≤ T := hT (Set.mem_image_of_mem _ hx)
+    rwa [← hs_def, ← ht_def] at this
+  -- endpoint numerator norm bound, mirroring Target 3
+  have h_endpoint_bound : ‖(x⁻¹) ^ (qIdx g N + 1)‖ ≤ max 1 t ^ g * t ^ N := by
+    rw [← hs_pow, ← pow_mul, norm_pow, ← ht_def]
+    have h_exp : g * (qIdx g N + 1) ≥ N := by
+      simp only [qIdx]
+      rcases N with _ | N
+      · norm_num
+      · simp only [Nat.add_sub_cancel]
+        have : g * ((N / g) + 1) = g * (N / g) + g := by ring
+        rw [this]
+        linarith [Nat.div_add_mod N g, Nat.mod_lt N hg_pos]
+    have h_exp2 : g * (qIdx g N + 1) ≤ N + g := by
+      simp only [qIdx]
+      rcases N with _ | N
+      · simp
+      · simp only [Nat.add_sub_cancel]
+        have : g * ((N / g) + 1) = g * (N / g) + g := by ring
+        rw [this]
+        linarith [Nat.div_mul_le_self N g, Nat.mod_lt N hg_pos]
+    by_cases ht_le_one : t ≤ 1
+    · have hmax : max 1 t = 1 := by rw [max_eq_left ht_le_one]
+      rw [hmax]
+      norm_num
+      exact pow_le_pow_of_le_one ht_nonneg ht_le_one h_exp
+    · push_neg at ht_le_one
+      have h_max : max 1 t = t := by rw [max_eq_right (le_of_lt ht_le_one)]
+      rw [h_max]
+      have ht_le_one' : 1 ≤ t := le_of_lt ht_le_one
+      calc t ^ (g * (qIdx g N + 1)) ≤ t ^ (N + g) := pow_le_pow_right₀ ht_le_one' h_exp2
+        _ = t ^ N * t ^ g := by ring
+        _ = t ^ g * t ^ N := by ring
+  have h_eps_bound : ‖(epsIdx g N : ℂ)‖ ≤ 1 := by
+    simp [epsIdx]; split_ifs <;> norm_num
+  -- combine
+  have hmax_mono : max 1 t ^ g ≤ max 1 T ^ g := by
+    apply pow_le_pow_left₀ (by positivity)
+    exact max_le_max (le_refl _) ht_le_T
+  calc ‖(epsIdx g N : ℂ)‖ * ‖(x⁻¹) ^ (qIdx g N + 1)‖
+      ≤ 1 * (max 1 t ^ g * t ^ N) := by
+        apply mul_le_mul h_eps_bound h_endpoint_bound (norm_nonneg _) (by positivity)
+    _ = max 1 t ^ g * t ^ N := by ring
+    _ ≤ max 1 T ^ g * t ^ N := by
+        apply mul_le_mul_of_nonneg_right hmax_mono (by positivity)
+    _ = max 1 T ^ g * ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖ ^ N := by rw [ht_def, hs_def]
+
+/-- Uniform contraction ratio for the endpoint channel: on a compact subset of
+the slit plane, `‖s‖ ≤ ρ ‖ 1 + s ‖` with `ρ < 1`, where `s = (x⁻¹)^(1/g)`.
+Mirrors `hnorm_1s_gt_t` in the pointwise Target 3, uniformized by compactness. -/
+lemma endpointRatio_uniform_lt_one {g : ℕ} (hg : 2 ≤ g)
+    {K : Set ℂ} (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    ∃ ρ : ℝ, 0 ≤ ρ ∧ ρ < 1 ∧ ∀ x ∈ K,
+      ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖ ≤ ρ * ‖(1 : ℂ) + (x⁻¹) ^ ((g : ℂ)⁻¹)‖ := by
+  -- Define the ratio function f(x) = ‖s‖ / ‖1 + s‖ where s = (x⁻¹)^(1/g)
+  set f := fun x : ℂ => ‖(x⁻¹) ^ ((g : ℂ)⁻¹)‖ / ‖1 + (x⁻¹) ^ ((g : ℂ)⁻¹)‖ with hf_def
+  -- Show that f(x) < 1 for each x in K (pointwise)
+  have hf_lt_one : ∀ x ∈ K, f x < 1 := by
+    intro x hx
+    have hxslit : x ∈ Complex.slitPlane := hKslit hx
+    -- x ≠ 0 and x⁻¹ ≠ 0
+    have hx_ne_zero : x ≠ 0 := by
+      simp only [Complex.slitPlane] at hxslit
+      rcases hxslit with hxslit | hxslit
+      · exact fun h => hxslit.ne' (h.symm ▸ by simp)
+      · exact fun h => hxslit (h.symm ▸ by simp)
+    -- s = (x⁻¹)^(1/g)
+    set s := (x⁻¹) ^ ((g : ℂ)⁻¹)
+    have hs_ne_zero : s ≠ 0 := by
+      show (x⁻¹) ^ ((g : ℂ)⁻¹) ≠ 0
+      rw [Complex.cpow_def_of_ne_zero (inv_ne_zero hx_ne_zero)]
+      exact Complex.exp_ne_zero _
+    -- |arg s| < π/g
+    have hxinv_slit : x⁻¹ ∈ Complex.slitPlane := by
+      simp only [Complex.slitPlane] at hxslit ⊢
+      rcases hxslit with hxslit | hxslit
+      · left
+        rw [Complex.inv_re]
+        apply div_pos hxslit
+        exact Complex.normSq_pos.mpr (fun h => hxslit.ne' (h.symm ▸ by simp))
+      · right
+        intro h
+        have := Complex.inv_im x
+        rw [this] at h
+        have h' : x.im = 0 ∨ x = 0 := by simpa using h
+        rcases h' with h' | h'
+        · exact hxslit h'
+        · simp [h'] at hxslit
+    have hs_arg : |s.arg| < Real.pi / (g : ℝ) := by
+      have hs_arg_inner : |Complex.arg (x⁻¹)| < Real.pi := by
+        have hs_arg : |Complex.arg x| < Real.pi := by
+          cases hxslit <;> simp_all +decide [ Complex.arg ]
+          · split_ifs <;> norm_num [ abs_lt ]
+            · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+            · linarith
+            · linarith
+          · split_ifs <;> norm_num [ abs_lt ]
+            · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+            · exact ⟨ by linarith [ Real.neg_pi_div_two_le_arcsin ( -x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ), Real.pi_pos ], div_neg_of_neg_of_pos ( neg_neg_of_pos ( lt_of_le_of_ne ‹_› ( Ne.symm ‹_› ) ) ) ( norm_pos_iff.mpr ( show x ≠ 0 from by aesop ) ) ⟩
+            · exact ⟨ div_pos ( neg_pos.mpr ( lt_of_not_ge ‹_› ) ) ( norm_pos_iff.mpr ( by aesop ) ), by linarith [ Real.pi_pos, Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ) ] ⟩
+        rw [ Complex.arg_inv ]
+        split_ifs <;> simp_all +decide [ abs_lt ]
+      have hs_arg_eq : s.arg = Complex.arg (x⁻¹) / (g : ℝ) := by
+        change ((x⁻¹) ^ ((g : ℂ)⁻¹)).arg = Complex.arg (x⁻¹) / (g : ℝ)
+        convert Complex.arg_mul_cos_add_sin_mul_I _ _ using 2
+        rotate_left
+        exact ‖x⁻¹‖ ^ ( ( g : ℝ ) ⁻¹ )
+        · exact Real.rpow_pos_of_pos ( norm_pos_iff.mpr ( inv_ne_zero hx_ne_zero ) ) _
+        · constructor <;> nlinarith [ abs_lt.mp hs_arg_inner, show ( 1 : ℝ ) ≤ g by norm_cast; linarith, mul_div_cancel₀ ( Complex.arg (x⁻¹) ) ( by positivity : ( g : ℝ ) ≠ 0 ) ]
+        · rw [ Complex.cpow_def_of_ne_zero ( inv_ne_zero hx_ne_zero ) ]
+          rw [ Complex.log ] ; ring_nf
+          rw [ Complex.exp_eq_exp_re_mul_sin_add_cos ] ; norm_num ; ring_nf
+          rw [ Real.rpow_def_of_pos ( inv_pos.mpr ( norm_pos_iff.mpr hx_ne_zero ) ) ] ; norm_num ; ring_nf
+      rw [ hs_arg_eq, abs_div, abs_of_nonneg ( by positivity : ( 0 : ℝ ) ≤ g ) ] ; gcongr
+    -- Re(s) > 0 implies ‖s‖ < ‖1 + s‖
+    have hs_re_pos : 0 < s.re := by
+      have hcos_pos : Real.cos s.arg > 0 := by
+        apply Real.cos_pos_of_mem_Ioo
+        constructor <;> nlinarith [abs_lt.mp hs_arg, Real.pi_pos, show (g : ℝ) ≥ 2 by norm_cast,
+          mul_div_cancel₀ (Real.pi : ℝ) (by positivity : (g : ℝ) ≠ 0)]
+      calc 0 < ‖s‖ * Real.cos s.arg := by exact mul_pos (norm_pos_iff.mpr hs_ne_zero) hcos_pos
+        _ = s.re := by rw [Complex.norm_mul_cos_arg]
+    have hnorm_1s_gt_t : ‖s‖ < ‖1 + s‖ := by
+      have h1 : ‖1 + s‖ ^ 2 = 1 + ‖s‖ ^ 2 + 2 * s.re := by
+        simp [Complex.normSq_add, Complex.sq_norm]
+      have h3 : ‖1 + s‖ ^ 2 > ‖s‖ ^ 2 := by nlinarith
+      nlinarith [norm_nonneg (1 + s)]
+    rw [hf_def]
+    have hnorm_pos : 0 < ‖1 + s‖ := by nlinarith [norm_nonneg s]
+    rw [div_lt_one hnorm_pos]
+    exact hnorm_1s_gt_t
+  -- The denominator ‖1 + s‖ is bounded below on K by compactness
+  -- We need to show that inf_{x ∈ K} ‖1 + (x⁻¹)^(1/g)‖ > 0
+  -- and then use compactness for the supremum of the ratio
+  -- First, show the denominator is never zero
+  have hdenom_ne_zero : ∀ x ∈ K, ‖1 + (x⁻¹) ^ ((g : ℂ)⁻¹)‖ ≠ 0 := by
+    intro x hx
+    have hxslit : x ∈ Complex.slitPlane := hKslit hx
+    set s := (x⁻¹) ^ ((g : ℂ)⁻¹)
+    have hx_ne_zero : x ≠ 0 := by
+      simp only [Complex.slitPlane] at hxslit
+      rcases hxslit with hxslit | hxslit
+      · exact fun h => hxslit.ne' (by simp [h])
+      · exact fun h => hxslit (by simp [h])
+    have hs_ne_zero : s ≠ 0 := by
+      show (x⁻¹) ^ ((g : ℂ)⁻¹) ≠ 0
+      rw [Complex.cpow_def_of_ne_zero (inv_ne_zero hx_ne_zero)]
+      exact Complex.exp_ne_zero _
+    have hxinv_slit : x⁻¹ ∈ Complex.slitPlane := by
+      simp only [Complex.slitPlane] at hxslit ⊢
+      rcases hxslit with hxslit | hxslit
+      · left; rw [Complex.inv_re]; apply div_pos hxslit; exact Complex.normSq_pos.mpr (fun h => hxslit.ne' (by simp [h]))
+      · right; intro h; have := Complex.inv_im x; rw [this] at h
+        have h' : x.im = 0 ∨ x = 0 := by simpa using h
+        rcases h' with h' | h'; exacts [hxslit h', by simp [h'] at hxslit]
+    have hs_arg : |s.arg| < Real.pi / (g : ℝ) := by
+      have hs_arg_inner : |Complex.arg (x⁻¹)| < Real.pi := by
+        have hs_arg : |Complex.arg x| < Real.pi := by
+          cases hxslit <;> simp_all +decide [ Complex.arg ]
+          · split_ifs <;> norm_num [ abs_lt ]
+            · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+            · linarith
+            · linarith
+          · split_ifs <;> norm_num [ abs_lt ]
+            · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
+            · exact ⟨ by linarith [ Real.neg_pi_div_two_le_arcsin ( -x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ), Real.pi_pos ], div_neg_of_neg_of_pos ( neg_neg_of_pos ( lt_of_le_of_ne ‹_› ( Ne.symm ‹_› ) ) ) ( norm_pos_iff.mpr ( show x ≠ 0 from by aesop ) ) ⟩
+            · exact ⟨ div_pos ( neg_pos.mpr ( lt_of_not_ge ‹_› ) ) ( norm_pos_iff.mpr ( by aesop ) ), by linarith [ Real.pi_pos, Real.arcsin_le_pi_div_two ( -x.im / ‖x‖ ) ] ⟩
+        rw [ Complex.arg_inv ]
+        split_ifs <;> simp_all +decide [ abs_lt ]
+      have hs_arg_eq : s.arg = Complex.arg (x⁻¹) / (g : ℝ) := by
+        change ((x⁻¹) ^ ((g : ℂ)⁻¹)).arg = Complex.arg (x⁻¹) / (g : ℝ)
+        convert Complex.arg_mul_cos_add_sin_mul_I _ _ using 2
+        rotate_left
+        exact ‖x⁻¹‖ ^ ( ( g : ℝ ) ⁻¹ )
+        · exact Real.rpow_pos_of_pos ( norm_pos_iff.mpr ( inv_ne_zero hx_ne_zero ) ) _
+        · constructor <;> nlinarith [ abs_lt.mp hs_arg_inner, show ( 1 : ℝ ) ≤ g by norm_cast; linarith, mul_div_cancel₀ ( Complex.arg (x⁻¹) ) ( by positivity : ( g : ℝ ) ≠ 0 ) ]
+        · rw [ Complex.cpow_def_of_ne_zero ( inv_ne_zero hx_ne_zero ) ]
+          rw [ Complex.log ] ; ring_nf
+          rw [ Complex.exp_eq_exp_re_mul_sin_add_cos ] ; norm_num ; ring_nf
+          rw [ Real.rpow_def_of_pos ( inv_pos.mpr ( norm_pos_iff.mpr hx_ne_zero ) ) ] ; norm_num ; ring_nf
+      rw [ hs_arg_eq, abs_div, abs_of_nonneg ( by positivity : ( 0 : ℝ ) ≤ g ) ] ; gcongr
+    have hs_re_pos : 0 < s.re := by
+      have hcos_pos : Real.cos s.arg > 0 := by
+        apply Real.cos_pos_of_mem_Ioo
+        constructor <;> nlinarith [abs_lt.mp hs_arg, Real.pi_pos, show (g : ℝ) ≥ 2 by norm_cast,
+          mul_div_cancel₀ (Real.pi : ℝ) (by positivity : (g : ℝ) ≠ 0)]
+      calc 0 < ‖s‖ * Real.cos s.arg := by exact mul_pos (norm_pos_iff.mpr hs_ne_zero) hcos_pos
+        _ = s.re := by rw [Complex.norm_mul_cos_arg]
+    have h1s_ne_zero : 1 + s ≠ 0 := by
+      intro h0
+      have hs_eq : s = -1 := by linear_combination h0
+      simp [hs_eq] at hs_re_pos
+      linarith
+    exact ne_of_gt (norm_pos_iff.mpr h1s_ne_zero)
+  -- f is continuous on K
+  have hxinv_slit : ∀ x ∈ K, x⁻¹ ∈ Complex.slitPlane := by
+    intro x hx
+    have hxslit := hKslit hx
+    simp only [Complex.slitPlane] at hxslit ⊢
+    rcases hxslit with hxslit | hxslit
+    · left; rw [Complex.inv_re]; apply div_pos hxslit; exact Complex.normSq_pos.mpr (fun h => hxslit.ne' (by simp [h]))
+    · right; intro h; have := Complex.inv_im x; rw [this] at h
+      have h' : x.im = 0 ∨ x = 0 := by simpa using h
+      rcases h' with h' | h'; exacts [hxslit h', by simp [h'] at hxslit]
+  have hf_cont : ContinuousOn f K := by
+    have hK_sub : K ⊆ {0}ᶜ := by
+      intro x hx
+      simp
+      intro hx0
+      have := hxinv_slit x hx
+      rw [hx0] at this
+      norm_num at this
+    refine ContinuousOn.div ?_ ?_ (fun x hx => hdenom_ne_zero x hx)
+    · refine ContinuousOn.norm ?_
+      exact (continuousOn_inv₀.mono hK_sub).cpow_const (fun x hx => hxinv_slit x hx)
+    · exact ContinuousOn.norm (continuousOn_const.add ((continuousOn_inv₀.mono hK_sub).cpow_const (fun x hx => hxinv_slit x hx)))
+  -- f(K) is compact
+  have hfK_compact : IsCompact (f '' K) := hK.image_of_continuousOn hf_cont
+  -- f(K) is bounded above by 1
+  have hfK_bdd : ∀ y ∈ f '' K, y < 1 := by
+    intro y hy
+    rcases hy with ⟨ x, hx, rfl ⟩
+    exact hf_lt_one x hx
+  -- Since K is nonempty (implied), or we handle empty case
+  by_cases hK_empty : K.Nonempty
+  · -- K is nonempty, so f(K) is nonempty and has a maximum
+    have hfK_nonempty : (f '' K).Nonempty := hK_empty.image _
+    obtain ⟨ρ, hρ_mem⟩ := hfK_compact.exists_isGreatest hfK_nonempty
+    use ρ
+    have hρ_nonneg : 0 ≤ ρ := by
+      obtain ⟨x, hx, hxρ⟩ := hρ_mem.1
+      rw [← hxρ]
+      exact div_nonneg (norm_nonneg _) (norm_nonneg _)
+    have hρ_lt_one : ρ < 1 := hfK_bdd _ hρ_mem.1
+    exact ⟨hρ_nonneg, hρ_lt_one,
+      fun x hx => by
+        have := hρ_mem.2 ⟨x, hx, rfl⟩
+        simp only [hf_def] at this
+        have hpos : 0 < ‖1 + x⁻¹ ^ ((g : ℂ)⁻¹)‖ := norm_pos_iff.mpr (by
+          intro h
+          apply hdenom_ne_zero x hx
+          simp [h])
+        rwa [div_le_iff₀ hpos] at this⟩
+  · -- K is empty, any ρ < 1 works
+    push_neg at hK_empty
+    use 0
+    simp [hK_empty]
+
+/- Uniform geometric bound for the endpoint correction on a compact subset of
+the slit plane.  This is the analytic core of Target 6.  Assembles the three
+helper lemmas above. -/
+lemma endpointCorrection_uniform_geom_bound {g : ℕ} (hg : 2 ≤ g)
+    {K : Set ℂ} (hK : IsCompact K) (hKslit : K ⊆ Complex.slitPlane) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∃ ρ : ℝ, 0 ≤ ρ ∧ ρ < 1 ∧ ∃ N₀ : ℕ,
+      ∀ N ≥ N₀, ∀ x ∈ K,
+        ‖(epsIdx g N : ℂ) * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N x⁻¹‖
+          ≤ C * ρ ^ N := by
+  obtain ⟨c, hc, N₀, hlow⟩ := sliceZero_uniform_lower hg hK hKslit
+  obtain ⟨D, hD, hnum⟩ := endpointNumerator_uniform_bound hg hK hKslit
+  obtain ⟨ρ, hρ0, hρ1, hratio⟩ := endpointRatio_uniform_lt_one hg hK hKslit
+  refine ⟨D / c, by positivity, ρ, hρ0, hρ1, N₀, ?_⟩
+  intro N hN x hx
+  set s : ℂ := (x⁻¹) ^ ((g : ℂ)⁻¹) with hs
+  have hnumx := hnum N x hx
+  have hr := hratio x hx
+  have hlowx := hlow N hN x hx
+  have hr' : ‖s‖ ≤ ρ * ‖(1 : ℂ) + s‖ := hr
+  have h1s_pos : 0 < ‖(1 : ℂ) + s‖ := by
+    by_contra h
+    push_neg at h
+    have hz : ‖(1 : ℂ) + s‖ = 0 := le_antisymm h (norm_nonneg _)
+    have h0 : (1 : ℂ) + s = 0 := norm_eq_zero.mp hz
+    have hsm1 : s = -1 := by linear_combination h0
+    rw [hz, mul_zero] at hr'
+    rw [hsm1] at hr'
+    norm_num at hr'
+  have hden_pos : 0 < c * ‖(1 : ℂ) + s‖ ^ N := by positivity
+  have hslice_pos : 0 < ‖slice g 0 N x⁻¹‖ := lt_of_lt_of_le hden_pos hlowx
+  have hs_nonneg : 0 ≤ ‖s‖ := norm_nonneg _
+  -- numerator ≤ D * (ρ * ‖ 1 + s ‖) ^ N
+  have hnum2 : ‖(epsIdx g N : ℂ)‖ * ‖(x⁻¹) ^ (qIdx g N + 1)‖ ≤ D * (ρ * ‖(1 : ℂ) + s‖) ^ N := by
+    refine le_trans hnumx ?_
+    apply mul_le_mul_of_nonneg_left _ hD
+    exact pow_le_pow_left₀ hs_nonneg hr N
+  have key : D * (ρ * ‖(1 : ℂ) + s‖) ^ N ≤ D / c * ρ ^ N * ‖slice g 0 N x⁻¹‖ := by
+    have step : D / c * ρ ^ N * (c * ‖(1 : ℂ) + s‖ ^ N) = D * (ρ * ‖(1 : ℂ) + s‖) ^ N := by
+      rw [mul_pow]; field_simp
+    calc D * (ρ * ‖(1 : ℂ) + s‖) ^ N
+        = D / c * ρ ^ N * (c * ‖(1 : ℂ) + s‖ ^ N) := step.symm
+      _ ≤ D / c * ρ ^ N * ‖slice g 0 N x⁻¹‖ := by
+          apply mul_le_mul_of_nonneg_left hlowx; positivity
+  rw [norm_div, norm_mul, div_le_iff₀ hslice_pos]
+  exact le_trans hnum2 key
 
 /- Target 6: compact-uniform endpoint suppression.  Again g ≥ 2 is required
 and is available in the positive-k branch of the final theorem. -/
@@ -1096,7 +1689,25 @@ theorem tendstoUniformlyOn_endpointCorrection_cpow {g : ℕ} (hg : 2 ≤ g)
           slice g 0 N x⁻¹)
       (fun _ => 0)
       Filter.atTop K := by
-  proof_placeholder
+  obtain ⟨C, hC, ρ, hρ0, hρ1, N₀, hbound⟩ :=
+    endpointCorrection_uniform_geom_bound hg hK hKslit
+  rw [Metric.tendstoUniformlyOn_iff]
+  intro ε hε
+  have hlim : Filter.Tendsto (fun N : ℕ => C * ρ ^ N) Filter.atTop (nhds 0) := by
+    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hρ0 hρ1).const_mul C
+  obtain ⟨N₁, hN₁⟩ :=
+    Filter.eventually_atTop.mp (hlim.eventually (Metric.ball_mem_nhds _ hε))
+  filter_upwards [Filter.eventually_ge_atTop N₀, Filter.eventually_ge_atTop N₁]
+    with N hN0 hN1 x hx
+  rw [dist_zero_left]
+  have hb := hbound N hN0 x hx
+  have hlt : C * ρ ^ N < ε := by
+    have := hN₁ N hN1
+    rw [Real.dist_eq, sub_zero, abs_of_nonneg (by positivity)] at this
+    exact this
+  calc ‖(epsIdx g N : ℂ) * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N x⁻¹‖
+      ≤ C * ρ ^ N := hb
+    _ < ε := hlt
 
 /- Target 7 (full paper statement): local uniformity of the actual reversed
 approximants on every compact subset of ℂ ∖ (−∞,0]. -/
@@ -1291,8 +1902,5 @@ theorem tendstoUniformlyOn_reversed_ratio_cpow {g k : ℕ}
       _ ≤ (ε' + B * δ) / ‖1 - endpt‖ := by exact div_le_div_of_nonneg_right h_num_le_denom_bound (by positivity)
       _ ≤ (ε' + B * δ) * 2 := by rw [div_eq_mul_inv]; exact mul_le_mul_of_nonneg_left h_inv_denom (le_of_lt h_pos_num)
       _ < ε := h_UB
-
-
--/
 
 end ResidueSlices

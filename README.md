@@ -165,6 +165,8 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendsto_endpointCorrection_cpow` | The deleted endpoint term → 0 pointwise on the slit plane (`g ≥ 2`) |
 | `tendsto_reversed_ratio_cpow` | **Reversed approximant convergence**: `reversedRatioComplex g k N x → x^(k/g)` on `ℂ∖(−∞,0]` — the paper's slit-plane theorem for the real approximant |
 | `tendstoUniformlyOn_slice_ratio_cpow` | Forward slice ratio → `x^(k/g)` **uniformly** on compact `K ⊆ ℂ∖(−∞,0]` |
+| `tendstoUniformlyOn_endpointCorrection_cpow` | Deleted endpoint term → 0 **uniformly** on compact `K` (`g ≥ 2`) |
+| `tendstoUniformlyOn_reversed_ratio_cpow` | **Reversed approximant, compact-uniform**: `reversedRatioComplex g k N x → x^(k/g)` uniformly on compact `K ⊆ ℂ∖(−∞,0]` — completes the paper's slit-plane theorem |
 
 ### `RequestProject/MetallicCutoff.lean` — metallic-ratio recurrence (in progress)
 Deterministic foundation for a selector-controlled heavy-tail experiment, on
@@ -184,12 +186,6 @@ certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and re-checked after the
 compact-uniform additions).
 
-- Slit-plane local uniformity is certified for the *forward slice ratio*
-  (`tendstoUniformlyOn_slice_ratio_cpow`) but not yet for the reversed
-  `A_N/B_N` approximant: its pointwise convergence is certified
-  (`tendsto_reversed_ratio_cpow`), while the compact-uniform reversed
-  version and the uniform endpoint-suppression lemma (Targets 6–7,
-  disabled in `SlitPlaneReversed.lean`) remain open.
 - Metallic-cutoff recurrence: the static-pole residue, the uniform
   moving-pole estimate, fixed-point existence/uniqueness, the scaled
   fixed-point error `→ 4u`, and the flagship cutoff constant `→ 1/2`

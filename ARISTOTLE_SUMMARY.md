@@ -1,3 +1,27 @@
+# Summary of changes for run b58227b3-21b6-427b-8c43-53b921bd330a
+Both remaining targets in the reversed slit-plane development are now proved and integrated, with no `sorry`, `admit`, custom axioms, or commented-out declarations.
+
+What was done:
+- Replaced the disabled Targets 6–7 comment block in `RequestProject/SlitPlaneReversed.lean` with real, proved top-level declarations. Targets 1–5 and all definitions (including `revAComplex` and the `reversedRatioComplex` constant‑`1` convention at `k = 0`) are unchanged, and no statement or hypothesis was weakened.
+
+Proved theorems:
+- `ResidueSlices.tendstoUniformlyOn_endpointCorrection_cpow` (Target 6): compact‑uniform suppression of the deleted endpoint correction, with the required `2 ≤ g`.
+- `ResidueSlices.tendstoUniformlyOn_reversed_ratio_cpow` (Target 7): compact‑local uniform convergence of the actual reversed approximant `reversedRatioComplex g k N x → x^(k/g)`. The `k = 0` case is split off separately (using the constant‑`1` convention) before invoking the endpoint estimate, and empty compact sets remain allowed.
+
+Supporting lemmas added and proved (all in the same file):
+- `endpointRatio_uniform_lt_one`, `endpointNumerator_uniform_bound`, `exists_uniform_complexSpectralGap`, `sliceZero_uniform_lower`, and `endpointCorrection_uniform_geom_bound`, which decompose the endpoint analysis into a uniform contraction ratio, a uniform numerator bound, a uniform packet/spectral‑gap bound, a uniform denominator lower bound, and a uniform geometric bound.
+
+Audit and verification:
+- Added both target theorem names to `audit/AxiomAudit.lean`.
+- The whole project builds successfully (`RequestProject.Main` and `RequestProject.SlitPlaneReversed`), and a source scan of the module found no `sorry`, `admit`, `proof_placeholder`, added axioms, `implemented_by`, or leftover `exact?`.
+- The standalone scaffold `SlitPlaneUniformReversed.lean` was updated to reference the integrated results (via `example`s that apply the two theorems), so it no longer contains any `sorry` and does not clash with the integrated declarations; it compiles.
+
+Targets proved and their axiom dependencies (each exactly `propext`, `Classical.choice`, `Quot.sound`):
+- `ResidueSlices.tendstoUniformlyOn_endpointCorrection_cpow`
+- `ResidueSlices.tendstoUniformlyOn_reversed_ratio_cpow`
+
+All work has been committed and pushed.
+
 # Summary of changes for run c9a773ca-5787-4cb6-be9e-17e118a9663f
 Added `RequestProject/MetallicCutoff.lean`, imported it through `RequestProject/Main.lean`, and added every completed target declaration to `audit/AxiomAudit.lean`.
 
