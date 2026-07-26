@@ -102,6 +102,8 @@ import RequestProject.Main
 #print axioms MetallicCutoff.state_neg_one_even
 #print axioms MetallicCutoff.state_neg_one_odd
 #print axioms MetallicCutoff.silver_identities
+#print axioms MetallicCutoff.ratio_three_closed_form
+#print axioms MetallicCutoff.even_pole_residue
 
 -- Spin factor / cross-norm
 #print axioms SpinFactor.mul_comm

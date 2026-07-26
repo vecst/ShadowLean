@@ -171,13 +171,15 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 ### `RequestProject/MetallicCutoff.lean` — metallic-ratio recurrence (in progress)
 Deterministic foundation for a selector-controlled heavy-tail experiment, on
 the recurrence `P_{N+1}=δP_N+Q_N, Q_{N+1}=P_N+Q_N`, `R_N=P_N/Q_N`, with the
-silver ratio `u=1+√2` and `B=3+2√2=u²`. Exact-algebra core proved; the
-static-pole and asymptotic targets (residue, uniform moving pole, fixed-point
-error, and the flagship cutoff constant `1/2`) are **not yet certified**.
+silver ratio `u=1+√2` and `B=3+2√2=u²`. Exact algebra and the static even-row
+pole proved; the asymptotic targets (uniform moving pole, fixed-point error,
+and the flagship cutoff constant `1/2`) are **not yet certified**.
 | Lean declaration | Statement |
 |---|---|
 | `state_neg_one_even` / `state_neg_one_odd` | Exact parity degeneration at the static pole `δ=−1`: `state(−1)(2m)=(2^m,0)`, `state(−1)(2m+1)=(−2^m,2^m)` |
 | `silver_identities` | `βu=2`, `B=u²`, `B·(3−2√2)=1` — the normalization for every later limit |
+| `ratio_three_closed_form` | Closed form on the recovery channel `δ=3` (`N ≥ 1`): `ratio 3 N = u + 2√2·(3−2√2)^N/(1−(3−2√2)^N)` |
+| `even_pole_residue` | The even-row pole at `δ=−1` has residue exactly `2/m` (`m ≥ 1`), via the punctured limit `nhdsWithin (−1) {−1}ᶜ` — no `0/0` identification |
 
 ## Not machine-checked (coverage boundary)
 
@@ -186,11 +188,11 @@ certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and re-checked after the
 compact-uniform additions).
 
-- Metallic-cutoff recurrence: the static-pole residue, the uniform
-  moving-pole estimate, fixed-point existence/uniqueness, the scaled
-  fixed-point error `→ 4u`, and the flagship cutoff constant `→ 1/2`
-  (`MetallicCutoff.lean` Targets 3–8) — not yet certified; only the exact
-  parity/silver algebra (Targets 1–2) is proved.
+- Metallic-cutoff recurrence: the uniform moving-pole estimate, fixed-point
+  existence/uniqueness, the scaled fixed-point error `→ 4u`, and the flagship
+  cutoff constant `→ 1/2` (`MetallicCutoff.lean` Targets 5–8) — not yet
+  certified. The exact algebra, the `δ=3` closed form, and the even-row pole
+  residue `2/m` (Targets 1–4) are proved.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
