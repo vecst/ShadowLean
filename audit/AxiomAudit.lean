@@ -98,7 +98,14 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
--- Metallic-cutoff recurrence (Targets 1-2; 3-8 open, omitted from file)
+-- Dual-slice logarithm (powers -> log via two-stage limit)
+#print axioms ResidueSlices.tendsto_binomialLog_row
+#print axioms ResidueSlices.logSurrogate_eq_tanh
+#print axioms ResidueSlices.tendsto_logSurrogate
+#print axioms ResidueSlices.binomialLog_iterated_converges_to_log
+#print axioms ResidueSlices.tendstoUniformlyOn_binomialLog_row
+
+-- Metallic-cutoff recurrence (Targets 1-4 proved; 5-8 open)
 #print axioms MetallicCutoff.state_neg_one_even
 #print axioms MetallicCutoff.state_neg_one_odd
 #print axioms MetallicCutoff.silver_identities

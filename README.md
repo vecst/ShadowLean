@@ -168,6 +168,19 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendstoUniformlyOn_endpointCorrection_cpow` | Deleted endpoint term → 0 **uniformly** on compact `K` (`g ≥ 2`) |
 | `tendstoUniformlyOn_reversed_ratio_cpow` | **Reversed approximant, compact-uniform**: `reversedRatioComplex g k N x → x^(k/g)` uniformly on compact `K ⊆ ℂ∖(−∞,0]` — completes the paper's slit-plane theorem |
 
+### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm
+A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
+arithmetic, division only) that reaches `Real.log x` by a genuine two-stage
+limit. Reuses the residue-slice convergence theorems; the fixed-`g` row limit
+is the *surrogate*, not `log x` — the natural log emerges only as `g → ∞`.
+| Lean declaration | Statement |
+|---|---|
+| `tendsto_binomialLog_row` | Fixed `g ≥ 2`, `x > 0`: `binomialLog g N x → logSurrogate g x` (`N → ∞`) — **not** `log x` |
+| `logSurrogate_eq_tanh` | Exact closed form `logSurrogate g x = 2g·tanh(log x / 2g)` |
+| `tendsto_logSurrogate` | `logSurrogate g x → Real.log x` as `g → ∞` |
+| `binomialLog_iterated_converges_to_log` | **Flagship two-stage convergence**: `∀ε ∃G ∀g≥G ∃N₀ ∀N≥N₀, \|binomialLog g N x − log x\| < ε` |
+| `tendstoUniformlyOn_binomialLog_row` | Fixed `g ≥ 2`: row limit is compact-uniform on `K ⊆ (0,∞)` |
+
 ### `RequestProject/MetallicCutoff.lean` — metallic-ratio recurrence (in progress)
 Deterministic foundation for a selector-controlled heavy-tail experiment, on
 the recurrence `P_{N+1}=δP_N+Q_N, Q_{N+1}=P_N+Q_N`, `R_N=P_N/Q_N`, with the

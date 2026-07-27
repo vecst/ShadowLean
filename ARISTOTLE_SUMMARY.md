@@ -1,3 +1,57 @@
+# Summary of changes for run 68547081-2302-4cfe-a5b8-4bd73d1ea643
+Completed and integrated `RequestProject/BinomialLogConvergence.lean`, preserving all five requested statements and boundary hypotheses exactly.
+
+Active proved declarations:
+
+```lean
+theorem ResidueSlices.tendsto_binomialLog_row {g : ℕ} (hg : 2 ≤ g)
+    {x : ℝ} (hx : 0 < x) :
+    Filter.Tendsto (fun N : ℕ => binomialLog g N x)
+      Filter.atTop (nhds (logSurrogate g x))
+```
+
+```lean
+theorem ResidueSlices.logSurrogate_eq_tanh {g : ℕ} (hg : 1 ≤ g)
+    {x : ℝ} (hx : 0 < x) :
+    logSurrogate g x =
+      2 * (g : ℝ) * Real.tanh (Real.log x / (2 * (g : ℝ)))
+```
+
+```lean
+theorem ResidueSlices.tendsto_logSurrogate {x : ℝ} (hx : 0 < x) :
+    Filter.Tendsto (fun g : ℕ => logSurrogate g x)
+      Filter.atTop (nhds (Real.log x))
+```
+
+```lean
+theorem ResidueSlices.binomialLog_iterated_converges_to_log
+    {x : ℝ} (hx : 0 < x) :
+    ∀ ε : ℝ, 0 < ε → ∃ G : ℕ, ∀ g : ℕ, G ≤ g →
+      ∃ N0 : ℕ, ∀ N : ℕ, N0 ≤ N →
+        |binomialLog g N x - Real.log x| < ε
+```
+
+```lean
+theorem ResidueSlices.tendstoUniformlyOn_binomialLog_row
+    {g : ℕ} (hg : 2 ≤ g) {K : Set ℝ}
+    (hK : IsCompact K) (hKpos : K ⊆ Set.Ioi (0 : ℝ)) :
+    TendstoUniformlyOn (fun N x => binomialLog g N x)
+      (fun x => logSurrogate g x) Filter.atTop K
+```
+
+The fixed-`g` proof normalizes by the positive zeroth slice and uses the exact rational identity for `u = x^(1/g)`. The surrogate is identified with the stated hyperbolic-tangent expression, and its large-`g` limit is proved through the derivative of real powers at exponent zero. The iterated theorem uses the requested epsilon-halving argument. The compact-uniform theorem is derived from compact-uniform convergence of the two slice ratios and control of the resulting denominator.
+
+Integration and validation:
+- Imported the module through `RequestProject/Main.lean`.
+- Added all five targets to `audit/AxiomAudit.lean`.
+- Built `RequestProject.BinomialLogConvergence` and `RequestProject.Main` successfully.
+- Checked the new module directly with warnings treated as errors.
+- Confirmed no `sorry`, `admit`, `implemented_by`, or unresolved `exact?` remains in the integrated files.
+- Each target depends exactly on the permitted axioms `propext`, `Classical.choice`, and `Quot.sound`.
+- The optional diagonal-schedule theorem was omitted as requested.
+
+All retained changes were committed and pushed.
+
 # Summary of changes for run b58227b3-21b6-427b-8c43-53b921bd330a
 Both remaining targets in the reversed slit-plane development are now proved and integrated, with no `sorry`, `admit`, custom axioms, or commented-out declarations.
 

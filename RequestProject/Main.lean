@@ -15,6 +15,7 @@ import RequestProject.ResidualCertificate
 import RequestProject.SlitPlane
 import RequestProject.SlitPlaneReversed
 import RequestProject.MetallicCutoff
+import RequestProject.BinomialLogConvergence
 
 open scoped BigOperators
 open scoped Real
