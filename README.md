@@ -168,6 +168,19 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendstoUniformlyOn_endpointCorrection_cpow` | Deleted endpoint term → 0 **uniformly** on compact `K` (`g ≥ 2`) |
 | `tendstoUniformlyOn_reversed_ratio_cpow` | **Reversed approximant, compact-uniform**: `reversedRatioComplex g k N x → x^(k/g)` uniformly on compact `K ⊆ ℂ∖(−∞,0]` — completes the paper's slit-plane theorem |
 
+### `RequestProject/IFFTPreparation.lean` — exact finite-`g` spectral reconstruction
+Inverse-Fourier packet preparation over `ZMod g` (reusing Mathlib's `ZMod.dft`):
+recover a spectrum *exactly at finite `g`* — the "no `g → ∞`" counterpart to
+the limit constructions. From `shadow_packetization_companions.tex`.
+| Lean declaration | Statement |
+|---|---|
+| `preparedScaledPacket_formula` | Explicit inverse-Fourier coefficients: `g⁻¹·∑ₖ Vₖ·χ(−kj)` |
+| `positiveDFT_preparedScaledPacket` | `positiveDFT ∘ preparedScaledPacket = id` (exact inversion) |
+| `packetSpectrum_preparedPacket` | **Exact reconstruction** (`α ≠ 0`): `packetSpectrum α (preparedPacket α V) = V` |
+| `preparedPacket_no_spectral_leakage` | Support preserved: `V` zero off `S` ⟹ reconstructed spectrum zero off `S` |
+| `preparedPacket_conj_eq_self` | Conjugate-symmetric spectrum (`V(−k)=conj Vₖ`, `α>0`) ⟹ real packet coordinates |
+| `preparedPacket_pos_of_dominant_zero` | Zero-mode dominance (`(V₀).re > ∑_{k≠0}‖Vₖ‖`) ⟹ **strictly positive** real coordinates |
+
 ### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm
 A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
 arithmetic, division only) that reaches `Real.log x` by a genuine two-stage

@@ -98,6 +98,14 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
+-- IFFT preparation (exact finite-g spectral reconstruction)
+#print axioms ResidueSlices.preparedScaledPacket_formula
+#print axioms ResidueSlices.positiveDFT_preparedScaledPacket
+#print axioms ResidueSlices.packetSpectrum_preparedPacket
+#print axioms ResidueSlices.preparedPacket_no_spectral_leakage
+#print axioms ResidueSlices.preparedPacket_conj_eq_self
+#print axioms ResidueSlices.preparedPacket_pos_of_dominant_zero
+
 -- Dual-slice logarithm (powers -> log via two-stage limit)
 #print axioms ResidueSlices.tendsto_binomialLog_row
 #print axioms ResidueSlices.logSurrogate_eq_tanh
