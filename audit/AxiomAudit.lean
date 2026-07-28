@@ -98,6 +98,13 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
+-- Packet high-pass (moving-packet Fourier identity + total-variation bound)
+#print axioms ResidueSlices.dft_movingPacketMass
+#print axioms ResidueSlices.movingPacketMass_add_one_sub
+#print axioms ResidueSlices.stdAddChar_sub_one_mul_dft
+#print axioms ResidueSlices.dft_norm_mul_le_cyclicVariation
+#print axioms ResidueSlices.movingPacket_dft_highpass_bound
+
 -- IFFT preparation (exact finite-g spectral reconstruction)
 #print axioms ResidueSlices.preparedScaledPacket_formula
 #print axioms ResidueSlices.positiveDFT_preparedScaledPacket

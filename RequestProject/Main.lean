@@ -17,6 +17,7 @@ import RequestProject.SlitPlaneReversed
 import RequestProject.MetallicCutoff
 import RequestProject.BinomialLogConvergence
 import RequestProject.IFFTPreparation
+import RequestProject.PacketHighPass
 
 open scoped BigOperators
 open scoped Real

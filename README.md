@@ -168,6 +168,18 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendstoUniformlyOn_endpointCorrection_cpow` | Deleted endpoint term → 0 **uniformly** on compact `K` (`g ≥ 2`) |
 | `tendstoUniformlyOn_reversed_ratio_cpow` | **Reversed approximant, compact-uniform**: `reversedRatioComplex g k N x → x^(k/g)` uniformly on compact `K ⊆ ℂ∖(−∞,0]` — completes the paper's slit-plane theorem |
 
+### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
+Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
+under an arbitrary moving selector `a`, plus a cyclic-total-variation high-pass
+bound (all finite algebra over `ZMod g`; from `shadow_packetization_companions.tex`).
+| Lean declaration | Statement |
+|---|---|
+| `dft_movingPacketMass` | Exact identity: `DFT(M)(ℓ) = ∑_q χ(a(q)·ℓ)·DFT(b_q)(ℓ)` |
+| `movingPacketMass_add_one_sub` | Finite-difference identity: `M(r+1) − M(r) = ∑_q Δb_q(a(q)+r)` |
+| `stdAddChar_sub_one_mul_dft` | Cyclic summation by parts: `(χ(ℓ)−1)·DFT(f)(ℓ) = ∑_j χ(−jℓ)·Δf(j)` |
+| `dft_norm_mul_le_cyclicVariation` | One-block bound: `‖χ(ℓ)−1‖·‖DFT(f)(ℓ)‖ ≤ cyclicVariation f` |
+| `movingPacket_dft_highpass_bound` | High-pass bound: `‖χ(ℓ)−1‖·‖DFT(M)(ℓ)‖ ≤ ∑_q cyclicVariation(b_q)` (valid at `ℓ=0`) |
+
 ### `RequestProject/IFFTPreparation.lean` — exact finite-`g` spectral reconstruction
 Inverse-Fourier packet preparation over `ZMod g` (reusing Mathlib's `ZMod.dft`):
 recover a spectrum *exactly at finite `g`* — the "no `g → ∞`" counterpart to
