@@ -168,6 +168,20 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 | `tendstoUniformlyOn_endpointCorrection_cpow` | Deleted endpoint term → 0 **uniformly** on compact `K` (`g ≥ 2`) |
 | `tendstoUniformlyOn_reversed_ratio_cpow` | **Reversed approximant, compact-uniform**: `reversedRatioComplex g k N x → x^(k/g)` uniformly on compact `K ⊆ ℂ∖(−∞,0]` — completes the paper's slit-plane theorem |
 
+### `RequestProject/PacketDerivativeJet.lean` — residue-packet derivative jet (Fourier core)
+Order-`r` forward differences of a packet, with exact `(z−1)^r` Fourier symbol
+— an exact order-`r` high-pass channel. From `shadow_packetization_companions.tex`.
+(The Stirling moment identities, Targets 7–9, are deferred — the producing run
+was budget-limited on the `stirlingSecond` induction.)
+| Lean declaration | Statement |
+|---|---|
+| `forwardDiff_binomial_symbol` | `∑_j c(r,j)·z^j = (z−1)^r` (exact binomial symbol) |
+| `forwardDiffSymbol_eq_pow` | Packet Fourier symbol `= (χ(ℓ)−1)^r` |
+| `forwardDiffPacket_eq_dft_sum` | Exact DFT reconstruction: `Δ_r(M) = (1/g)∑_ℓ (χ(ℓ)−1)^r·DFT(M)(ℓ)` |
+| `forwardDiffSymbol_zero` | Zero-frequency annihilation for `r > 0`: `symbol r 0 = 0` |
+| `forwardDiffPacket_eq_dft_sum_erase_zero` | Same reconstruction with the zero channel removed (`r > 0`) |
+| `forwardDiffPacket_movingPacketMass` | Bridge to moving packets: `Δ_r(M_{b,a}) = ∑_q ∑_j c(r,j)·b_q(a_q+j)` |
+
 ### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
 Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
 under an arbitrary moving selector `a`, plus a cyclic-total-variation high-pass
@@ -231,6 +245,10 @@ compact-uniform additions).
   cutoff constant `→ 1/2` (`MetallicCutoff.lean` Targets 5–8) — not yet
   certified. The exact algebra, the `δ=3` closed form, and the even-row pole
   residue `2/m` (Targets 1–4) are proved.
+- Packet derivative jet: the Stirling moment identities `∑_j c(r,j)·j^m =
+  r!·S(m,r)` and its `m<r` / `m=r` corollaries (`PacketDerivativeJet.lean`
+  Targets 7–9) — not yet certified. The exact Fourier/high-pass core
+  (Targets 1–6) is proved.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.

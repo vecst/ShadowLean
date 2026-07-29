@@ -18,6 +18,7 @@ import RequestProject.MetallicCutoff
 import RequestProject.BinomialLogConvergence
 import RequestProject.IFFTPreparation
 import RequestProject.PacketHighPass
+import RequestProject.PacketDerivativeJet
 
 open scoped BigOperators
 open scoped Real

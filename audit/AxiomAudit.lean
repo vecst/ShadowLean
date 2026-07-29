@@ -98,6 +98,14 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
+-- Packet derivative jet (Fourier core; Targets 7-9 Stirling moments deferred)
+#print axioms ResidueSlices.forwardDiff_binomial_symbol
+#print axioms ResidueSlices.forwardDiffSymbol_eq_pow
+#print axioms ResidueSlices.forwardDiffPacket_eq_dft_sum
+#print axioms ResidueSlices.forwardDiffSymbol_zero
+#print axioms ResidueSlices.forwardDiffPacket_eq_dft_sum_erase_zero
+#print axioms ResidueSlices.forwardDiffPacket_movingPacketMass
+
 -- Packet high-pass (moving-packet Fourier identity + total-variation bound)
 #print axioms ResidueSlices.dft_movingPacketMass
 #print axioms ResidueSlices.movingPacketMass_add_one_sub
