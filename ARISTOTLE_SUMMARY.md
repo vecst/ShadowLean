@@ -1,3 +1,44 @@
+# Summary of changes for run b2fee3de-a657-447f-985e-f2b2503e3135
+Completed and integrated Target 7 in `RequestProject/PacketDerivativeJet.lean` while preserving the supplied definitions and Targets 1–6 byte-identically. Targets 8–9 remain deferred and were not added as declarations.
+
+Proved the exact requested theorem:
+```lean
+theorem ResidueSlices.forwardDiff_moment_eq_factorial_mul_stirlingSecond
+    (r m : Nat) :
+    Finset.sum (Finset.range (r + 1)) (fun j =>
+      forwardDiffCoeff r j * (j : Int) ^ m) =
+      (Nat.factorial r : Int) * (Nat.stirlingSecond m r : Int)
+```
+
+Added and proved these supporting lemmas:
+- `forwardDiffCoeff_succ_mul_index`
+- `forwardDiff_moment_zero`
+- `forwardDiff_moment_succ_shift`
+- `forwardDiff_moment_shift_eq_add`
+- `forwardDiff_moment_succ_recurrence`
+
+The proof uses `Nat.add_one_mul_choose_eq`, the exact recurrence
+`F (r+1) (m+1) = (r+1) * (F (r+1) m + F r m)`, and induction on `m` with `r` generalized, matching `Nat.stirlingSecond_succ_succ`.
+
+Integration updates:
+- Imported `RequestProject.PacketDerivativeJet` through `RequestProject/Main.lean`.
+- Added the Target 7 declaration and `#print axioms` audit to `audit/AxiomAudit.lean`.
+- Updated the README coverage table and boundary: Target 7 proved; Targets 8–9 deferred.
+- Updated the trailing module comment to describe the completed proof.
+
+Verification:
+- Strict warning-as-error checks succeeded for `RequestProject/PacketDerivativeJet.lean`, `RequestProject/Main.lean`, and `audit/AxiomAudit.lean`.
+- The complete project build succeeded: `Build completed successfully (8048 jobs)`.
+- No proof placeholders, `admit`, prohibited declarations, or unresolved proof suggestions remain in the completed module.
+- Axiom audit output:
+```text
+'ResidueSlices.forwardDiff_moment_eq_factorial_mul_stirlingSecond' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+All changes were committed and pushed.
+
 # Summary of changes for run 0b1df328-c95e-4931-b2c4-ad1a9c67ce37
 Completed and integrated `RequestProject/PacketHighPass.lean`, preserving every supplied definition and theorem signature exactly as written. All five targets are active declarations and are proved using Mathlib’s `ZMod.dft` and `ZMod.stdAddChar`; no parallel DFT was introduced. The phase and sign conventions are preserved, and Targets 4–5 retain their product form with no `ℓ ≠ 0` hypothesis.
 

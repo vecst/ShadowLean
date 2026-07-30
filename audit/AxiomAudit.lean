@@ -105,6 +105,7 @@ import RequestProject.Main
 #print axioms ResidueSlices.forwardDiffSymbol_zero
 #print axioms ResidueSlices.forwardDiffPacket_eq_dft_sum_erase_zero
 #print axioms ResidueSlices.forwardDiffPacket_movingPacketMass
+#print axioms ResidueSlices.forwardDiff_moment_eq_factorial_mul_stirlingSecond
 
 -- Packet high-pass (moving-packet Fourier identity + total-variation bound)
 #print axioms ResidueSlices.dft_movingPacketMass
