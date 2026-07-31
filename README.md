@@ -170,9 +170,8 @@ is `0`, not `1`, so `reversedRatioComplex` guards `k=0` as the constant `1`).
 
 ### `RequestProject/PacketDerivativeJet.lean` — residue-packet derivative jet (Fourier core)
 Order-`r` forward differences of a packet, with exact `(z−1)^r` Fourier symbol
-— an exact order-`r` high-pass channel — and the exact Stirling moment identity.
-From `shadow_packetization_companions.tex`. (Targets 8–9, the moment corollaries,
-are deferred.)
+— an exact order-`r` high-pass channel — the exact Stirling moment identity, and
+its derivative-jet moment cancellation. From `shadow_packetization_companions.tex`.
 | Lean declaration | Statement |
 |---|---|
 | `forwardDiff_binomial_symbol` | `∑_j c(r,j)·z^j = (z−1)^r` (exact binomial symbol) |
@@ -182,6 +181,8 @@ are deferred.)
 | `forwardDiffPacket_eq_dft_sum_erase_zero` | Same reconstruction with the zero channel removed (`r > 0`) |
 | `forwardDiffPacket_movingPacketMass` | Bridge to moving packets: `Δ_r(M_{b,a}) = ∑_q ∑_j c(r,j)·b_q(a_q+j)` |
 | `forwardDiff_moment_eq_factorial_mul_stirlingSecond` | **Exact moment identity**: `∑_j c(r,j)·j^m = r!·S(m,r)` (Stirling 2nd kind) |
+| `forwardDiff_moment_vanish` | Lower-moment annihilation: `∑_j c(r,j)·j^m = 0` for `m < r` |
+| `forwardDiff_top_moment` | Normalized top moment: `∑_j c(r,j)·j^r = r!` |
 
 ### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
 Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
@@ -246,10 +247,6 @@ compact-uniform additions).
   cutoff constant `→ 1/2` (`MetallicCutoff.lean` Targets 5–8) — not yet
   certified. The exact algebra, the `δ=3` closed form, and the even-row pole
   residue `2/m` (Targets 1–4) are proved.
-- Packet derivative jet: the moment corollaries `∑_j c(r,j)·j^m = 0` (`m<r`)
-  and `= r!` (`m=r`) (`PacketDerivativeJet.lean` Targets 8–9) — not yet
-  certified. The Fourier/high-pass core and the exact Stirling moment identity
-  (Targets 1–7) are proved.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.

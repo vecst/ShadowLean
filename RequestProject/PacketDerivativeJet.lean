@@ -365,14 +365,28 @@ theorem forwardDiff_moment_eq_factorial_mul_stirlingSecond
       push_cast
       ring
 
+/-- Target 8: lower-moment annihilation. -/
+theorem forwardDiff_moment_vanish {r m : Nat} (hm : m < r) :
+    Finset.sum (Finset.range (r + 1)) (fun j =>
+      forwardDiffCoeff r j * (j : Int) ^ m) = 0 := by
+  rw [forwardDiff_moment_eq_factorial_mul_stirlingSecond]
+  rw [Nat.stirlingSecond_eq_zero_of_lt hm]
+  simp
+
+/-- Target 9: normalized top moment. -/
+theorem forwardDiff_top_moment (r : Nat) :
+    Finset.sum (Finset.range (r + 1)) (fun j =>
+      forwardDiffCoeff r j * (j : Int) ^ r) =
+      (Nat.factorial r : Int) := by
+  rw [forwardDiff_moment_eq_factorial_mul_stirlingSecond]
+  rw [Nat.stirlingSecond_self]
+  simp
+
 /-
-Targets 8-9 (the moment corollaries `forwardDiff_moment_vanish` and
-`forwardDiff_top_moment`) are deferred to a follow-up run; only Target 7
-above is added here. Target 7 is proved via the helper recurrence
-F(r+1,m+1) = (r+1)*(F(r+1,m)+F(r,m)), matching
-`Nat.stirlingSecond_succ_succ`, followed by induction on m with r general.
-The base uses alternating-binomial cancellation and the positive-j reindex
-uses `Nat.add_one_mul_choose_eq`.
+Targets 1-9 are all active and certified here: the exact Fourier/high-pass
+core (1-6), the Stirling moment identity `∑_j c(r,j)·j^m = r!·S(m,r)` (7),
+and its corollaries — lower-moment annihilation for `m < r` (8) and the
+normalized top moment `= r!` at `m = r` (9).
 -/
 
 end ResidueSlices
