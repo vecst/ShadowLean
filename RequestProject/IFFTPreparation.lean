@@ -26,8 +26,8 @@ Proof routes:
   `(α⁻¹)^j.val > 0`. Strict positivity needs exactly the dominance hypothesis;
   do NOT weaken to `≥ 0` or to `(V 0).re > 0` alone.
 
-Honesty: no sorry/admit/implemented_by/unsafe/new axioms; every target an
-active declaration (not commented out); keep `α ≠ 0` (Targets 3–4) and
+Certification scope: every target is an active declaration (not commented
+out); keep `α ≠ 0` (Targets 3–4) and
 `α > 0` (Targets 5–6); if a target cannot be closed, leave it out and report
 it explicitly.
 -/

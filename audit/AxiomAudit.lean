@@ -1,7 +1,9 @@
 /-
-Axiom audit for all principal theorems.  Run with:
+Axiom audit for all 137 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
-Every line must report exactly [propext, Classical.choice, Quot.sound].
+Every dependency list must be a subset of
+[propext, Classical.choice, Quot.sound]. Public definitions are covered by the
+strict build and complete declaration inventory rather than duplicated here.
 -/
 import RequestProject.Main
 
@@ -76,7 +78,7 @@ import RequestProject.Main
 #print axioms ResidueSlices.norm_one_add_root_mul_lt
 #print axioms ResidueSlices.tendsto_slice_ratio_cpow
 
--- Reversed approximant over the slit plane (Targets 1-5; 6-7 disabled/open)
+-- Reversed approximant over the slit plane (Targets 1-7 active)
 #print axioms ResidueSlices.revAComplex_eq_slice
 #print axioms ResidueSlices.revBComplex_eq_slice
 #print axioms ResidueSlices.tendsto_endpointCorrection_cpow
@@ -98,7 +100,7 @@ import RequestProject.Main
 #print axioms ResidualCertificate.residual_negative_enclosure
 #print axioms ResidualCertificate.sqrt_ten_bracket_via_interface
 
--- Packet derivative jet (Fourier core; Targets 7-9 Stirling moments deferred)
+-- Packet derivative jet (Fourier core and Targets 7-9 Stirling moments active)
 #print axioms ResidueSlices.forwardDiff_binomial_symbol
 #print axioms ResidueSlices.forwardDiffSymbol_eq_pow
 #print axioms ResidueSlices.forwardDiffPacket_eq_dft_sum
@@ -146,3 +148,41 @@ import RequestProject.Main
 #print axioms SpinFactor.associator_eq
 #print axioms SpinFactor.mul_self_assoc
 #print axioms SpinFactor.jordan_identity
+
+-- Public proof helpers omitted by the former principal-theorem selection.
+-- Keeping them explicit makes this driver a 137/137 public-proof audit.
+#print axioms ResidueSlices.unique_residue_packet
+#print axioms ResidueSlices.slice_nonneg
+#print axioms ResidueSlices.square_even_odd
+#print axioms ResidueSlices.square_even_odd_reflected
+#print axioms ResidueSlices.square_ratio_cross_error
+#print axioms ResidueSlices.two_mul_square_even
+#print axioms ResidueSlices.primitive_root_power_sum
+#print axioms ResidueSlices.tendsto_finite_mode_sum_zero
+#print axioms ResidueSlices.primitive_root_pow_ne_one
+#print axioms ResidueSlices.norm_one_add_pos_mul_lt
+#print axioms ResidueSlices.tendsto_general_slice_ratio_of_dominance
+#print axioms ResidueSlices.tendsto_general_slice_ratio_with_primitive
+#print axioms ResidueSlices.channelRatio_le_spectralGap
+#print axioms ResidueSlices.slice_ofReal
+#print axioms ResidueSlices.headPoly_nonneg
+#print axioms ResidueSlices.headPoly_le_slice
+#print axioms ResidueSlices.tailTerm_nonneg
+#print axioms ResidueSlices.headTerm_nonneg
+#print axioms SpinFactor.one_mul
+#print axioms SpinFactor.mul_one
+#print axioms ResidueSlices.headTerm_antitoneOn_Ioi
+#print axioms ResidueSlices.tendstoUniformlyOn_endpointCorrection
+#print axioms ResidueSlices.reversedRatioComplex_zero
+#print axioms ResidueSlices.exists_uniform_complexSpectralGap
+#print axioms ResidueSlices.sliceZero_uniform_lower
+#print axioms ResidueSlices.endpointNumerator_uniform_bound
+#print axioms ResidueSlices.endpointRatio_uniform_lt_one
+#print axioms ResidueSlices.endpointCorrection_uniform_geom_bound
+#print axioms MetallicCutoff.state_succ
+#print axioms MetallicCutoff.state_neg_one_pair
+#print axioms ResidueSlices.forwardDiffCoeff_succ_mul_index
+#print axioms ResidueSlices.forwardDiff_moment_zero
+#print axioms ResidueSlices.forwardDiff_moment_succ_shift
+#print axioms ResidueSlices.forwardDiff_moment_shift_eq_add
+#print axioms ResidueSlices.forwardDiff_moment_succ_recurrence

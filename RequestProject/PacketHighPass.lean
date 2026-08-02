@@ -16,8 +16,8 @@ Proof routes:
   the nonnegative `‖χ ℓ − 1‖` and apply Target 4 termwise.
 Keep the product-form bounds (valid at `ℓ = 0`); add no `ℓ ≠ 0` hypothesis.
 
-Honesty: no sorry/admit/unsafe/implemented_by/new axioms; every target an
-active declaration; do not weaken hypotheses or specialize the index type; if
+Certification scope: every target is an active declaration; do not weaken
+hypotheses or specialize the index type; if
 a target cannot be closed, omit it and report it explicitly.
 -/
 import RequestProject.IFFTPreparation

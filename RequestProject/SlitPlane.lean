@@ -35,8 +35,8 @@ subordinate modes to `0` (as in the real proof).  Hence
 `slice g k N x⁻¹ / slice g 0 N x⁻¹ → s^(−k) = x^(k/g)` in the principal
 branch (`cpow_mul` / `cpow_natCast` bookkeeping on the slit plane).
 
-Every `sorry` is a requested result.  Minor Mathlib-name adjustments are
-fine; keep the mathematical content of each statement.  (Local uniformity
+Every declaration below is a requested result. Minor Mathlib-name adjustments
+are fine; keep the mathematical content of each statement. (Local uniformity
 and the reversed/endpoint `A_N/B_N` form are deliberately out of scope for
 this run.)
 -/

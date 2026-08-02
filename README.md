@@ -20,10 +20,14 @@ in `audit/` and enforced in CI.
 ```
 lake exe cache get   # fetch Mathlib binary cache
 lake build           # build all modules (no sorry, no warnings-as-errors failures)
-lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principal theorems
+lake env lean audit/AxiomAudit.lean   # audit all 137 public theorem/lemma declarations
 ```
 
-## Theorem ↔ paper map
+## Theorem ↔ paper/formal-interface map
+
+Rows explicitly naming a paper identify theorem-level correspondence. Rows
+for standalone formal interfaces record exactly what Lean proves but do not,
+by themselves, claim that a canonical paper contains the statement.
 
 ### `RequestProject/ResidueSlices.lean` — finite algebra and the g = 2 case
 | Lean declaration | Paper claim |
@@ -96,7 +100,7 @@ lake env lean audit/AxiomAudit.lean   # print axiom dependencies of all principa
 | `qIdx`, `epsIdx`, `revA` | Reversal degree `q_N`, endpoint indicator `ε_N`, reversed polynomials `A_N`/`B_N` (residue_slice_rational_approximation.tex) |
 | `revA_eq_slice` | Corrected forward-slice relation, `1 ≤ k < g` (Lemma [forward-slice-relation], repaired per audit finding 7.1) |
 | `revB_eq_slice` | `k = 0` denominator identity with explicit `ε_N` endpoint correction (nonzero iff `g ∣ N`) |
-| `revA_pos` | Strict positivity / pole-freeness of the approximant family on `(0,∞)` |
+| `revA_pos` | Strict numerator positivity on `(0,∞)` when `k ≤ N`; applying it at `k=0` gives denominator positivity |
 | `tendsto_reversed_ratio` | Positive-axis convergence `R_N(x;k,g) → x^(k/g)` |
 
 ### `RequestProject/RationalZeta.lean` — rational-exponent diagonal ζ
@@ -153,7 +157,7 @@ Quantitative relative-error bounds (same module, natural-power / no-calculus):
 | Lean declaration | Paper claim |
 |---|---|
 | `norm_one_add_root_mul_lt` | Complex spectral dominance in the principal sector: `\|arg s\| < π/g`, `s ≠ 0` ⟹ `\|1 + ω^ℓ s\| < \|1 + s\|` for every `ℓ ≠ 0` |
-| `tendsto_slice_ratio_cpow` | **Principal-branch convergence on the slit plane**: for `x ∈ ℂ∖(−∞,0]`, `slice g k N x⁻¹ / slice g 0 N x⁻¹ → x^(k/g)` (Thm. [Principal-branch convergence]) |
+| `tendsto_slice_ratio_cpow` | Forward-ratio ingredient on the slit plane: for `x ∈ ℂ∖(−∞,0]`, `slice g k N x⁻¹ / slice g 0 N x⁻¹ → x^(k/g)` pointwise. This is not, by itself, the paper's reversed or locally uniform theorem; those are supplied by `SlitPlaneReversed.lean`. |
 
 ### `RequestProject/SlitPlaneReversed.lean` — reversed approximant over ℂ
 The paper's *actual* approximant `A_N/B_N` on the slit plane (`revAComplex`,
@@ -182,7 +186,7 @@ its derivative-jet moment cancellation. From `shadow_packetization_companions.te
 | `forwardDiffPacket_movingPacketMass` | Bridge to moving packets: `Δ_r(M_{b,a}) = ∑_q ∑_j c(r,j)·b_q(a_q+j)` |
 | `forwardDiff_moment_eq_factorial_mul_stirlingSecond` | **Exact moment identity**: `∑_j c(r,j)·j^m = r!·S(m,r)` (Stirling 2nd kind) |
 | `forwardDiff_moment_vanish` | Lower-moment annihilation: `∑_j c(r,j)·j^m = 0` for `m < r` |
-| `forwardDiff_top_moment` | Normalized top moment: `∑_j c(r,j)·j^r = r!` |
+| `forwardDiff_top_moment` | Top-moment response: `∑_j c(r,j)·j^r = r!` |
 
 ### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
 Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
@@ -209,7 +213,7 @@ the limit constructions. From `shadow_packetization_companions.tex`.
 | `preparedPacket_conj_eq_self` | Conjugate-symmetric spectrum (`V(−k)=conj Vₖ`, `α>0`) ⟹ real packet coordinates |
 | `preparedPacket_pos_of_dominant_zero` | Zero-mode dominance (`(V₀).re > ∑_{k≠0}‖Vₖ‖`) ⟹ **strictly positive** real coordinates |
 
-### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm
+### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm (standalone formal result)
 A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
 arithmetic, division only) that reaches `Real.log x` by a genuine two-stage
 limit. Reuses the residue-slice convergence theorems; the fixed-`g` row limit
@@ -250,9 +254,20 @@ compact-uniform additions).
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
+- From `shadow_packetization_companions.tex`: the Newton, Halley, Chebyshev,
+  Schröder, and Householder residual laws; filter classification and canonical
+  filters; nonlinear sublattice cancellation; prime-power blocks; recursive
+  descent; Poissonized flow; construction spectra; and power-chain results.
+  The mapped inverse-Fourier preparation, moving-packet Fourier/high-pass,
+  and finite-difference/Stirling statements are the machine-checked portion
+  of that paper.
 - Spin factor: bilinearity as exported lemmas, full power-associativity,
   conjugation as an involution, the inverse formula, and the downstream
   cross-norm closure and tree-indexed transport theorems.
+- `ResidualCertificate.lean`, `BinomialLogConvergence.lean`, and
+  `MetallicCutoff.lean` are formal standalone interfaces/results unless and
+  until an explicit canonical-paper mapping is added. Their listed Lean
+  statements are certified; surrounding experimental narratives are not.
 
 ## Provenance
 

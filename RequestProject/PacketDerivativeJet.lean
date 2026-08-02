@@ -24,8 +24,8 @@ Proof routes:
 - Target 8: Target 7 + `stirlingSecond_eq_zero_of_lt`.
 - Target 9: Target 7 + `stirlingSecond_self`.
 
-Honesty: no sorry/admit/unsafe/implemented_by/new axioms; every target an
-active declaration; do not weaken (no `r < g`, no `2 ≤ g`, DFT sign unchanged);
+Certification scope: every target is an active declaration; do not weaken
+(no `r < g`, no `2 ≤ g`, DFT sign unchanged);
 if a target cannot be closed, omit it and report it explicitly.
 -/
 import RequestProject.PacketHighPass

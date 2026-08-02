@@ -25,8 +25,8 @@ Proof route:
   correction has |·| ≤ C₂·r^N; eventually |correction| ≤ 1/2 so
   |1 − correction|⁻¹ ≤ 2, and both terms are ≤ R^N.
 
-Every `sorry` is a requested result.  Minor Mathlib-name adjustments are
-fine; keep the mathematical content of each statement.
+Every declaration below is a requested result. Minor Mathlib-name adjustments
+are fine; keep the mathematical content of each statement.
 -/
 import RequestProject.CompactUniform
 
