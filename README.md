@@ -222,6 +222,24 @@ the limit constructions. From `shadow_packetization_companions.tex`.
 | `preparedPacket_conj_eq_self` | Conjugate-symmetric spectrum (`V(−k)=conj Vₖ`, `α>0`) ⟹ real packet coordinates |
 | `preparedPacket_pos_of_dominant_zero` | Zero-mode dominance (`(V₀).re > ∑_{k≠0}‖Vₖ‖`) ⟹ **strictly positive** real coordinates |
 
+### `RequestProject/IFFTSupportFlow.lean` — spectral support under packet flow
+Exact channel evolution `packetSpectralFlow α V n k = Vₖ·(1 + α·ζ^k)^n` and its
+IFFT reconstruction: an initially zero channel stays zero, so support is
+*contained* in the initial set `S` at every time (an evolution factor may vanish
+and shrink support; none is created). **Scope note:** this module does *not*
+formalize equivalence with the coordinate recurrence
+`C_{0,n+1}=C_{0,n}+x·C_{g-1,n}`, `C_{j,n+1}=C_{j-1,n}+C_{j,n}` — a separate later
+target.
+| Lean declaration | Statement |
+|---|---|
+| `packetSpectralFlow_zero` | Time-zero state: `packetSpectralFlow α V 0 = V` |
+| `packetSpectralFlow_succ` | One-step channel recurrence: `× (1 + α·ζ^k)` per step |
+| `packetSpectralFlow_zero_of_initial_zero` | `Vₖ = 0 ⟹ packetSpectralFlow α V n k = 0` |
+| `packetSpectralFlow_supported` | Support containment: `V` zero off `S` ⟹ flowed spectrum zero off `S`, all `n` |
+| `packetSpectrum_evolvedPreparedPacket` | Exact reconstruction (`α ≠ 0`): `packetSpectrum α (evolved …) = packetSpectralFlow α V n` |
+| `packetSpectrum_evolvedPreparedPacket_succ` | The reconstruction realizes the exact `× (1 + α·ζ^k)` channel recurrence |
+| `evolvedPreparedPacket_no_spectral_leakage` | No leakage at any time: reconstructed spectrum zero off `S`, all `n` |
+
 ### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm (standalone formal result)
 A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
 arithmetic, division only) that reaches `Real.log x` by a genuine two-stage
