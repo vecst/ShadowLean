@@ -200,6 +200,15 @@ bound (all finite algebra over `ZMod g`; from `shadow_packetization_companions.t
 | `dft_norm_mul_le_cyclicVariation` | One-block bound: `‖χ(ℓ)−1‖·‖DFT(f)(ℓ)‖ ≤ cyclicVariation f` |
 | `movingPacket_dft_highpass_bound` | High-pass bound: `‖χ(ℓ)−1‖·‖DFT(M)(ℓ)‖ ≤ ∑_q cyclicVariation(b_q)` (valid at `ℓ=0`) |
 
+### `RequestProject/PacketHighPassDivided.lean` — nonzero-frequency divided bounds
+At `ℓ ≠ 0` the character factor is strictly positive, so the product-form
+bounds divide into clean `‖DFT‖ ≤ variation / ‖χ(ℓ)−1‖` estimates.
+| Lean declaration | Statement |
+|---|---|
+| `stdAddChar_sub_one_norm_pos` | `ℓ ≠ 0` ⟹ `0 < ‖χ(ℓ)−1‖` (vacuous at `g=1`) |
+| `dft_norm_le_cyclicVariation_div` | `‖DFT(f)(ℓ)‖ ≤ cyclicVariation f / ‖χ(ℓ)−1‖` (`ℓ ≠ 0`) |
+| `movingPacket_dft_divided_bound` | `‖DFT(M)(ℓ)‖ ≤ (∑_q cyclicVariation(b_q)) / ‖χ(ℓ)−1‖` (`ℓ ≠ 0`) |
+
 ### `RequestProject/IFFTPreparation.lean` — exact finite-`g` spectral reconstruction
 Inverse-Fourier packet preparation over `ZMod g` (reusing Mathlib's `ZMod.dft`):
 recover a spectrum *exactly at finite `g`* — the "no `g → ∞`" counterpart to

@@ -19,6 +19,7 @@ import RequestProject.BinomialLogConvergence
 import RequestProject.IFFTPreparation
 import RequestProject.PacketHighPass
 import RequestProject.PacketDerivativeJet
+import RequestProject.PacketHighPassDivided
 
 open scoped BigOperators
 open scoped Real

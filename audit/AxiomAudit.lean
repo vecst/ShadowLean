@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 137 public theorem/lemma declarations. Run with:
+Axiom audit for all 140 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -118,6 +118,11 @@ import RequestProject.Main
 #print axioms ResidueSlices.dft_norm_mul_le_cyclicVariation
 #print axioms ResidueSlices.movingPacket_dft_highpass_bound
 
+-- Packet high-pass, divided (nonzero-frequency bounds)
+#print axioms ResidueSlices.stdAddChar_sub_one_norm_pos
+#print axioms ResidueSlices.dft_norm_le_cyclicVariation_div
+#print axioms ResidueSlices.movingPacket_dft_divided_bound
+
 -- IFFT preparation (exact finite-g spectral reconstruction)
 #print axioms ResidueSlices.preparedScaledPacket_formula
 #print axioms ResidueSlices.positiveDFT_preparedScaledPacket
@@ -150,7 +155,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 137/137 public-proof audit.
+-- Keeping them explicit makes this driver a 140/140 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
