@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 147 public theorem/lemma declarations. Run with:
+Axiom audit for all 160 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -164,7 +164,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 147/147 public-proof audit.
+-- Keeping them explicit makes this driver a 160/160 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -200,3 +200,18 @@ import RequestProject.Main
 #print axioms ResidueSlices.forwardDiff_moment_succ_shift
 #print axioms ResidueSlices.forwardDiff_moment_shift_eq_add
 #print axioms ResidueSlices.forwardDiff_moment_succ_recurrence
+
+-- Silver-ratio crossover algebra (cubic residual jet + normalized quadratic roots)
+#print axioms SilverCrossover.cubicResidual_add_displacement
+#print axioms SilverCrossover.cubicResidual_neutral
+#print axioms SilverCrossover.cubicResidual_neutral_hasDerivAt
+#print axioms SilverCrossover.crossoverScale_sq
+#print axioms SilverCrossover.quadraticCrossover_rescale_pos
+#print axioms SilverCrossover.quadraticCrossover_rescale_neg
+#print axioms SilverCrossover.complex_sq_sqrt
+#print axioms SilverCrossover.normalizedRootPlus_isRoot
+#print axioms SilverCrossover.normalizedRootMinus_isRoot
+#print axioms SilverCrossover.negative_discriminant_of_abs_lt_two
+#print axioms SilverCrossover.negative_discriminant_eq_zero_of_abs_eq_two
+#print axioms SilverCrossover.positive_discriminant_of_two_lt_abs
+#print axioms SilverCrossover.positive_error_discriminant
