@@ -47,10 +47,12 @@ positive-axis rational approximants.
 -/
 theorem one_le_slice_zero (g N : ℕ) {x : ℝ} (hx : 0 ≤ x) :
     1 ≤ slice g 0 N x := by
-  convert Finset.single_le_sum ( fun j _ => ?_ ) ( Finset.mem_range.mpr ( Nat.succ_pos ( N : ℕ ) ) ) using 1;
-  · norm_num
-  · infer_instance
-  · positivity
+  have hzero : 0 ∈ Finset.range (N + 1) := Finset.mem_range.mpr (Nat.zero_lt_succ N)
+  have hterm : ∀ j ∈ Finset.range (N + 1),
+      0 ≤ if j % g = 0 then (N.choose j : ℝ) * x ^ (j / g) else 0 := by
+    intro j hj
+    split_ifs <;> positivity
+  simpa [slice] using Finset.single_le_sum hterm hzero
 
 /-
 For `g = 2`, the two packets are the even and odd parts of the binomial
@@ -66,7 +68,7 @@ even packet fixed.
 -/
 theorem square_even_odd_reflected (N : ℕ) (t : ℝ) :
     slice 2 0 N (t ^ 2) - t * slice 2 1 N (t ^ 2) = (1 - t) ^ N := by
-  convert square_even_odd N ( -t ) using 1 ; ring
+  simpa [sub_eq_add_neg] using square_even_odd N (-t)
 
 /-
 Exact error identity for the square-root packet ratio.  When `t > 0`, the
@@ -113,6 +115,25 @@ theorem tendsto_square_ratio {t : ℝ} (ht : 0 < t) :
       grind +suggestions;
     rw [ h_even_odd.1, h_even_odd.2, div_pow ];
     field_simp;
-  simpa [ h_ratio ] using Filter.Tendsto.div ( tendsto_const_nhds.mul ( tendsto_const_nhds.sub ( tendsto_pow_atTop_nhds_zero_of_abs_lt_one hq ) ) ) ( tendsto_const_nhds.add ( tendsto_pow_atTop_nhds_zero_of_abs_lt_one hq ) ) ( by norm_num ) |> fun h => h.trans <| by norm_num;
+  rw [show (fun N : ℕ => slice 2 1 N (t ^ 2) / slice 2 0 N (t ^ 2)) =
+      (fun N : ℕ => t⁻¹ * (1 - q ^ N) / (1 + q ^ N)) by
+        funext N
+        exact h_ratio N]
+  have hpow : Filter.Tendsto (fun N : ℕ => q ^ N) Filter.atTop (nhds (0 : ℝ)) :=
+    tendsto_pow_atTop_nhds_zero_of_abs_lt_one hq
+  have hnum : Filter.Tendsto (fun N : ℕ => t⁻¹ * (1 - q ^ N)) Filter.atTop
+      (nhds (t⁻¹ * (1 - (0 : ℝ)))) :=
+    tendsto_const_nhds.mul (tendsto_const_nhds.sub hpow)
+  have hden : Filter.Tendsto (fun N : ℕ => (1 : ℝ) + q ^ N) Filter.atTop
+      (nhds ((1 : ℝ) + 0)) :=
+    tendsto_const_nhds.add hpow
+  have hdiv := Filter.Tendsto.div hnum hden (by norm_num : (1 : ℝ) + 0 ≠ 0)
+  have hfun :
+      (fun N : ℕ => t⁻¹ * (1 - q ^ N)) / (fun N : ℕ => (1 : ℝ) + q ^ N) =
+        (fun N : ℕ => t⁻¹ * (1 - q ^ N) / (1 + q ^ N)) := by
+    funext N
+    rfl
+  rw [hfun] at hdiv
+  simpa using hdiv
 
 end ResidueSlices

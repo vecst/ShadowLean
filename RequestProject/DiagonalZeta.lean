@@ -116,8 +116,11 @@ theorem channelRatio_diagonal_bound
         -- We have $ channelRatio t ω a \leq \exp(- (1 - \cos(2π/g))t / (1 + t)^2)$.
         have h_exp : channelRatio t ω a ≤ Real.exp (- (1 - Real.cos (2 * Real.pi / g)) * t / (1 + t) ^ 2) := by
           have h_exp : channelRatio t ω a ^ 2 ≤ Real.exp (-2 * (1 - Real.cos (2 * Real.pi / g)) * t / (1 + t) ^ 2) := by
-            refine le_trans h_sq ?_;
-            convert Real.add_one_le_exp _ using 1 ; ring;
+            calc
+              _ ≤ 1 - 2 * (1 - Real.cos (2 * Real.pi / g)) * t / (1 + t) ^ 2 := h_sq
+              _ = -2 * (1 - Real.cos (2 * Real.pi / g)) * t / (1 + t) ^ 2 + 1 := by ring
+              _ ≤ Real.exp (-2 * (1 - Real.cos (2 * Real.pi / g)) * t / (1 + t) ^ 2) :=
+                Real.add_one_le_exp _
           convert Real.le_sqrt_of_sq_le h_exp using 1 ; rw [ Real.sqrt_eq_rpow, ← Real.exp_mul ] ; ring;
         -- We have $ t / (1 + t)^2 \geq N^{-1/g} / 4$.
         have h_bound : t / (1 + t) ^ 2 ≥ (N : ℝ) ^ (-(1 : ℝ) / g) / 4 := by
@@ -127,7 +130,13 @@ theorem channelRatio_diagonal_bound
         -- We have $ channelRatio t ω a \leq \exp(- (1 - \cos(2π/g))N^{-1/g} / 4)$.
         have h_exp_bound : channelRatio t ω a ≤ Real.exp (- (1 - Real.cos (2 * Real.pi / g)) * (N : ℝ) ^ (-(1 : ℝ) / g) / 4) := by
           refine le_trans h_exp <| Real.exp_le_exp.mpr ?_;
-          convert mul_le_mul_of_nonpos_left h_bound ( show ( - ( 1 - Real.cos ( 2 * Real.pi / g ) ) ) ≤ 0 from neg_nonpos_of_nonneg ( sub_nonneg.mpr ( Real.cos_le_one _ ) ) ) using 1 <;> ring;
+          have hc : -(1 - Real.cos (2 * Real.pi / g)) ≤ 0 :=
+            neg_nonpos_of_nonneg (sub_nonneg.mpr (Real.cos_le_one _))
+          calc
+            _ = -(1 - Real.cos (2 * Real.pi / g)) * (t / (1 + t) ^ 2) := by ring
+            _ ≤ -(1 - Real.cos (2 * Real.pi / g)) * ((N : ℝ) ^ (-(1 : ℝ) / g) / 4) :=
+              mul_le_mul_of_nonpos_left h_bound hc
+            _ = -(1 - Real.cos (2 * Real.pi / g)) * (N : ℝ) ^ (-(1 : ℝ) / g) / 4 := by ring
         refine le_trans ( pow_le_pow_left₀ ( by exact div_nonneg ( norm_nonneg _ ) ( by positivity ) ) h_exp_bound _ ) ?_;
         rw [ ← Real.exp_nat_mul ] ; ring_nf ; norm_num [ diagGap ];
         rw [ show ( 1 - ( g : ℝ ) ⁻¹ ) = - ( g : ℝ ) ⁻¹ + 1 by ring, Real.rpow_add' ] <;> norm_num ; ring_nf ; norm_num;
@@ -142,23 +151,30 @@ theorem spectralGap_diagonal_bound
     {n N : ℕ} (hn1 : 1 ≤ n) (hnN : n ≤ N) :
     spectralGap g ((n : ℝ) ^ ((g : ℝ))⁻¹) ω ^ N ≤
       Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))) := by
-        convert channelRatio_diagonal_bound hg hω _ _ _ _ using 1 <;> norm_num [ hn1, hnN ];
-        rotate_left;
-        exact Classical.choose ( show ∃ a ∈ Finset.range g \ { 0 }, spectralGap g ( n ^ ( g : ℝ ) ⁻¹ ) ω = channelRatio ( n ^ ( g : ℝ ) ⁻¹ ) ω a from by
-                                  have h_max : ∃ a ∈ Finset.range g \ {0}, ∀ b ∈ Finset.range g \ {0}, channelRatio ((n : ℝ) ^ ((g : ℝ))⁻¹) ω b ≤ channelRatio ((n : ℝ) ^ ((g : ℝ))⁻¹) ω a := by
-                                    exact Finset.exists_max_image _ _ ⟨ 1, by norm_num; linarith ⟩
-                                  generalize_proofs at *; (
-                                  obtain ⟨ a, ha₁, ha₂ ⟩ := h_max; use a; simp_all +decide [ spectralGap ] ;
-                                  refine' le_antisymm _ _ <;> simp_all +decide [ Finset.max' ];
-                                  · exact ⟨ div_nonneg ( norm_nonneg _ ) ( by positivity ), fun x y hy hy' hx => hx ▸ ha₂ y hy hy' ⟩;
-                                  · exact Or.inr ⟨ a, ha₁, le_rfl ⟩) )
-        all_goals generalize_proofs at *;
-        exact Finset.mem_range.mp ( Finset.mem_sdiff.mp ( Classical.choose_spec ‹∃ x ∈ Finset.range g \ { 0 }, spectralGap g ( n ^ ( g : ℝ ) ⁻¹ ) ω = channelRatio ( n ^ ( g : ℝ ) ⁻¹ ) ω x› |>.1 ) |>.1 );
-        grind;
-        exact n;
-        · exact hn1;
-        · exact hnN;
-        · exact Classical.choose_spec ‹∃ x ∈ Finset.range g \ { 0 }, spectralGap g ( n ^ ( g : ℝ ) ⁻¹ ) ω = channelRatio ( n ^ ( g : ℝ ) ⁻¹ ) ω x› |>.2 ▸ rfl
+  let t : ℝ := (n : ℝ) ^ ((g : ℝ))⁻¹
+  have hchannels : (Finset.range g \ {0}).Nonempty := by
+    refine ⟨1, Finset.mem_sdiff.mpr ⟨Finset.mem_range.mpr ?_, by simp⟩⟩
+    linarith
+  obtain ⟨a, ha, hmax⟩ :=
+    Finset.exists_max_image (Finset.range g \ {0}) (channelRatio t ω) hchannels
+  have ha_range : a ∈ Finset.range g := (Finset.mem_sdiff.mp ha).1
+  have ha0 : a ≠ 0 := by simpa using (Finset.mem_sdiff.mp ha).2
+  have hgap_le : spectralGap g t ω ≤ channelRatio t ω a := by
+    unfold spectralGap
+    apply Finset.max'_le
+    intro y hy
+    rcases Finset.mem_insert.mp hy with rfl | hy
+    · unfold channelRatio
+      positivity
+    · rcases Finset.mem_image.mp hy with ⟨b, hb, rfl⟩
+      exact hmax b hb
+  have hgap_ge : channelRatio t ω a ≤ spectralGap g t ω :=
+    channelRatio_le_spectralGap ha_range ha0
+  have hgap_eq : spectralGap g t ω = channelRatio t ω a :=
+    le_antisymm hgap_le hgap_ge
+  change spectralGap g t ω ^ N ≤ _
+  rw [hgap_eq]
+  exact channelRatio_diagonal_bound hg hω (Finset.mem_range.mp ha_range) ha0 hn1 hnN
 
 /-
 **Uniform diagonal estimate**: one explicit threshold in `N` works

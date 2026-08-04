@@ -198,7 +198,6 @@ theorem ratio_three_closed_form {N : Nat} (hN : 1 <= N) :
     have h_lt : (2 - Real.sqrt 2) ^ N < (2 + Real.sqrt 2) ^ N := by
       gcongr
       · nlinarith [Real.sq_sqrt (by norm_num : (2 : ℝ) ≥ 0)]
-      · linarith [Real.sqrt_pos.mpr (by norm_num : (2 : ℝ) > 0)]
     linarith
   -- Now use field_simp to clear denominators
   rw [silver_eq]

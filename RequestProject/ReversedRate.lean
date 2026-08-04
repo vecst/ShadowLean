@@ -110,18 +110,18 @@ theorem reversed_ratio_geometric_bound {g k : ℕ} (hg : 0 < g) (hk : k < g)
           by_cases hk0 : k = 0 <;> simp_all +decide [ div_eq_mul_inv ];
           · refine' ⟨ 0, by norm_num, 0, fun N hN => _ ⟩ ; norm_num [ ne_of_gt ( revA_pos ( show 0 ≤ N by linarith ) hx ) ];
           · -- Use the results from general_slice_ratio_spectral_rate_exp and endpointCorrection_geometric_bound.
-            obtain ⟨C1, hC1_nonneg, N1, hN1⟩ : ∃ C1 : ℝ, 0 ≤ C1 ∧ ∃ N1 : ℕ, ∀ N ≥ N1, |slice g k N (x⁻¹) / slice g 0 N (x⁻¹) - (revT g x) ^ (-k : ℝ)| ≤ C1 * (spectralGap g (revT g x) (Complex.exp (2 * Real.pi * Complex.I / g))) ^ N := by
+            obtain ⟨C1, hC1_nonneg, N1, hRate1⟩ : ∃ C1 : ℝ, 0 ≤ C1 ∧ ∃ N1 : ℕ, ∀ N ≥ N1, |slice g k N (x⁻¹) / slice g 0 N (x⁻¹) - (revT g x) ^ (-k : ℝ)| ≤ C1 * (spectralGap g (revT g x) (Complex.exp (2 * Real.pi * Complex.I / g))) ^ N := by
               have := general_slice_ratio_spectral_rate_exp hg hk ( show 0 < revT g x from by exact Real.rpow_pos_of_pos ( inv_pos.mpr hx ) _ );
               obtain ⟨ C, hC₀, hC ⟩ := this; use C, hC₀, 0; intro N hN; convert hC N using 1; norm_cast; norm_num [ Real.rpow_neg, hx.le, hg.ne' ] ;
               unfold revT; norm_num [ ← Real.rpow_natCast, ← Real.rpow_mul ( inv_nonneg.mpr hx.le ), hg.ne' ] ;
-            obtain ⟨C2, hC2_nonneg, N2, hN2⟩ : ∃ C2 : ℝ, 0 ≤ C2 ∧ ∃ N2 : ℕ, ∀ N ≥ N2, |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| ≤ C2 * (revT g x / (1 + revT g x)) ^ N := by
+            obtain ⟨C2, hC2_nonneg, N2, hRate2⟩ : ∃ C2 : ℝ, 0 ≤ C2 ∧ ∃ N2 : ℕ, ∀ N ≥ N2, |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| ≤ C2 * (revT g x / (1 + revT g x)) ^ N := by
               convert endpointCorrection_geometric_bound hg hx using 1;
             -- Use the results from tendstoUniformlyOn_endpointCorrection to find N3 such that for all N ≥ N3, |correction| ≤ 1/2.
-            obtain ⟨N3, hN3⟩ : ∃ N3 : ℕ, ∀ N ≥ N3, |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| ≤ 1 / 2 := by
+            obtain ⟨N3, hHalf⟩ : ∃ N3 : ℕ, ∀ N ≥ N3, |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| ≤ 1 / 2 := by
               have hN3 : Filter.Tendsto (fun N => |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)|) Filter.atTop (nhds 0) := by
                 refine' squeeze_zero_norm' _ _;
                 use fun N => C2 * ( revT g x / ( 1 + revT g x ) ) ^ N;
-                · filter_upwards [ Filter.eventually_ge_atTop N2 ] with N hN using by simpa using hN2 N hN;
+                · filter_upwards [ Filter.eventually_ge_atTop N2 ] with N hN using by simpa using hRate2 N hN;
                 · exact MulZeroClass.mul_zero ( C2 : ℝ ) ▸ tendsto_const_nhds.mul ( tendsto_pow_atTop_nhds_zero_of_lt_one ( by exact div_nonneg ( Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ( by exact add_nonneg zero_le_one ( Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ) ) ( by rw [ div_lt_iff₀ ] <;> linarith [ show 0 < revT g x from Real.rpow_pos_of_pos ( inv_pos.2 hx ) _ ] ) );
               simpa using hN3.eventually ( ge_mem_nhds <| by norm_num );
             refine' ⟨ 2 * C1 + 2 * |revT g x ^ (-k : ℝ)| * C2, _, Max.max N1 (Max.max N2 (Max.max N3 1)), _ ⟩ <;> norm_num;
@@ -130,31 +130,48 @@ theorem reversed_ratio_geometric_bound {g k : ℕ} (hg : 0 < g) (hk : k < g)
               have h_ratio : revA g k N x / revA g 0 N x = (slice g k N (x⁻¹) / slice g 0 N (x⁻¹)) / (1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)) := by
                 rw [ revA_eq_slice hg ( Nat.pos_of_ne_zero hk0 ) hk hx, revB_eq_slice hg hN4 hx ];
                 rw [ mul_div_mul_left _ _ ( by positivity ), div_div, mul_sub, mul_one, mul_div_cancel₀ _ ( by exact ne_of_gt ( slice_zero_pos _ _ ( by positivity ) ) ) ];
+              have hden : 1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+                    slice g 0 N (x⁻¹) ≠ 0 := by
+                have hu := (abs_le.mp (hHalf N hN3)).2
+                linarith
+              have hslice : slice g 0 N (x⁻¹) ≠ 0 :=
+                ne_of_gt (slice_zero_pos g N (by positivity))
+              have rational_identity (a c e : ℝ) (he : 1 - e ≠ 0) :
+                  a / (1 - e) - c = (a - c) / (1 - e) + c * e / (1 - e) := by
+                field_simp [he]
+                ring
               have h_bound : |revA g k N x / revA g 0 N x - revT g x ^ (-k : ℝ)| ≤ 2 * |slice g k N (x⁻¹) / slice g 0 N (x⁻¹) - revT g x ^ (-k : ℝ)| + 2 * |revT g x ^ (-k : ℝ)| * |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| := by
                 have h_bound : |revA g k N x / revA g 0 N x - revT g x ^ (-k : ℝ)| ≤ |slice g k N (x⁻¹) / slice g 0 N (x⁻¹) - revT g x ^ (-k : ℝ)| / |1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| + |revT g x ^ (-k : ℝ)| * |epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| / |1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| := by
                   rw [ h_ratio, ← abs_div ];
                   rw [ ← abs_mul, ← abs_div ];
                   rw [ show slice g k N x⁻¹ / slice g 0 N x⁻¹ / ( 1 - epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) - revT g x ^ ( -k : ℝ ) = ( slice g k N x⁻¹ / slice g 0 N x⁻¹ - revT g x ^ ( -k : ℝ ) ) / ( 1 - epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) + revT g x ^ ( -k : ℝ ) * ( epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) / ( 1 - epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) by
-                        grind ];
-                  grind;
+                        exact rational_identity _ _ _ hden ];
+                  exact abs_add_le _ _
                 have h_bound : |1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹)| ≥ 1 / 2 := by
-                  cases abs_cases ( 1 - epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) <;> linarith [ abs_le.mp ( ‹∀ N ≥ N3, |epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹| ≤ 1 / 2› N hN3 ) ];
+                  cases abs_cases ( 1 - epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) <;> linarith [ abs_le.mp ( hHalf N hN3 ) ];
                 refine le_trans ‹_› ?_;
                 exact add_le_add ( by rw [ div_le_iff₀ ] <;> nlinarith [ abs_nonneg ( slice g k N x⁻¹ / slice g 0 N x⁻¹ - revT g x ^ ( -k : ℝ ) ) ] ) ( by rw [ div_le_iff₀ ] <;> nlinarith [ abs_nonneg ( revT g x ^ ( -k : ℝ ) ), abs_nonneg ( epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ), mul_nonneg ( abs_nonneg ( revT g x ^ ( -k : ℝ ) ) ) ( abs_nonneg ( epsIdx g N * x⁻¹ ^ ( qIdx g N + 1 ) / slice g 0 N x⁻¹ ) ) ] );
-              convert h_bound.trans _ using 1;
-              · unfold revT; norm_num [ Real.rpow_neg, Real.rpow_mul, hx.le ] ; ring_nf;
-                norm_num [ Real.inv_rpow hx.le, Real.rpow_neg hx.le ];
-                rw [ ← Real.rpow_natCast, ← Real.rpow_mul hx.le, ← Real.rpow_natCast, ← Real.rpow_mul hx.le ] ; ring_nf;
-              · refine' le_trans ( add_le_add ( mul_le_mul_of_nonneg_left ( by solve_by_elim ) zero_le_two ) ( mul_le_mul_of_nonneg_left ( by solve_by_elim ) ( by positivity ) ) ) _;
-                unfold combinedRate; ring_nf; norm_num;
-                refine' add_le_add _ _;
-                · gcongr;
-                  · exact Finset.le_max' _ _ ( Finset.mem_insert_self _ _ ) |> le_trans ( by norm_num );
-                  · exact le_max_left _ _;
-                · norm_num [ mul_assoc, mul_comm, mul_left_comm, ← div_eq_mul_inv ];
-                  rw [ mul_div_right_comm ];
-                  rw [ mul_comm ] ; gcongr;
-                  rw [ ← div_pow ] ; exact pow_le_pow_left₀ ( by exact div_nonneg ( by exact Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ( by exact add_nonneg zero_le_one ( Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ) ) ( le_max_right _ _ ) _;
+              have htarget : revT g x ^ (-k : ℝ) = x ^ ((k : ℝ) * (g : ℝ)⁻¹) := by
+                unfold revT
+                rw [← Real.rpow_mul (inv_nonneg.mpr hx.le)]
+                rw [Real.inv_rpow hx.le]
+                rw [← Real.rpow_neg hx.le]
+                congr 1
+                field_simp [hg.ne']
+              rw [← htarget]
+              refine h_bound.trans ?_
+              refine le_trans ( add_le_add ( mul_le_mul_of_nonneg_left ( hRate1 N hN1 ) zero_le_two ) ( mul_le_mul_of_nonneg_left ( hRate2 N hN2 ) ( by positivity ) ) ) ?_
+              unfold combinedRate
+              ring_nf
+              norm_num
+              refine' add_le_add _ _;
+              · gcongr;
+                · exact Finset.le_max' _ _ ( Finset.mem_insert_self _ _ ) |> le_trans ( by norm_num );
+                · exact le_max_left _ _;
+              · norm_num [ mul_assoc, mul_comm, mul_left_comm, ← div_eq_mul_inv ];
+                rw [ mul_div_right_comm ];
+                rw [ mul_comm ] ; gcongr;
+                rw [ ← div_pow ] ; exact pow_le_pow_left₀ ( by exact div_nonneg ( by exact Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ( by exact add_nonneg zero_le_one ( Real.rpow_nonneg ( inv_nonneg.2 hx.le ) _ ) ) ) ( le_max_right _ _ ) _;
 
 /-
 **Target 4 (optional).** The same result in `IsBigO` form at `atTop`.

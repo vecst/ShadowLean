@@ -187,7 +187,22 @@ theorem tendsto_reversed_ratio {g k : ℕ} (hg : 0 < g) (hk : k < g)
             convert tendsto_slice_ratio_rpow hg hk ( inv_pos.mpr hx ) using 1;
           -- Rewrite the quotient as $(S_k/S_0)/(1-E_N/S_0)$.
           have h_quotient : Filter.Tendsto (fun N => (slice g k N (x⁻¹) / slice g 0 N (x⁻¹)) / (1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) / slice g 0 N (x⁻¹))) Filter.atTop (nhds ((x⁻¹) ^ (-(k : ℝ) / (g : ℝ)))) := by
-            convert h_slice_ratio.div ( tendsto_const_nhds.sub h_endpoints ) _ using 2 <;> norm_num;
+            have hden : Filter.Tendsto
+                (fun N : ℕ => 1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+                  slice g 0 N (x⁻¹)) Filter.atTop (nhds (1 : ℝ)) := by
+              simpa using tendsto_const_nhds.sub h_endpoints
+            have hdiv := h_slice_ratio.div hden (by norm_num : (1 : ℝ) ≠ 0)
+            have hfun :
+                (fun N : ℕ => slice g k N (x⁻¹) / slice g 0 N (x⁻¹)) /
+                    (fun N : ℕ => 1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+                      slice g 0 N (x⁻¹)) =
+                  (fun N : ℕ => (slice g k N (x⁻¹) / slice g 0 N (x⁻¹)) /
+                    (1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+                      slice g 0 N (x⁻¹))) := by
+              funext N
+              rfl
+            rw [hfun] at hdiv
+            simpa using hdiv
           refine' Filter.Tendsto.congr' _ ( h_quotient.trans _ );
           · filter_upwards [ Filter.eventually_ge_atTop 1, Filter.eventually_ge_atTop k ] with N hN₁ hN₂ using by rw [ h_ratio N hN₁ hN₂, div_div, mul_sub, mul_one, mul_div_cancel₀ _ ( ne_of_gt <| slice_zero_pos _ _ <| by positivity ) ] ;
           · norm_num [ neg_div, Real.rpow_neg_eq_inv_rpow ]

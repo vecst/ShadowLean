@@ -88,10 +88,10 @@ theorem tendsto_tailTerm (m : ℕ) {x : ℝ} (hx : 0 < x) :
                   -- We can factor out $(1 / \log(1 + \sqrt{x}))^{2j}$ from the limit.
                   suffices h_factor : Filter.Tendsto (fun y : ℝ => y ^ (2 * j) / Real.exp y) Filter.atTop (nhds 0) by
                     convert h_factor.div_const ( Real.log ( 1 + Real.sqrt x ) ^ ( 2 * j ) ) using 2 <;> ring;
-                  simpa [ Real.exp_neg ] using Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero ( 2 * j );
+                  simpa [ div_eq_mul_inv, Real.exp_neg ] using Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero ( 2 * j );
                 convert h_term_zero.const_mul ( x ^ j ) using 2 <;> ring;
               refine' squeeze_zero ( fun N => div_nonneg ( headPoly_nonneg m N hx.le ) ( by positivity ) ) ( fun N => div_le_div_of_nonneg_right ( h_poly_bound N ) ( by positivity ) ) _;
-              simpa [ Finset.sum_div _ _ _ ] using tendsto_finset_sum _ fun j hj => h_term_zero j ( Finset.mem_range.mp hj );
+              simpa [ Finset.sum_div _ _ _ ] using tendsto_finsetSum _ fun j hj => h_term_zero j ( Finset.mem_range.mp hj );
             -- Since $(1 - \sqrt{x})^N$ is bounded, we can factor it out of the limit.
             have h_factor : Filter.Tendsto (fun N => ((1 + Real.sqrt x) ^ N + (1 - Real.sqrt x) ^ N) / (1 + Real.sqrt x) ^ N) Filter.atTop (nhds 1) := by
               norm_num [ add_div ];
@@ -115,8 +115,16 @@ theorem tendsto_mixedKernel {m g k : ℕ} (hg : 0 < g) (hk : k < g)
     {x : ℝ} (hx : 0 < x) :
     Filter.Tendsto (fun N : ℕ => mixedKernel m g k N x)
       Filter.atTop (nhds (x ^ (-sVal m k g))) := by
-        convert Filter.Tendsto.mul ( tendsto_tailTerm m hx ) ( tendsto_slice_ratio_rpow hg hk hx ) using 1 ; norm_num [ sVal ] ; ring;
-        rw [ Real.rpow_sub hx, Real.rpow_neg hx.le ] ; norm_cast ; norm_num ; ring
+  have hmul := Filter.Tendsto.mul (tendsto_tailTerm m hx)
+    (tendsto_slice_ratio_rpow hg hk hx)
+  have hlimit : (x ^ m)⁻¹ * x ^ (-(k : ℝ) / (g : ℝ)) = x ^ (-sVal m k g) := by
+    rw [show -sVal m k g = -(m : ℝ) + (-(k : ℝ) / (g : ℝ)) by
+      simp [sVal]
+      ring]
+    rw [Real.rpow_add hx, Real.rpow_neg hx.le]
+    norm_cast
+  rw [hlimit] at hmul
+  simpa [mixedKernel] using hmul
 
 /-
 **Diagonal approximation to ζ(s)** (`residue_packetization.tex`,
@@ -156,11 +164,23 @@ theorem tendsto_diagZeta {m g k : ℕ} (hg : 2 ≤ g) (hk : k < g)
                   exact ⟨ 1, fun N hN n hn hn' => head_tail_identity m N ( by positivity ) ⟩;
                 filter_upwards [ h_bound ] with N hN n hn hn' using by linarith [ hN n hn hn', show 0 ≤ headTerm m N ( n : ℝ ) from headTerm_nonneg m N ( by positivity ) ] ;
               filter_upwards [ h_bound ] with N hN n hn hn' using by rw [ abs_of_nonneg ( tailTerm_nonneg m N ( by positivity ) ) ] ; exact hN n hn hn';
-            filter_upwards [ h_bound, ‹∀ᶠ N in Filter.atTop, ∀ n ≥ 1, n ≤ N → |slice g k N ( n : ℝ ) / slice g 0 N ( n : ℝ )| ≤ ( n : ℝ ) ^ ( - ( k : ℝ ) / ( g : ℝ ) ) * ( 1 + 4 * ( g - 1 ) ) › ] with N hN₁ hN₂ n hn hn' ; simp_all +decide [ sVal ];
-            convert mul_le_mul ( hN₁ n hn hn' ) ( hN₂ n hn hn' ) ( by positivity ) ( by positivity ) using 1 ; ring;
-            · rw [ ← abs_mul ] ; unfold mixedKernel ; ring;
-            · rw [ Real.rpow_add ( by positivity ), Real.rpow_neg ( by positivity ) ] ; ring;
-              norm_num [ Real.rpow_neg ( by positivity : 0 ≤ ( n : ℝ ) ) ] ; ring;
+            filter_upwards [ h_bound, ‹∀ᶠ N in Filter.atTop, ∀ n ≥ 1, n ≤ N → |slice g k N ( n : ℝ ) / slice g 0 N ( n : ℝ )| ≤ ( n : ℝ ) ^ ( - ( k : ℝ ) / ( g : ℝ ) ) * ( 1 + 4 * ( g - 1 ) ) › ] with N hN₁ hN₂ n hn hn'
+            calc
+              |mixedKernel m g k N (n : ℝ)| =
+                  |tailTerm m N (n : ℝ)| *
+                    |slice g k N (n : ℝ) / slice g 0 N (n : ℝ)| := by
+                      simp only [mixedKernel, abs_mul]
+              _ ≤ (n : ℝ) ^ (-m : ℝ) *
+                    ((n : ℝ) ^ (-(k : ℝ) / (g : ℝ)) *
+                      (1 + 4 * (g - 1))) :=
+                mul_le_mul (hN₁ n hn hn') (hN₂ n hn hn')
+                  (by positivity) (by positivity)
+              _ = (n : ℝ) ^ (-sVal m k g) * (1 + 4 * (g - 1)) := by
+                rw [show -sVal m k g = (-m : ℝ) + (-(k : ℝ) / (g : ℝ)) by
+                  simp [sVal]
+                  ring]
+                rw [Real.rpow_add (by positivity)]
+                ring
           filter_upwards [ h_bound ] with N hN k ; split_ifs <;> simp_all +decide ;
           · exact_mod_cast hN ( k + 1 ) ( by linarith ) ( by linarith );
           · exact mul_nonneg ( Real.rpow_nonneg ( by positivity ) _ ) ( by linarith [ show ( g : ℝ ) ≥ 2 by norm_cast ] );
@@ -189,21 +209,40 @@ lemma real_rpow_tsum_tail_bound {s : ℝ} (hs : 1 < s) {N : ℕ} (hN : 1 ≤ N) 
           intro M
           induction' M with M ih;
           · norm_num;
-          · convert add_le_add ih ( h_integral_bound M ) using 1 <;> push_cast [ Finset.sum_range_succ ] <;> ring;
-            rw [ intervalIntegral.integral_add_adjacent_intervals ] <;> apply_rules [ intervalIntegral.intervalIntegrable_rpow ] <;> norm_num;
-            · exact Or.inr fun h => by linarith;
-            · exact Or.inr fun h => by linarith [ show ( N : ℝ ) ≥ 1 by norm_cast ] ;
+          · rw [Finset.sum_range_succ]
+            push_cast
+            rw [show (M : ℝ) + 1 + N = (M : ℝ) + N + 1 by ring]
+            rw [← intervalIntegral.integral_add_adjacent_intervals]
+            · exact add_le_add ih (h_integral_bound M)
+            · apply_rules [intervalIntegral.intervalIntegrable_rpow]
+              norm_num
+              exact Or.inr fun h => by
+                linarith [show (N : ℝ) ≥ 1 by norm_cast]
+            · apply_rules [intervalIntegral.intervalIntegrable_rpow]
+              norm_num
+              exact Or.inr fun h => by
+                linarith [show (N : ℝ) ≥ 1 by norm_cast]
         -- Taking the limit of the integral bound as $M$ approaches infinity, we get the desired result.
         have h_limit_integral_bound : Filter.Tendsto (fun M : ℕ => ∫ x in (N : ℝ)..((M + N) : ℝ), x ^ (-s)) Filter.atTop (nhds (∫ x in Set.Ioi (N : ℝ), x ^ (-s))) := by
           apply_rules [ MeasureTheory.intervalIntegral_tendsto_integral_Ioi ];
           · rw [ integrableOn_Ioi_rpow_iff ] <;> norm_num ; linarith;
             linarith;
           · exact Filter.tendsto_atTop_add_const_right _ _ tendsto_natCast_atTop_atTop;
-        convert le_of_tendsto_of_tendsto' ( Summable.hasSum ( show Summable _ from _ ) |> HasSum.tendsto_sum_nat ) h_limit_integral_bound h_sum_integral_bound using 1;
-        · rw [ integral_Ioi_rpow_of_lt ] <;> norm_num [ hs ];
-          · rw [ ← neg_div_neg_eq ] ; ring;
-          · linarith;
-        · exact_mod_cast summable_nat_add_iff ( N + 1 ) |>.2 <| Real.summable_nat_rpow.2 <| by linarith;
+        have hsumm : Summable (fun n : ℕ => ((n + N + 1 : ℝ) ^ (-s))) := by
+          exact_mod_cast summable_nat_add_iff (N + 1) |>.2 <|
+            Real.summable_nat_rpow.2 (by linarith)
+        have hle : (∑' n : ℕ, ((n + N + 1 : ℝ) ^ (-s))) ≤
+            ∫ x in Set.Ioi (N : ℝ), x ^ (-s) :=
+          le_of_tendsto_of_tendsto' hsumm.hasSum.tendsto_sum_nat
+            h_limit_integral_bound h_sum_integral_bound
+        have heval : (∫ x in Set.Ioi (N : ℝ), x ^ (-s)) =
+            (N : ℝ) ^ (1 - s) / (s - 1) := by
+          rw [integral_Ioi_rpow_of_lt] <;> norm_num [hs]
+          · rw [← neg_div_neg_eq]
+            ring
+          · linarith
+        rw [heval] at hle
+        exact hle
 
 /-
 The normalized finite head is uniformly polynomial times exponentially small.
@@ -295,9 +334,25 @@ lemma mixedKernel_diagonal_error {m g k : ℕ} (hm : 1 ≤ m)
             have h_e_b : e * |b| ≤ 3 * e := by
               rw [ mul_comm ];
               exact mul_le_mul_of_nonneg_right ( h_bounds.2.trans ( mul_le_of_le_one_right ( by norm_num ) ( by exact le_trans ( Real.rpow_le_rpow_of_exponent_le ( mod_cast Finset.mem_Icc.mp hn |>.1 ) ( show ( -k : ℝ ) / g ≤ 0 by exact div_nonpos_of_nonpos_of_nonneg ( neg_nonpos.mpr ( Nat.cast_nonneg _ ) ) ( Nat.cast_nonneg _ ) ) ) ( by norm_num ) ) ) ) ( by exact div_nonneg ( headPoly_nonneg _ _ ( Nat.cast_nonneg _ ) ) ( mul_nonneg ( pow_nonneg ( Nat.cast_nonneg _ ) _ ) ( one_le_slice_zero _ _ ( Nat.cast_nonneg _ ) |> le_trans ( by norm_num ) ) ) );
-            convert h_triangle.trans ( add_le_add h_e_b h_p_c_b ) |> le_trans <| add_le_add ( mul_le_mul_of_nonneg_left ( hC₁.2 N ( by linarith ) n hn ) zero_le_three ) le_rfl using 1 ; ring;
-            · exact h_identities.2.symm ▸ rfl;
-            · ring
+            calc
+              |(n : ℝ) ^ (-sVal m k g) - mixedKernel m g k N (n : ℝ)| =
+                  |p * c - a * b| := by
+                    rw [h_identities.2]
+                    rfl
+              _ ≤ e * |b| + p * |c - b| := h_triangle
+              _ ≤ 3 * e + 4 * (g - 1) *
+                    Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))) :=
+                add_le_add h_e_b h_p_c_b
+              _ ≤ 3 * (C₁ * (N : ℝ) ^ (2 * m - 2) * (2 : ℝ)⁻¹ ^ N) +
+                    4 * (g - 1) *
+                      Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))) :=
+                add_le_add
+                  (mul_le_mul_of_nonneg_left (hC₁.2 N (by linarith) n hn) zero_le_three)
+                  le_rfl
+              _ = 3 * C₁ * (N : ℝ) ^ (2 * m - 2) * (2 : ℝ)⁻¹ ^ N +
+                    4 * (g - 1) *
+                      Real.exp (-(diagGap g * (N : ℝ) ^ (1 - (g : ℝ)⁻¹))) := by
+                ring
 
 /-
 **Three-term error estimate** (same theorem, quantitative form):
@@ -326,8 +381,10 @@ theorem diagZeta_error_bound {m g k : ℕ} (hg : 2 ≤ g) (hk : k < g)
                 have h_split : ∑ n ∈ Finset.Icc 1 N, ((n : ℝ) ^ (-sVal m k g)) = ∑ n ∈ Finset.range N, ((n + 1 : ℝ) ^ (-sVal m k g)) := by
                   erw [ Finset.sum_Ico_eq_sub _ _ ] <;> norm_num [ Finset.sum_range_succ' ];
                 have h_split : |∑ n ∈ Finset.Icc 1 N, ((n : ℝ) ^ (-sVal m k g)) - diagZeta m g k N| ≤ ∑ n ∈ Finset.Icc 1 N, |((n : ℝ) ^ (-sVal m k g)) - mixedKernel m g k N (n : ℝ)| := by
-                  convert Finset.abs_sum_le_sum_abs _ _ using 2 ; aesop;
-                  infer_instance;
+                  rw [show diagZeta m g k N =
+                    ∑ n ∈ Finset.Icc 1 N, mixedKernel m g k N (n : ℝ) from rfl]
+                  rw [← Finset.sum_sub_distrib]
+                  exact Finset.abs_sum_le_sum_abs _ _
                 cases abs_cases ( ∑' n : ℕ, ( n + 1 : ℝ ) ^ ( -sVal m k g ) - diagZeta m g k N ) <;> cases abs_cases ( ∑ n ∈ Finset.Icc 1 N, ( n : ℝ ) ^ ( -sVal m k g ) - diagZeta m g k N ) <;> linarith [ show 0 ≤ ∑' n : ℕ, ( n + N + 1 : ℝ ) ^ ( -sVal m k g ) from tsum_nonneg fun _ => Real.rpow_nonneg ( by positivity ) _ ];
               refine le_trans h_split ?_;
               refine' le_trans ( add_le_add ( real_rpow_tsum_tail_bound hs ( by linarith ) ) ( Finset.sum_le_sum fun n hn => hN₀ N ( by linarith ) n hn ) ) _;

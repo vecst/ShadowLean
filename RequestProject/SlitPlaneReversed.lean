@@ -64,6 +64,51 @@ set_option maxRecDepth 5000
 
 namespace ResidueSlices
 
+private lemma continuousOn_max_insert_image_zero
+    {X ι : Type*} [TopologicalSpace X] [DecidableEq ι]
+    (s : Finset ι) (f : ι → X → ℝ) (t : Set X)
+    (hf : ∀ i ∈ s, ContinuousOn (f i) t) :
+    ContinuousOn
+      (fun x => (insert 0 (s.image fun i => f i x)).max'
+        ⟨0, Finset.mem_insert_self 0 _⟩) t := by
+  let os : Finset (Option ι) := insert none (s.image some)
+  have hos : os.Nonempty := ⟨none, Finset.mem_insert_self none _⟩
+  let F : Option ι → X → ℝ := fun oi x =>
+    match oi with
+    | none => 0
+    | some i => f i x
+  have hcont : ContinuousOn (fun x => os.sup' hos (fun oi => F oi x)) t := by
+    apply ContinuousOn.finset_sup'_apply hos
+    intro oi hoi
+    simp only [os, Finset.mem_insert, Finset.mem_image] at hoi
+    rcases hoi with rfl | ⟨i, hi, rfl⟩
+    · exact continuousOn_const
+    · exact hf i hi
+  apply hcont.congr
+  intro x hx
+  let vals : Finset ℝ := insert 0 (s.image fun i => f i x)
+  have hvals : vals.Nonempty := ⟨0, Finset.mem_insert_self 0 _⟩
+  change vals.max' hvals = os.sup' hos (fun oi => F oi x)
+  rw [Finset.max'_eq_sup']
+  apply le_antisymm
+  · apply Finset.sup'_le hvals id
+    intro y hy
+    simp only [vals, Finset.mem_insert, Finset.mem_image] at hy
+    rcases hy with rfl | ⟨i, hi, rfl⟩
+    · exact Finset.le_sup' (s := os) (fun oi => F oi x)
+        (Finset.mem_insert_self none _)
+    · change F (some i) x ≤ os.sup' hos (fun oi => F oi x)
+      simpa only [] using Finset.le_sup' (s := os) (b := some i) (fun oi => F oi x)
+        (Finset.mem_insert_of_mem (Finset.mem_image.mpr ⟨i, hi, rfl⟩))
+  · apply Finset.sup'_le hos (fun oi => F oi x)
+    intro oi hoi
+    simp only [os, Finset.mem_insert, Finset.mem_image] at hoi
+    rcases hoi with rfl | ⟨i, hi, rfl⟩
+    · exact Finset.le_sup' (s := vals) id (Finset.mem_insert_self 0 _)
+    · change id (f i x) ≤ vals.sup' hvals id
+      simpa only [] using Finset.le_sup' (s := vals) (b := f i x) id
+        (Finset.mem_insert_of_mem (Finset.mem_image.mpr ⟨i, hi, rfl⟩))
+
 /-- Complex version of the paper's reversed polynomial
 `A_N(x,k,g) = ∑_{j=0}^{q_N} C(N,gj+k)x^(q_N-j)`.
 The denominator polynomial is `revAComplex g 0 N x`. -/
@@ -251,7 +296,7 @@ theorem tendsto_endpointCorrection_cpow {g : ℕ} (hg : 2 ≤ g)
       rw [hmax]
       norm_num
       exact pow_le_pow_of_le_one (norm_nonneg s) ht_le_one h_exp
-    · push_neg at ht_le_one
+    · push Not at ht_le_one
       have h_max : max 1 t = t := by rw [max_eq_right (le_of_lt ht_le_one)]
       rw [ht_def] at *
       rw [h_max]
@@ -398,8 +443,12 @@ theorem tendsto_endpointCorrection_cpow {g : ℕ} (hg : 2 ≤ g)
     -- Split the sum: a = 0 term plus a ≠ 0 terms
     have hsplit : ∑ a ∈ Finset.range g, (1 + s * ω a) ^ N = 
         (1 + s) ^ N + ∑ a ∈ (Finset.range g \ {0}), (1 + s * ω a) ^ N := by
-      rw [Finset.sum_eq_add_sum_diff_singleton (Finset.mem_range.mpr hg_pos)]
-      simp [ω, Complex.exp_zero]
+      rw [← Finset.sum_sdiff (show ({0} : Finset ℕ) ⊆ Finset.range g by
+        intro a ha
+        have ha0 : a = 0 := Finset.mem_singleton.mp ha
+        subst a
+        exact Finset.mem_range.mpr hg_pos)]
+      simp [ω, Complex.exp_zero, add_comm]
     rw [hsplit] at hsum
     -- Take norms and use triangle inequality
     have hnorm_triangle : ‖(1 + s) ^ N + ∑ a ∈ (Finset.range g \ {0}), (1 + s * ω a) ^ N‖ ≥ 
@@ -553,6 +602,16 @@ theorem tendsto_reversed_ratio_cpow {g k : ℕ} (hg : 0 < g) (hk : k < g)
       simpa using Filter.Tendsto.const_sub 1 h_endpoint
     -- Use tendsto_div
     have := Filter.Tendsto.div h_slice_ratio h_denom (by norm_num : (1 : ℂ) ≠ 0)
+    have hfun :
+        (fun N : ℕ => slice g k N x⁻¹ / slice g 0 N x⁻¹) /
+            (fun N : ℕ => 1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+              slice g 0 N x⁻¹) =
+          (fun N : ℕ => (slice g k N x⁻¹ / slice g 0 N x⁻¹) /
+            (1 - epsIdx g N * (x⁻¹) ^ (qIdx g N + 1) /
+              slice g 0 N x⁻¹)) := by
+      funext N
+      rfl
+    rw [hfun] at this
     simpa using this
 
 
@@ -596,7 +655,7 @@ theorem tendstoUniformlyOn_slice_ratio_cpow {g k : ℕ}
     · exact continuousOn_const
     · intro x hx
       have h := inv_slitPlane x (hKslit hx)
-      simp only [Complex.slitPlane, Set.mem_setOf_eq] at h ⊢
+      simp only [Complex.slitPlane, Set.mem_ofPred_eq] at h ⊢
       exact h
   -- The image of K under sFn is compact
   let imageK := sFn '' K
@@ -613,7 +672,7 @@ theorem tendstoUniformlyOn_slice_ratio_cpow {g k : ℕ}
     · aesop
     · have harg_x : |Complex.arg x| < Real.pi := by
         have hxslit := hKslit hx
-        simp only [Complex.slitPlane, Set.mem_setOf_eq] at hxslit
+        simp only [Complex.slitPlane, Set.mem_ofPred_eq] at hxslit
         cases hxslit <;> simp_all +decide [Complex.arg]
         · split_ifs <;> norm_num [ abs_lt ];
           · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ];
@@ -678,54 +737,24 @@ theorem tendstoUniformlyOn_slice_ratio_cpow {g k : ℕ}
         (fun s hs => norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs))
     -- The spectral gap function is continuous on imageK
     have hcomplexSpectralGap_cont : ContinuousOn (fun s : ℂ => complexSpectralGap s) imageK := by
-      refine' ContinuousOn.congr _ _
-      exact fun s => (Insert.insert 0 ((Finset.range g \ {0}).image fun a => ‖1 + s * ω ^ a‖ / ‖1 + s‖)).max' ⟨0, Finset.mem_insert_self 0 _⟩
-      · intro s hs
-        refine' tendsto_order.2 ⟨ _, _ ⟩
-        · intro a' ha'
-          simp_all +decide [Finset.max']
-          rcases ha' with ( ha' | ⟨ a, ⟨ ha₁, ha₂ ⟩, ha₃ ⟩ )
-          · exact Or.inl ha'
-          · refine' Or.inr _
-            have h_cont : Filter.Tendsto (fun x : ℂ => ‖1 + x * ω ^ a‖ / ‖1 + x‖) (nhdsWithin s imageK) (nhds (‖1 + s * ω ^ a‖ / ‖1 + s‖)) :=
-              Filter.Tendsto.div ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const) )
-                ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id) )
-                ( norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs) )
-            filter_upwards [ h_cont.eventually ( lt_mem_nhds ha₃ ) ] with x hx using ⟨ a, ⟨ ha₁, ha₂ ⟩, hx ⟩
-        · intro a' ha'
-          simp_all +decide [Finset.max']
-          -- Each channel function is continuous at s
-          have h_cont_at : ∀ x < g, x ≠ 0 → ContinuousAt (fun b : ℂ => ‖1 + b * ω ^ x‖ / ‖1 + b‖) s := fun x hx_lt hx_ne =>
-            ContinuousAt.div ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const )
-              ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id )
-              ( norm_ne_zero_iff.mpr <| h1_plus_s_ne_zero s hs )
-          -- Get ε for each channel
-          have h_exists_eps : ∀ x < g, x ≠ 0 → ∃ ε > 0, ∀ b, dist b s < ε → ‖1 + b * ω ^ x‖ / ‖1 + b‖ < a' := by
-            intro x hx_lt hx_ne
-            have hchan_at_s : ‖1 + s * ω ^ x‖ / ‖1 + s‖ < a' := ha'.2 _ x hx_lt hx_ne rfl
-            exact Metric.mem_nhds_iff.mp ( ContinuousAt.preimage_mem_nhds ( h_cont_at x hx_lt hx_ne ) ( Iio_mem_nhds hchan_at_s ) )
-          choose! ε hε₁ hε₂ using h_exists_eps
-          -- Choose ε to be the minimum of the ε_x's.
-          by_cases h_empty : Finset.filter (fun x => x ≠ 0) (Finset.range g) = ∅
-          · simp_all +decide
-          · obtain ⟨x₀, hx₀⟩ : ∃ x₀ ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ∀ x ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ε x₀ ≤ ε x := by
-              exact Finset.exists_min_image _ _ ( Finset.nonempty_of_ne_empty h_empty )
-            have hx₀_valid : x₀ < g ∧ x₀ ≠ 0 := by simpa [Finset.mem_filter] using hx₀.1
-            have hε₀_pos : ε x₀ > 0 := hε₁ x₀ hx₀_valid.1 hx₀_valid.2
-            filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (Metric.ball_mem_nhds s hε₀_pos)] with b hb₁ hb₂ a x hx_lt hx_ne hx_eq
-            have hdist : dist b s < ε x₀ := hb₂.out
-            have hx₀_le : ε x₀ ≤ ε x := hx₀.2 x (Finset.mem_filter.mpr ⟨Finset.mem_range.mpr hx_lt, hx_ne⟩)
-            exact hx_eq ▸ hε₂ x hx_lt hx_ne b (hdist.trans_le hx₀_le)
-      · intro s hs
-        rfl
+      simpa only [complexSpectralGap, ω] using
+        continuousOn_max_insert_image_zero (Finset.range g \ {0})
+          (fun a (s : ℂ) => ‖1 + s * ω ^ a‖ / ‖1 + s‖) imageK
+          (fun a ha => hchannel_cont a
+            (Finset.mem_range.mp (Finset.mem_sdiff.mp ha).1)
+            (Finset.mem_singleton.not.mp (Finset.mem_sdiff.mp ha).2))
     -- Use compactness to find max spectral gap
     obtain ⟨s₀, hs₀⟩ := IsCompact.exists_isMaxOn himageK_compact himage_nonempty hcomplexSpectralGap_cont
     -- The spectral gap is < 1 for each s in imageK
     have hspectral_lt_one : ∀ s ∈ imageK, complexSpectralGap s < 1 := by
       intro s hs
-      simp only [complexSpectralGap]
-      simp_all +decide [Finset.max']
-      exact fun a x hx hx' hx'' => hx''.symm ▸ hchannel_lt_one s hs x hx hx'
+      unfold complexSpectralGap
+      apply (Finset.max'_lt_iff _ _).2
+      intro y hy
+      rcases Finset.mem_insert.mp hy with rfl | hy
+      · norm_num
+      · rcases Finset.mem_image.mp hy with ⟨a, ha, rfl⟩
+        exact hchannel_lt_one s hs a ha
     have hρ_lt_one : complexSpectralGap s₀ < 1 := hspectral_lt_one s₀ hs₀.1
     -- We need a complex version of the explicit rate theorem
     -- Define a complex packet principal deviation lemma
@@ -1138,7 +1167,7 @@ lemma exists_uniform_complexSpectralGap {g : ℕ} (hg : 0 < g)
       · have hs_arg_inner : |Complex.arg (x⁻¹)| < Real.pi := by
           have hs_arg : |Complex.arg x| < Real.pi := by
             have hxslit := hKslit hx
-            simp only [Complex.slitPlane, Set.mem_setOf_eq] at hxslit
+            simp only [Complex.slitPlane, Set.mem_ofPred_eq] at hxslit
             cases hxslit <;> simp_all +decide [ Complex.arg ]
             · split_ifs <;> norm_num [ abs_lt ]
               · constructor <;> linarith [ Real.neg_pi_div_two_le_arcsin ( x.im / ‖x‖ ), Real.arcsin_le_pi_div_two ( x.im / ‖x‖ ), Real.pi_pos ]
@@ -1151,7 +1180,6 @@ lemma exists_uniform_complexSpectralGap {g : ℕ} (hg : 0 < g)
           rw [ Complex.arg_inv ]
           split_ifs <;> simp_all +decide [ abs_lt ]
         have hs_arg_eq : Complex.arg ((x⁻¹) ^ ((g : ℂ)⁻¹)) = Complex.arg (x⁻¹) / (g : ℝ) := by
-          change ((x⁻¹) ^ ((g : ℂ)⁻¹)).arg = Complex.arg (x⁻¹) / (g : ℝ)
           convert Complex.arg_mul_cos_add_sin_mul_I _ _ using 2
           rotate_left
           exact ‖x⁻¹‖ ^ ( ( g : ℝ ) ⁻¹ )
@@ -1197,51 +1225,24 @@ lemma exists_uniform_complexSpectralGap {g : ℕ} (hg : 0 < g)
         (fun s hs => norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs))
     -- The spectral gap function is continuous on imageK
     have hcomplexSpectralGap_cont : ContinuousOn (fun s : ℂ => complexSpectralGap s) imageK := by
-      refine' ContinuousOn.congr _ _
-      exact fun s => (Insert.insert 0 ((Finset.range g \ {0}).image fun a => ‖1 + s * ω ^ a‖ / ‖1 + s‖)).max' ⟨0, Finset.mem_insert_self 0 _⟩
-      · intro s hs
-        refine' tendsto_order.2 ⟨ _, _ ⟩
-        · intro a' ha'
-          simp_all +decide [Finset.max']
-          rcases ha' with ( ha' | ⟨ a, ⟨ ha₁, ha₂ ⟩, ha₃ ⟩ )
-          · exact Or.inl ha'
-          · refine' Or.inr _
-            have h_cont : Filter.Tendsto (fun x : ℂ => ‖1 + x * ω ^ a‖ / ‖1 + x‖) (nhdsWithin s imageK) (nhds (‖1 + s * ω ^ a‖ / ‖1 + s‖)) :=
-              Filter.Tendsto.div ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const) )
-                ( ContinuousAt.continuousWithinAt (by exact ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id) )
-                ( norm_ne_zero_iff.mpr (h1_plus_s_ne_zero s hs) )
-            filter_upwards [ h_cont.eventually ( lt_mem_nhds ha₃ ) ] with x hx using ⟨ a, ⟨ ha₁, ha₂ ⟩, hx ⟩
-        · intro a' ha'
-          simp_all +decide [Finset.max']
-          have h_cont_at : ∀ x < g, x ≠ 0 → ContinuousAt (fun b : ℂ => ‖1 + b * ω ^ x‖ / ‖1 + b‖) s := fun x hx_lt hx_ne =>
-            ContinuousAt.div ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const <| ContinuousAt.mul continuousAt_id <| continuousAt_const )
-              ( ContinuousAt.norm <| ContinuousAt.add continuousAt_const continuousAt_id )
-              ( norm_ne_zero_iff.mpr <| h1_plus_s_ne_zero s hs )
-          have h_exists_eps : ∀ x < g, x ≠ 0 → ∃ ε > 0, ∀ b, dist b s < ε → ‖1 + b * ω ^ x‖ / ‖1 + b‖ < a' := by
-            intro x hx_lt hx_ne
-            have hchan_at_s : ‖1 + s * ω ^ x‖ / ‖1 + s‖ < a' := ha'.2 _ x hx_lt hx_ne rfl
-            exact Metric.mem_nhds_iff.mp ( ContinuousAt.preimage_mem_nhds ( h_cont_at x hx_lt hx_ne ) ( Iio_mem_nhds hchan_at_s ) )
-          choose! ε hε₁ hε₂ using h_exists_eps
-          by_cases h_empty : Finset.filter (fun x => x ≠ 0) (Finset.range g) = ∅
-          · simp_all +decide
-          · obtain ⟨x₀, hx₀⟩ : ∃ x₀ ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ∀ x ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ε x₀ ≤ ε x := by
-              exact Finset.exists_min_image _ _ ( Finset.nonempty_of_ne_empty h_empty )
-            have hx₀_valid : x₀ < g ∧ x₀ ≠ 0 := by simpa [Finset.mem_filter] using hx₀.1
-            have hε₀_pos : ε x₀ > 0 := hε₁ x₀ hx₀_valid.1 hx₀_valid.2
-            filter_upwards [self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds (Metric.ball_mem_nhds s hε₀_pos)] with b hb₁ hb₂ a x hx_lt hx_ne hx_eq
-            have hdist : dist b s < ε x₀ := hb₂.out
-            have hx₀_le : ε x₀ ≤ ε x := hx₀.2 x (Finset.mem_filter.mpr ⟨Finset.mem_range.mpr hx_lt, hx_ne⟩)
-            exact hx_eq ▸ hε₂ x hx_lt hx_ne b (hdist.trans_le hx₀_le)
-      · intro s hs
-        rfl
+      simpa only [complexSpectralGap, ω] using
+        continuousOn_max_insert_image_zero (Finset.range g \ {0})
+          (fun a (s : ℂ) => ‖1 + s * ω ^ a‖ / ‖1 + s‖) imageK
+          (fun a ha => hchannel_cont a
+            (Finset.mem_range.mp (Finset.mem_sdiff.mp ha).1)
+            (Finset.mem_singleton.not.mp (Finset.mem_sdiff.mp ha).2))
     -- Use compactness to find max spectral gap
     obtain ⟨s₀, hs₀⟩ := IsCompact.exists_isMaxOn himageK_compact himage_nonempty hcomplexSpectralGap_cont
     -- The spectral gap is < 1 for each s in imageK
     have hspectral_lt_one : ∀ s ∈ imageK, complexSpectralGap s < 1 := by
       intro s hs
-      simp only [complexSpectralGap]
-      simp_all +decide [Finset.max']
-      exact fun a x hx hx' hx'' => hx''.symm ▸ hchannel_lt_one s hs x hx hx'
+      unfold complexSpectralGap
+      apply (Finset.max'_lt_iff _ _).2
+      intro y hy
+      rcases Finset.mem_insert.mp hy with rfl | hy
+      · norm_num
+      · rcases Finset.mem_image.mp hy with ⟨a, ha, rfl⟩
+        exact hchannel_lt_one s hs a ha
     have hρ_lt_one : complexSpectralGap s₀ < 1 := hspectral_lt_one s₀ hs₀.1
     -- Nonnegativity of complexSpectralGap
     have hρ_nonneg : 0 ≤ complexSpectralGap s₀ := by
@@ -1372,7 +1373,7 @@ lemma endpointNumerator_uniform_bound {g : ℕ} (hg : 2 ≤ g)
     · exact continuousOn_const
     · intro x hx
       have h := inv_slitPlane x (hKslit hx)
-      simp only [Complex.slitPlane, Set.mem_setOf_eq] at h ⊢
+      simp only [Complex.slitPlane, Set.mem_ofPred_eq] at h ⊢
       exact h
   obtain ⟨T, hT⟩ := hK.bddAbove_image hsFn_cont
   refine ⟨(max 1 T) ^ g, by positivity, ?_⟩
@@ -1411,7 +1412,7 @@ lemma endpointNumerator_uniform_bound {g : ℕ} (hg : 2 ≤ g)
       rw [hmax]
       norm_num
       exact pow_le_pow_of_le_one ht_nonneg ht_le_one h_exp
-    · push_neg at ht_le_one
+    · push Not at ht_le_one
       have h_max : max 1 t = t := by rw [max_eq_right (le_of_lt ht_le_one)]
       rw [h_max]
       have ht_le_one' : 1 ≤ t := le_of_lt ht_le_one
@@ -1629,7 +1630,7 @@ lemma endpointRatio_uniform_lt_one {g : ℕ} (hg : 2 ≤ g)
           simp [h])
         rwa [div_le_iff₀ hpos] at this⟩
   · -- K is empty, any ρ < 1 works
-    push_neg at hK_empty
+    push Not at hK_empty
     use 0
     simp [hK_empty]
 
@@ -1654,7 +1655,7 @@ lemma endpointCorrection_uniform_geom_bound {g : ℕ} (hg : 2 ≤ g)
   have hr' : ‖s‖ ≤ ρ * ‖(1 : ℂ) + s‖ := hr
   have h1s_pos : 0 < ‖(1 : ℂ) + s‖ := by
     by_contra h
-    push_neg at h
+    push Not at h
     have hz : ‖(1 : ℂ) + s‖ = 0 := le_antisymm h (norm_nonneg _)
     have h0 : (1 : ℂ) + s = 0 := norm_eq_zero.mp hz
     have hsm1 : s = -1 := by linear_combination h0
@@ -1773,7 +1774,7 @@ theorem tendstoUniformlyOn_reversed_ratio_cpow {g k : ℕ}
       have h_eps := hN₁ N hN x hx
       rw [dist_zero_left] at h_eps
       by_contra h_contra
-      push_neg at h_contra
+      push Not at h_contra
       have h_eps_norm : ‖(epsIdx g N : ℂ) * x⁻¹ ^ (qIdx g N + 1) / slice g 0 N x⁻¹‖ < 1 / 2 := by
         calc ‖(epsIdx g N : ℂ) * x⁻¹ ^ (qIdx g N + 1) / slice g 0 N x⁻¹‖ < δ := h_eps
           _ ≤ 1 / 2 := min_le_right _ _

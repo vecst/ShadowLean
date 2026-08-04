@@ -71,7 +71,13 @@ theorem exists_uniform_spectralGap {g : ℕ} (hg : 0 < g)
                 · obtain ⟨x₀, hx₀⟩ : ∃ x₀ ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ∀ x ∈ Finset.filter (fun x => x ≠ 0) (Finset.range g), ε x₀ ≤ ε x := by
                     exact Finset.exists_min_image _ _ ( Finset.nonempty_of_ne_empty h_empty );
                   exact ⟨ ε x₀, hε₁ x₀ ( Finset.mem_range.mp ( Finset.mem_filter.mp hx₀.1 |>.1 ) ) ( Finset.mem_filter.mp hx₀.1 |>.2 ), fun x hx₁ hx₂ => hx₀.2 x ( Finset.mem_filter.mpr ⟨ Finset.mem_range.mpr hx₁, hx₂ ⟩ ) ⟩;
-              filter_upwards [ self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds ( Metric.ball_mem_nhds _ hε_min.1 ) ] with b hb₁ hb₂ using fun a x hx₁ hx₂ hx₃ => hx₃ ▸ hε₂ x hx₁ hx₂ b ( by simpa using hb₂.out.trans_le ( hε_min.2 x hx₁ hx₂ ) );
+              filter_upwards [ self_mem_nhdsWithin, mem_nhdsWithin_of_mem_nhds ( Metric.ball_mem_nhds _ hε_min.1 ) ] with b hb₁ hb₂
+              intro a x hx₁ hx₂ hx₃
+              subst a
+              apply hε₂ x hx₁ hx₂ b
+              have hb' : dist b t < ε x :=
+                hb₂.out.trans_le (hε_min.2 x hx₁ hx₂)
+              simpa only [Real.dist_eq] using hb'
           · intro t ht; simp +decide [ spectralGap ] ;
             unfold channelRatio; aesop;
         by_cases hK_nonempty : K.Nonempty;

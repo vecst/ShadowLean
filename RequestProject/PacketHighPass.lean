@@ -167,7 +167,7 @@ theorem movingPacket_dft_highpass_bound {g : ℕ} [NeZero g]
         intro q _
         rw [norm_mul]
         simp only [ZMod.stdAddChar_apply]
-        norm_num [ZMod.toCircle]
+        rw [(ZMod.toCircle (a q * ℓ)).norm_coe, one_mul]
     _ ≤ ∑ q, cyclicVariation (b q) := by
         rw [Finset.mul_sum]
         apply Finset.sum_le_sum

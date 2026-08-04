@@ -41,8 +41,20 @@ lemma spectralGap_mem_unitInterval {g : ℕ} (hg : 0 < g) {t : ℝ} (ht : 0 < t)
     have h_norm : ‖ω ^ a‖ = 1 := by
       have := hω.pow_eq_one; replace := congr_arg Norm.norm this; norm_num at this; rw [ pow_eq_one_iff_of_nonneg ] at this <;> aesop;
     unfold channelRatio; rw [ div_lt_one ( by positivity ) ] ; exact norm_one_add_pos_mul_lt h_norm ( by exact fun h => ha0 <| by have := hω.pow_inj ( by linarith [ Finset.mem_range.mp ha ] : a < g ) ( by linarith [ Finset.mem_range.mp ha ] : 0 < g ) ; aesop ) ht;
-  unfold spectralGap; simp_all +decide [ Finset.max' ] ;
-  exact fun a x hx hx' hx'' => hx''.symm ▸ h_channel_ratio_lt_one x hx hx'
+  let channels := (Finset.range g \ {0}).image (channelRatio t ω)
+  have hzero : 0 ∈ insert 0 channels := Finset.mem_insert_self 0 channels
+  have hne : (insert 0 channels).Nonempty := by exact ⟨0, hzero⟩
+  change 0 ≤ (insert 0 channels).max' hne ∧
+    (insert 0 channels).max' hne < 1
+  constructor
+  · exact Finset.le_max' (insert 0 channels) 0 hzero
+  · rw [Finset.max'_lt_iff]
+    intro x hx
+    rcases Finset.mem_insert.mp hx with rfl | hx
+    · norm_num
+    · rcases Finset.mem_image.mp hx with ⟨a, ha, rfl⟩
+      exact h_channel_ratio_lt_one a (Finset.mem_sdiff.mp ha).1
+        (by simpa using (Finset.mem_sdiff.mp ha).2)
 
 /-
 Quantitative spectral recovery for Pascal residue packets.  The error is
@@ -70,9 +82,11 @@ theorem general_slice_ratio_spectral_rate
         convert roots_of_unity_filter hg hk hω t using 1;
         unfold slice; norm_num [ Finset.sum_ite ] ;
       have h_filter_zero : ∑ a ∈ Finset.range g, ω ^ (a * g) * (1 + t * ω ^ a) ^ N = (g : ℂ) * slice g 0 N (t ^ g) := by
-        convert roots_of_unity_filter hg ( show 0 < g from hg ) hω t using 1;
-        norm_num [ slice ];
-        exact Or.inl <| Finset.sum_congr rfl fun _ _ => by split_ifs <;> norm_num;
+        have hroot := roots_of_unity_filter (g := g) (k := 0) (N := N) hg hg hω (t : ℂ)
+        simp only [Nat.sub_zero] at hroot
+        convert hroot using 1
+        unfold slice
+        norm_num [Finset.sum_ite]
       have h_filter_zero : ∑ a ∈ Finset.range g, ω ^ (a * (g - k)) * (1 + t * ω ^ a) ^ N = ω ^ (0 * (g - k)) * (1 + t * ω ^ 0) ^ N := by
         rw [ Finset.sum_eq_single 0 ] <;> aesop;
       have h_filter_zero : ∑ a ∈ Finset.range g, ω ^ (a * g) * (1 + t * ω ^ a) ^ N = ω ^ (0 * g) * (1 + t * ω ^ 0) ^ N := by
@@ -94,9 +108,11 @@ theorem general_slice_ratio_spectral_rate
             · convert roots_of_unity_filter hg hk hω t |> Eq.symm using 1;
               norm_num [ slice ];
               exact Or.inl <| Finset.sum_congr rfl fun _ _ => by split_ifs <;> norm_num;
-            · convert roots_of_unity_filter hg ( show 0 < g from hg ) hω t |> Eq.symm using 1;
-              norm_num [ slice ];
-              exact Or.inl ( Finset.sum_congr rfl fun _ _ => by split_ifs <;> norm_num );
+            · have hroot := roots_of_unity_filter (g := g) (k := 0) (N := N) hg hg hω (t : ℂ) |> Eq.symm
+              simp only [Nat.sub_zero] at hroot
+              convert hroot using 1
+              norm_num [slice]
+              exact Or.inl <| Finset.sum_congr rfl fun _ _ => by split_ifs <;> norm_num
           simp_all +decide [ ← Finset.sum_div _ _ _ ];
           exact ⟨ by rw [ sub_div, div_self ( by norm_cast; positivity ) ], by rw [ sub_div, div_self ( by norm_cast; positivity ) ] ⟩;
         convert And.intro ( norm_sum_le _ _ ) ( norm_sum_le _ _ ) using 2;
@@ -136,14 +152,45 @@ theorem general_slice_ratio_spectral_rate
           · rw [ norm_div ];
           · exact fun h => by have := hM N hN; norm_num [ h ] at this;
         have h_error_bound_step : ‖(g * t ^ k * slice g k N (t ^ g)) / (1 + t) ^ N - (g * slice g 0 N (t ^ g)) / (1 + t) ^ N‖ ≤ 2 * C * (spectralGap g t ω) ^ N := by
-          convert le_trans ( norm_sub_le _ _ ) ( add_le_add ( hC_bound N |>.1 ) ( hC_bound N |>.2 ) ) using 1 ; ring;
-          ring;
+          calc
+            _ = ‖((g * t ^ k * slice g k N (t ^ g)) / (1 + t) ^ N - 1) -
+                ((g * slice g 0 N (t ^ g)) / (1 + t) ^ N - 1)‖ := by
+                  congr 1
+                  ring
+            _ ≤ ‖(g * t ^ k * slice g k N (t ^ g)) / (1 + t) ^ N - 1‖ +
+                ‖(g * slice g 0 N (t ^ g)) / (1 + t) ^ N - 1‖ := norm_sub_le _ _
+            _ ≤ C * spectralGap g t ω ^ N + C * spectralGap g t ω ^ N :=
+              add_le_add (hC_bound N).1 (hC_bound N).2
+            _ = 2 * C * spectralGap g t ω ^ N := by ring
         refine le_trans ‹_› ?_;
         rw [ div_le_iff₀ ] <;> nlinarith [ hM N hN, show 0 ≤ C * spectralGap g t ω ^ N by exact mul_nonneg hC_nonneg ( pow_nonneg ( by linarith [ spectralGap_mem_unitInterval hg ht hω ] ) _ ) ];
-      convert mul_le_mul_of_nonneg_left h_error_bound_step ( show 0 ≤ ( t ^ k ) ⁻¹ by positivity ) using 1 <;> ring;
-      norm_num [ mul_assoc, mul_comm, mul_left_comm, hg.ne', ht.ne' ];
-      field_simp;
-      rw [ abs_div, abs_of_nonneg ( by positivity : 0 ≤ t ^ k ), mul_div_cancel₀ _ ( by positivity ) ] ; ring;
+      have hg_ne : (g : ℝ) ≠ 0 := by exact_mod_cast hg.ne'
+      have hbase_ne : (1 + t : ℝ) ^ N ≠ 0 := pow_ne_zero _ (by linarith)
+      have hslice_ne : slice g 0 N (t ^ g) ≠ 0 :=
+        ne_of_gt (lt_of_lt_of_le zero_lt_one (one_le_slice_zero g N (by positivity)))
+      have hratio :
+          (g * t ^ k * slice g k N (t ^ g)) / (1 + t) ^ N /
+              ((g * slice g 0 N (t ^ g)) / (1 + t) ^ N) =
+            t ^ k * (slice g k N (t ^ g) / slice g 0 N (t ^ g)) := by
+        field_simp [hg_ne, hbase_ne, hslice_ne]
+      rw [hratio] at h_error_bound_step
+      have hpow_pos : 0 < t ^ k := pow_pos ht k
+      have hscale :
+          slice g k N (t ^ g) / slice g 0 N (t ^ g) - (t ^ k)⁻¹ =
+            (t ^ k)⁻¹ *
+              (t ^ k * (slice g k N (t ^ g) / slice g 0 N (t ^ g)) - 1) := by
+        field_simp [hslice_ne, ne_of_gt hpow_pos]
+      calc
+        _ = ‖(t ^ k)⁻¹ *
+              (t ^ k * (slice g k N (t ^ g) / slice g 0 N (t ^ g)) - 1)‖ := by rw [hscale]
+        _ = (t ^ k)⁻¹ *
+              ‖t ^ k * (slice g k N (t ^ g) / slice g 0 N (t ^ g)) - 1‖ := by
+              rw [norm_mul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hpow_pos)]
+        _ ≤ (t ^ k)⁻¹ * (4 * C * spectralGap g t ω ^ N) :=
+              mul_le_mul_of_nonneg_left h_error_bound_step (le_of_lt (inv_pos.mpr hpow_pos))
+        _ = (4 * C / t ^ k) * spectralGap g t ω ^ N := by
+              rw [inv_eq_one_div]
+              ring
     use Max.max ( 4 * C / t ^ k ) ( ∑ N ∈ Finset.range M, ‖slice g k N ( t ^ g ) / slice g 0 N ( t ^ g ) - ( t ^ k ) ⁻¹‖ / spectralGap g t ω ^ N );
     refine' ⟨ le_max_of_le_left ( by positivity ), fun N => _ ⟩;
     by_cases hN : N < M;

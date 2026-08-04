@@ -199,16 +199,30 @@ theorem tendsto_logSurrogate {x : ℝ} (hx : 0 < x) :
       tendsto_inv_atTop_zero.comp tendsto_natCast_atTop_atTop
     have hcont : Continuous (fun h : ℝ => x ^ h) := by
       have : (fun h : ℝ => x ^ h) = (fun h => Real.exp (h * Real.log x)) := funext fun h => by rw [Real.rpow_def_of_pos hx, mul_comm]
-      rw [this]; exact Real.continuous_exp.comp (continuous_mul_right _)
-    simpa using hcont.continuousAt.tendsto.comp htendsto
+      rw [this]
+      exact Real.continuous_exp.comp (continuous_id.mul_const _)
+    have ht := hcont.continuousAt.tendsto.comp htendsto
+    have hfun : ((fun h : ℝ => x ^ h) ∘ fun g : ℕ => (g : ℝ)⁻¹) =
+        (fun g : ℕ => x ^ (g : ℝ)⁻¹) := by
+      funext g
+      rfl
+    rw [hfun] at ht
+    simpa only [Real.rpow_zero] using ht
   -- x^(1/g) + 1 → 2
   have h_denom : Filter.Tendsto (fun g : ℕ => x ^ (g : ℝ)⁻¹ + 1) Filter.atTop (nhds 2) := by
     convert h_x_rpow.add_const 1 using 1; norm_num
   -- Final: quotient → (2 * log x) / 2 = log x
   have h_ne : (2 : ℝ) ≠ 0 := by norm_num
   have h_final := h_two_g_slope.div h_denom h_ne
-  simp at h_final
+  have hfun : ((fun g : ℕ => 2 * (g : ℝ) * (x ^ (g : ℝ)⁻¹ - 1)) /
+      (fun g : ℕ => x ^ (g : ℝ)⁻¹ + 1)) =
+      (fun g : ℕ => 2 * (g : ℝ) * (x ^ (g : ℝ)⁻¹ - 1) /
+        (x ^ (g : ℝ)⁻¹ + 1)) := by
+    funext g
+    rfl
+  rw [hfun] at h_final
   convert h_final using 1
+  norm_num
 
 /-- **Target 4 — flagship iterated convergence.**  For `x > 0` and every
 `ε > 0` there is `G` such that for all `g ≥ G` there is `N₀(g)` with

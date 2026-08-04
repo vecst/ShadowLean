@@ -167,7 +167,7 @@ theorem tendsto_slice_ratio_cpow {g k : ℕ} (hg : 0 < g) (hk : k < g)
                 exact tendsto_pow_atTop_nhds_zero_of_norm_lt_one ( by rw [ norm_div ] ; exact div_lt_one hs_gt_one |>.2 h_abs );
               convert h_abs_pow.const_mul ( Complex.exp ( 2 * Real.pi * Complex.I * a / g ) ^ ( g - k ) ) using 2 <;> ring;
               rw [ show ( Complex.exp ( Real.pi * Complex.I * a * ( g : ℂ ) ⁻¹ * 2 ) * s * ( 1 + s ) ⁻¹ + ( 1 + s ) ⁻¹ ) = ( 1 + Complex.exp ( Real.pi * Complex.I * a * ( g : ℂ ) ⁻¹ * 2 ) * s ) * ( 1 + s ) ⁻¹ by ring ] ; rw [ mul_pow ] ; ring;
-            simpa [ Finset.sum_div _ _ _ ] using tendsto_finset_sum _ h_filter_ratio;
+            simpa [ Finset.sum_div _ _ _ ] using tendsto_finsetSum _ h_filter_ratio;
           have h_filter_ratio : Filter.Tendsto (fun N : ℕ => (∑ a ∈ Finset.range g, (1 + s * Complex.exp (2 * Real.pi * Complex.I * (a : ℂ) / (g : ℂ))) ^ N) / (1 + s) ^ N) Filter.atTop (nhds 1) := by
             have h_filter_ratio : Filter.Tendsto (fun N : ℕ => (∑ a ∈ Finset.range g \ {0}, (1 + s * Complex.exp (2 * Real.pi * Complex.I * (a : ℂ) / (g : ℂ))) ^ N) / (1 + s) ^ N) Filter.atTop (nhds 0) := by
               have h_filter_ratio : ∀ a ∈ Finset.range g \ {0}, Filter.Tendsto (fun N : ℕ => (1 + s * Complex.exp (2 * Real.pi * Complex.I * (a : ℂ) / (g : ℂ))) ^ N / (1 + s) ^ N) Filter.atTop (nhds 0) := by
@@ -177,11 +177,11 @@ theorem tendsto_slice_ratio_cpow {g k : ℕ} (hg : 0 < g) (hk : k < g)
                 have h_abs_pow : Filter.Tendsto (fun N : ℕ => (‖1 + s * Complex.exp (2 * Real.pi * Complex.I * (a : ℂ) / (g : ℂ))‖ / ‖1 + s‖) ^ N) Filter.atTop (nhds 0) := by
                   exact tendsto_pow_atTop_nhds_zero_of_lt_one ( div_nonneg ( norm_nonneg _ ) ( norm_nonneg _ ) ) ( by rwa [ div_lt_one hs_gt_one ] );
                 exact tendsto_zero_iff_norm_tendsto_zero.mpr ( by simpa [ div_pow ] using h_abs_pow );
-              simpa [ Finset.sum_div _ _ _ ] using tendsto_finset_sum _ h_filter_ratio;
-            convert h_filter_ratio.add_const 1 using 2 <;> norm_num [ Finset.sum_eq_add_sum_diff_singleton ( Finset.mem_range.mpr hg ) ];
+              simpa [ Finset.sum_div _ _ _ ] using tendsto_finsetSum _ h_filter_ratio;
+            convert h_filter_ratio.add_const 1 using 2 <;> norm_num [ Finset.sum_eq_add_sum_sdiff_singleton_of_mem ( Finset.mem_range.mpr hg ) ];
             rw [ add_div, div_self ( pow_ne_zero _ ( by aesop ) ) ] ; ring;
           convert Filter.Tendsto.div ( ‹Filter.Tendsto ( fun N : ℕ => ( ∑ a ∈ Finset.range g \ { 0 }, Complex.exp ( 2 * Real.pi * Complex.I * a / g ) ^ ( g - k ) * ( 1 + s * Complex.exp ( 2 * Real.pi * Complex.I * a / g ) ) ^ N ) / ( 1 + s ) ^ N ) Filter.atTop ( nhds 0 ) ›.add_const ( Complex.exp ( 2 * Real.pi * Complex.I * 0 / g ) ^ ( g - k ) ) ) h_filter_ratio _ using 2 <;> norm_num;
-          rw [ Finset.sum_eq_sum_diff_singleton_add ( Finset.mem_range.mpr hg ) ] ; ring;
+          rw [ Finset.sum_eq_sum_sdiff_singleton_add ( Finset.mem_range.mpr hg ) ] ; ring;
           simp +decide [mul_assoc, mul_comm, mul_left_comm,
             show (1 + s) ≠ 0 from by
               intro h

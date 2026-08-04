@@ -115,8 +115,17 @@ theorem zeta_certified_bounds (m N M : ℕ) (hm : 2 ≤ m) (hM : 1 ≤ M) :
             -- Summing the integral bounds from $n = 0$ to $\infty$, we get the desired result.
             have h_sum_integral_bound : ∀ N : ℕ, ∑ n ∈ Finset.range N, ((n + M + 1 : ℝ) ^ m)⁻¹ ≤ ∫ x in (M : ℝ)..((N + M) : ℝ), x ^ (-m : ℝ) := by
               intro N; induction' N with N ih <;> norm_num [ add_assoc, Finset.sum_range_succ ] at *;
-              convert add_le_add ih ( h_integral_bound N ) using 1;
-              rw [ intervalIntegral.integral_add_adjacent_intervals ] <;> apply_rules [ ContinuousOn.intervalIntegrable ] <;> exact continuousOn_of_forall_continuousAt fun x hx => ContinuousAt.inv₀ ( continuousAt_id.pow _ ) ( pow_ne_zero _ <| by cases Set.mem_uIcc.mp hx <;> linarith [ show ( M : ℝ ) ≥ 1 by norm_cast ] );
+              have hstep := add_le_add ih (h_integral_bound N)
+              rw [intervalIntegral.integral_add_adjacent_intervals] at hstep
+              · exact hstep
+              · apply ContinuousOn.intervalIntegrable
+                exact continuousOn_of_forall_continuousAt fun x hx => ContinuousAt.inv₀ (continuousAt_id.pow _)
+                  (pow_ne_zero _ <| by cases Set.mem_uIcc.mp hx <;>
+                    linarith [show (M : ℝ) ≥ 1 by norm_cast])
+              · apply ContinuousOn.intervalIntegrable
+                exact continuousOn_of_forall_continuousAt fun x hx => ContinuousAt.inv₀ (continuousAt_id.pow _)
+                  (pow_ne_zero _ <| by cases Set.mem_uIcc.mp hx <;>
+                    linarith [show (M : ℝ) ≥ 1 by norm_cast])
             -- Taking the limit of the integral bound as $N$ approaches infinity, we get the desired result.
             have h_limit_integral_bound : Filter.Tendsto (fun N : ℕ => ∫ x in (M : ℝ)..((N + M) : ℝ), x ^ (-m : ℝ)) Filter.atTop (nhds (∫ x in Set.Ioi (M : ℝ), x ^ (-m : ℝ))) := by
               apply_rules [ MeasureTheory.intervalIntegral_tendsto_integral_Ioi ];

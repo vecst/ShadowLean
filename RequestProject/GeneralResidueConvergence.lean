@@ -63,7 +63,7 @@ lemma tendsto_finite_mode_sum_zero {g : ℕ} (c q : ℕ → ℂ)
     (hq : ∀ a ∈ Finset.range g, ‖q a‖ < 1) :
     Filter.Tendsto (fun N : ℕ => ∑ a ∈ Finset.range g, c a * (q a) ^ N)
       Filter.atTop (nhds 0) := by
-  exact le_trans ( tendsto_finset_sum _ fun i hi => tendsto_const_nhds.mul ( tendsto_pow_atTop_nhds_zero_of_norm_lt_one ( hq i hi ) ) ) ( by norm_num )
+  exact le_trans ( tendsto_finsetSum _ fun i hi => tendsto_const_nhds.mul ( tendsto_pow_atTop_nhds_zero_of_norm_lt_one ( hq i hi ) ) ) ( by norm_num )
 
 /-- A nontrivial power below the order of a primitive root cannot be one. -/
 lemma primitive_root_pow_ne_one {g a : ℕ} {ω : ℂ} (hω : IsPrimitiveRoot ω g)
@@ -100,9 +100,11 @@ theorem tendsto_general_slice_ratio_of_dominance
   have h_sums : ∀ N : ℕ, (g : ℂ) * t ^ k * slice g k N (t ^ g) = ∑ a ∈ Finset.range g, ω ^ (a * (g - k)) * (1 + t * ω ^ a) ^ N ∧ (g : ℂ) * slice g 0 N (t ^ g) = ∑ a ∈ Finset.range g, ω ^ (a * g) * (1 + t * ω ^ a) ^ N := by
     intro N
     constructor;
-    · convert roots_of_unity_filter hg hk hω t |> Eq.symm using 1;
+    · convert roots_of_unity_filter (g := g) (k := k) (N := N) hg hk hω (t : ℂ) |> Eq.symm using 1;
       unfold slice; norm_num [ Finset.sum_ite ] ;
-    · convert roots_of_unity_filter hg ( by linarith : 0 < g ) hω t |> Eq.symm using 1 ; norm_num [ pow_mul' ];
+    · have hroot := roots_of_unity_filter (g := g) (k := 0) (N := N) hg hg hω (t : ℂ) |> Eq.symm
+      simp only [Nat.sub_zero] at hroot
+      convert hroot using 1
       unfold slice; norm_num [ Finset.sum_ite ] ;
   -- Divide both sides of the equation by $(1 + t)^N$ and take the limit as $N \to \infty$.
   have h_limit : Filter.Tendsto (fun N : ℕ => (∑ a ∈ Finset.range g, ω ^ (a * (g - k)) * (1 + t * ω ^ a) ^ N) / (1 + t) ^ N) Filter.atTop (nhds (ω ^ (0 * (g - k)))) ∧ Filter.Tendsto (fun N : ℕ => (∑ a ∈ Finset.range g, ω ^ (a * g) * (1 + t * ω ^ a) ^ N) / (1 + t) ^ N) Filter.atTop (nhds (ω ^ (0 * g))) := by
@@ -119,12 +121,12 @@ theorem tendsto_general_slice_ratio_of_dominance
     simp_all +decide [ Finset.sum_div _ _ _ ];
     constructor <;> rw [ tendsto_iff_norm_sub_tendsto_zero ];
     · rw [ show ( fun e => ‖∑ i ∈ Finset.range g, ω ^ ( i * ( g - k ) ) * ( 1 + t * ω ^ i ) ^ e / ( 1 + t ) ^ e - 1‖ ) = fun e => ‖∑ i ∈ Finset.range g \ { 0 }, ω ^ ( i * ( g - k ) ) * ( 1 + t * ω ^ i ) ^ e / ( 1 + t ) ^ e‖ from funext fun _ => ?_ ];
-      · exact squeeze_zero ( fun _ => norm_nonneg _ ) ( fun _ => norm_sum_le _ _ ) ( by simpa using tendsto_finset_sum _ fun i hi => Filter.Tendsto.norm ( h_limit i ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hi |>.1 ) ) ( by aesop ) |>.1 ) );
-      · simp +decide [ Finset.sum_eq_sum_diff_singleton_add ( Finset.mem_range.mpr hg ) ];
+      · exact squeeze_zero ( fun _ => norm_nonneg _ ) ( fun _ => norm_sum_le _ _ ) ( by simpa using tendsto_finsetSum _ fun i hi => Filter.Tendsto.norm ( h_limit i ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hi |>.1 ) ) ( by aesop ) |>.1 ) );
+      · simp +decide [ Finset.sum_eq_sum_sdiff_singleton_add ( Finset.mem_range.mpr hg ) ];
         rw [ div_self <| by norm_cast; positivity, add_sub_cancel_right ];
-    · rw [ Filter.tendsto_congr' ( by filter_upwards [ Filter.eventually_gt_atTop 0 ] with N hN; rw [ Finset.sum_eq_add_sum_diff_singleton ( Finset.mem_range.mpr hg ) ] ) ];
+    · rw [ Filter.tendsto_congr' ( by filter_upwards [ Filter.eventually_gt_atTop 0 ] with N hN; rw [ Finset.sum_eq_add_sum_sdiff_singleton_of_mem ( Finset.mem_range.mpr hg ) ] ) ];
       norm_num [ show ( 1 + t : ℂ ) ≠ 0 by norm_cast; linarith ];
-      exact squeeze_zero ( fun _ => norm_nonneg _ ) ( fun N => norm_sum_le _ _ ) ( by simpa using tendsto_finset_sum _ fun x hx => Filter.Tendsto.norm ( h_limit x ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hx |>.1 ) ) ( by aesop ) |>.2 ) );
+      exact squeeze_zero ( fun _ => norm_nonneg _ ) ( fun N => norm_sum_le _ _ ) ( by simpa using tendsto_finsetSum _ fun x hx => Filter.Tendsto.norm ( h_limit x ( Finset.mem_range.mp ( Finset.mem_sdiff.mp hx |>.1 ) ) ( by aesop ) |>.2 ) );
   convert Complex.continuous_re.continuousAt.tendsto.comp ( h_limit.1.div h_limit.2 _ ) |> ( fun h => h.div_const ( t ^ k : ℝ ) ) using 2 <;> norm_num [ ← h_sums ];
   rw [ div_div_div_cancel_right₀ ( by norm_cast; positivity ) ] ; norm_cast ; simp +decide [ mul_assoc, mul_comm ] ; ring;
   simp +decide [mul_assoc, mul_comm, mul_left_comm, hg.ne', ht.ne']
