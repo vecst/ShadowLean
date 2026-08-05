@@ -21,6 +21,7 @@ import RequestProject.PacketHighPass
 import RequestProject.PacketDerivativeJet
 import RequestProject.PacketHighPassDivided
 import RequestProject.IFFTSupportFlow
+import RequestProject.IFFTCoordinateBridge
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
