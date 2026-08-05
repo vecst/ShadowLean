@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 166 public theorem/lemma declarations. Run with:
+Axiom audit for all 173 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -140,6 +140,15 @@ import RequestProject.Main
 #print axioms ResidueSlices.packetSpectrum_packetCoordinateStep
 #print axioms ResidueSlices.evolvedPreparedPacket_succ_eq_packetCoordinateStep
 
+-- IFFT finite-time iterated coordinate flow (n-step diagonalization + semigroup/support)
+#print axioms ResidueSlices.packetSpectrum_packetCoordinateStep_iterate
+#print axioms ResidueSlices.evolvedPreparedPacket_zero
+#print axioms ResidueSlices.evolvedPreparedPacket_eq_packetCoordinateStep_iterate
+#print axioms ResidueSlices.packetCoordinateStep_iterate_evolvedPreparedPacket
+#print axioms ResidueSlices.packetCoordinateStep_iterate_no_spectral_leakage
+#print axioms ResidueSlices.packetSpectrum_packetCoordinateStep_iterate_eq_zero_iff
+#print axioms ResidueSlices.packetCoordinateStep_iterate_support_eq
+
 -- IFFT preparation (exact finite-g spectral reconstruction)
 #print axioms ResidueSlices.preparedScaledPacket_formula
 #print axioms ResidueSlices.positiveDFT_preparedScaledPacket
@@ -172,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 166/166 public-proof audit.
+-- Keeping them explicit makes this driver a 173/173 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
