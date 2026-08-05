@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 173 public theorem/lemma declarations. Run with:
+Axiom audit for all 183 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 173/173 public-proof audit.
+-- Keeping them explicit makes this driver a 183/183 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -232,3 +232,15 @@ import RequestProject.Main
 #print axioms SilverCrossover.negative_discriminant_eq_zero_of_abs_eq_two
 #print axioms SilverCrossover.positive_discriminant_of_two_lt_abs
 #print axioms SilverCrossover.positive_error_discriminant
+
+-- Silver finite-row bridge (generic algebra <-> reversed g=3 Pascal-row packet)
+#print axioms SilverFiniteRow.affineInput_center
+#print axioms SilverFiniteRow.affineInput_silver
+#print axioms SilverFiniteRow.silverConstantFromRadical_isRoot
+#print axioms SilverFiniteRow.packetRatio_den_pos
+#print axioms SilverFiniteRow.tendsto_finiteMap
+#print axioms SilverFiniteRow.finiteMap_center_sub_eq_centerError
+#print axioms SilverFiniteRow.tendsto_centerError
+#print axioms SilverFiniteRow.tendstoUniformlyOn_finiteMap
+#print axioms SilverFiniteRow.cubicResidual_eq_packetDeviation_factor_of_fixed
+#print axioms SilverFiniteRow.cubic_displacement_eq_packetDeviation_factor_of_fixed
