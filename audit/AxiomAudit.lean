@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 200 public theorem/lemma declarations. Run with:
+Axiom audit for all 227 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 200/200 public-proof audit.
+-- Keeping them explicit makes this driver a 227/227 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -265,3 +265,32 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.packetRatio_pos
 #print axioms SilverFiniteRow.continuousOn_finiteMap_silver
 #print axioms SilverFiniteRow.exists_finiteRow_fixedPoint
+
+-- Silver finite-row uniqueness: elasticity/Wronskian machinery + unique fixed point + limiting collapse = alpha
+#print axioms SilverFiniteRow.choose_step_mul_le
+#print axioms SilverFiniteRow.choose_pair_le
+#print axioms SilverFiniteRow.rowCoeff_nonneg
+#print axioms SilverFiniteRow.rowPoly_coeff
+#print axioms SilverFiniteRow.rowPoly_eval
+#print axioms SilverFiniteRow.coeff_rowPoly_mul
+#print axioms SilverFiniteRow.coeff_derivative_rowPoly_mul
+#print axioms SilverFiniteRow.coeff_rowPoly_mul_derivative
+#print axioms SilverFiniteRow.rowCoeff_of_le
+#print axioms SilverFiniteRow.rowCoeff_of_gt
+#print axioms SilverFiniteRow.rowCoeff_cross_le
+#print axioms SilverFiniteRow.rowCoeff_shift_le
+#print axioms SilverFiniteRow.pair_term_wronskian_nonneg
+#print axioms SilverFiniteRow.pair_term_elasticity_nonpos
+#print axioms SilverFiniteRow.antidiag_wronskian_nonneg
+#print axioms SilverFiniteRow.antidiag_elasticity_nonpos
+#print axioms SilverFiniteRow.coeff_rowWronskian
+#print axioms SilverFiniteRow.coeff_rowWronskian_nonneg
+#print axioms SilverFiniteRow.coeff_rowElasticity_nonpos
+#print axioms SilverFiniteRow.eval_rowWronskian_nonneg
+#print axioms SilverFiniteRow.rowCoeff_zero_pos
+#print axioms SilverFiniteRow.eval_rowElasticity_neg
+#print axioms SilverFiniteRow.eval_wronskian_mul_lt
+#print axioms SilverFiniteRow.hasDerivAt_scaledRatio
+#print axioms SilverFiniteRow.strictAntiOn_scaledRatio
+#print axioms SilverFiniteRow.unique_finiteRow_fixedPoint
+#print axioms SilverFiniteRow.limitingMap_fixedPoint_eq
