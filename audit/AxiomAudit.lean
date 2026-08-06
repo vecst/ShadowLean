@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 193 public theorem/lemma declarations. Run with:
+Axiom audit for all 200 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 193/193 public-proof audit.
+-- Keeping them explicit makes this driver a 200/200 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -256,3 +256,12 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.normalized_negative_crossover_equation
 #print axioms SilverFiniteRow.tendstoUniformlyOn_packetDeviation
 #print axioms SilverFiniteRow.tendstoUniformlyOn_deviationVariation
+
+-- Silver finite-row fixed-point existence (the collapse is real, via IVT on [0,N])
+#print axioms SilverFiniteRow.choose_succ_le_nat_mul
+#print axioms SilverFiniteRow.continuous_revA
+#print axioms SilverFiniteRow.revA_one_le_nat_mul_revA_zero
+#print axioms SilverFiniteRow.packetRatio_le_nat
+#print axioms SilverFiniteRow.packetRatio_pos
+#print axioms SilverFiniteRow.continuousOn_finiteMap_silver
+#print axioms SilverFiniteRow.exists_finiteRow_fixedPoint

@@ -25,6 +25,7 @@ import RequestProject.IFFTCoordinateBridge
 import RequestProject.IFFTIteratedFlow
 import RequestProject.SilverFiniteRowBridge
 import RequestProject.SilverFiniteRowRemainder
+import RequestProject.SilverFiniteRowFixedPoint
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
