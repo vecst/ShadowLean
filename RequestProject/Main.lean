@@ -29,6 +29,7 @@ import RequestProject.SilverFiniteRowFixedPoint
 import RequestProject.SilverFiniteRowElasticity
 import RequestProject.SilverFiniteRowUnique
 import RequestProject.SliceHyperbolic
+import RequestProject.SliceMultisection
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
