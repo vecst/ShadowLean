@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 227 public theorem/lemma declarations. Run with:
+Axiom audit for all 230 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 227/227 public-proof audit.
+-- Keeping them explicit makes this driver a 230/230 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -294,3 +294,8 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.strictAntiOn_scaledRatio
 #print axioms SilverFiniteRow.unique_finiteRow_fixedPoint
 #print axioms SilverFiniteRow.limitingMap_fixedPoint_eq
+
+-- Circle-hyperbola: the g=2 gudermannian anchor (mod-2 Pascal slice = tanh of the rapidity)
+#print axioms SliceHyperbolic.binomEven_closed
+#print axioms SliceHyperbolic.binomOdd_closed
+#print axioms SliceHyperbolic.binomSlice_ratio_tanh
