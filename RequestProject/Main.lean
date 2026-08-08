@@ -30,6 +30,7 @@ import RequestProject.SilverFiniteRowElasticity
 import RequestProject.SilverFiniteRowUnique
 import RequestProject.SliceHyperbolic
 import RequestProject.SliceMultisection
+import RequestProject.SliceFilter
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
