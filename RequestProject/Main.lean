@@ -31,6 +31,7 @@ import RequestProject.SilverFiniteRowUnique
 import RequestProject.SliceHyperbolic
 import RequestProject.SliceMultisection
 import RequestProject.SliceFilter
+import RequestProject.Gudermann3
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
