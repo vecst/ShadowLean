@@ -33,6 +33,8 @@ import RequestProject.SliceMultisection
 import RequestProject.SliceFilter
 import RequestProject.Gudermann3
 import RequestProject.Gudermann4
+import RequestProject.GdgCriticalTetranomial
+import RequestProject.GdgCriticalCandidateLocation
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

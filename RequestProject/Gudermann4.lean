@@ -1,6 +1,6 @@
 /-
 gd₄ — the g=4 circle↔hyperbola bridge as a special function (gd_g ladder, last
-elementary rung).
+single-cotangent rung).
 
 The mod-4 character `1 + i u` (i = e^{2πi/4}) has circular part `ψ = arg(1+iu) =
 arctan u` and hyperbolic part `s = log|1+iu| − ¼·log(1−u⁴) = ½log(1+u²) −
@@ -10,10 +10,11 @@ g=4 sibling of `gd₃`'s `dψ/ds = −3cot(π/3−ψ)` and of the gudermannian's
 
   dψ/ds = 2·cot(2ψ),      integrating to    cos(2ψ) = e^{−4s}.
 
-Together with `gd₃` this certifies the ELEMENTARY (single-cot) rungs of the ladder.
-Numerically the ODE holds for g=3,4 exactly but FAILS for g≥5 (dF/dψ is not a
-low-degree polynomial in F) — a solvability threshold coinciding with radicals
-(quartic solvable, quintic not); gd₄ is the last elementary rung.
+Together with `gd₃` this certifies the single-cotangent rungs of the ladder.
+Numerically this ODE form holds for g=3,4 exactly but fails for g≥5 (dF/dψ is
+not a low-degree polynomial in F). This is a threshold for the one-cotangent
+normal form, not for elementarity: gd₅ and gd₆ can still be elementary through
+more complicated radicals. Thus gd₄ is the last single-cotangent rung.
 
 Proof routes (keep every statement verbatim; minor lemma-name changes ok):
 - gd4Psi_hasDerivAt: `gd4Psi = Real.arctan`, so this is `Real.hasDerivAt_arctan u`
@@ -90,7 +91,7 @@ theorem gd4_sin (u : ℝ) :
 
 /-- **The gd₄ autonomous ODE.** The bridge derivatives satisfy
 `ψ'·sin(2ψ) = 2·s'·cos(2ψ)`, i.e. `dψ/ds = 2 cot(2ψ)` — the g=4 sibling of
-`gd₃`'s law and the last elementary rung of the ladder. -/
+`gd₃`'s law and the last single-cotangent rung of the ladder. -/
 theorem gd4_ode {u : ℝ} (hu0 : 0 < u) (hu1 : u < 1) :
     (1 / (1 + u ^ 2)) * Real.sin (2 * gd4Psi u)
       = 2 * (u / (1 - u ^ 4)) * Real.cos (2 * gd4Psi u) := by
