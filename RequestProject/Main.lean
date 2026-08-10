@@ -35,6 +35,7 @@ import RequestProject.Gudermann3
 import RequestProject.Gudermann4
 import RequestProject.GdgCriticalTetranomial
 import RequestProject.GdgCriticalCandidateLocation
+import RequestProject.GdgCriticalValueSeparation
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
