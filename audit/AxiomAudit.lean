@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 258 public theorem/lemma declarations. Run with:
+Axiom audit for all 266 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 258/258 public-proof audit.
+-- Keeping them explicit makes this driver a 266/266 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -341,3 +341,13 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdg_one_lt_ratio
 #print axioms GdgSquarefree.gdg_one_lt_exterior
 #print axioms GdgSquarefree.gdg_one_lt_powered
+
+-- gd_g lobe translation: translation dominance of the interior magnitude
+#print axioms GdgSquarefree.gdgTheta_pos
+#print axioms GdgSquarefree.gdgTheta_lt_pi_div_two
+#print axioms GdgSquarefree.gdgInteriorNumeratorAbs_shift
+#print axioms GdgSquarefree.gdgInteriorDenominator_shift_pos_lt
+#print axioms GdgSquarefree.gdgInteriorMagnitude_shift_lt
+#print axioms GdgSquarefree.gdgInteriorMagnitude_max_shift_lt
+#print axioms GdgSquarefree.gdgExteriorCriticalRatio_strictAntiOn
+#print axioms GdgSquarefree.gdgExteriorCriticalRatio_eq_cos_unique
