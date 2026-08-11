@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 267 public theorem/lemma declarations. Run with:
+Axiom audit for all 276 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 267/267 public-proof audit.
+-- Keeping them explicit makes this driver a 276/276 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -352,3 +352,14 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgExteriorCriticalRatio_strictAntiOn
 #print axioms GdgSquarefree.gdgExteriorCriticalRatio_eq_cos_unique
 #print axioms GdgSquarefree.gdgInteriorMagnitude_max_shift_lt_of_pos
+
+-- gd_g natural lobes: zero-to-zero lobe geometry and positive-maximum existence
+#print axioms GdgSquarefree.gdgLobeLeft_succ
+#print axioms GdgSquarefree.gdgLobeRight_eq_next_left
+#print axioms GdgSquarefree.gdgEvenLobe_numerator_values
+#print axioms GdgSquarefree.gdgOddLobe_numerator_values
+#print axioms GdgSquarefree.gdgInteriorDenominator_pos_on_Icc
+#print axioms GdgSquarefree.continuousOn_gdgInteriorMagnitude_of_before_pole
+#print axioms GdgSquarefree.exists_gdgInteriorMagnitude_isGreatest_pos
+#print axioms GdgSquarefree.exists_pos_even_lobe_max
+#print axioms GdgSquarefree.exists_pos_odd_lobe_max
