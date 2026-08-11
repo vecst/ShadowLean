@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 266 public theorem/lemma declarations. Run with:
+Axiom audit for all 267 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 266/266 public-proof audit.
+-- Keeping them explicit makes this driver a 267/267 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -351,3 +351,4 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgInteriorMagnitude_max_shift_lt
 #print axioms GdgSquarefree.gdgExteriorCriticalRatio_strictAntiOn
 #print axioms GdgSquarefree.gdgExteriorCriticalRatio_eq_cos_unique
+#print axioms GdgSquarefree.gdgInteriorMagnitude_max_shift_lt_of_pos

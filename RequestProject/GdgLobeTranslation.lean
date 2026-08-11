@@ -239,4 +239,55 @@ theorem gdgExteriorCriticalRatio_eq_cos_unique {g : ℕ} (hg : 5 ≤ g)
     t1 = t2 :=
   (gdgExteriorCriticalRatio_strictAntiOn hg).injOn ht1 ht2 (h1.trans h2.symm)
 
+set_option linter.unusedVariables false in
+/-- **Positive-maximum transfer (repaired natural-lobe interface).** The
+maximum-transfer theorem `gdgInteriorMagnitude_max_shift_lt` cannot be applied to
+the natural closed zero-to-zero lobes, whose endpoints are numerator zeros, so
+its pointwise hypothesis `∀ φ ∈ Icc, 0 < numerator` is unsatisfiable there. This
+companion replaces that hypothesis by strict positivity of the earlier maximum
+`0 < M`: a maximizer `p` of a positive maximum must have positive numerator (a
+zero numerator would force `gdgInteriorMagnitude g p = 0 = M`), which feeds the
+pointwise dominance. Nonnegativity of the numerator would NOT suffice — both
+maxima could be zero. The interface hypothesis `hle : left ≤ right` is retained
+though the proof does not use it. This repairs maximum transfer on natural lobes
+only once positivity of their maximum is established separately; it does not
+prove lobe existence, maximum positivity, unique critical points, full
+critical-value separation, or any monodromy statement. -/
+theorem gdgInteriorMagnitude_max_shift_lt_of_pos {g : ℕ} (hg : 5 ≤ g)
+    {left right M Mnext : ℝ}
+    (hle : left ≤ right) (hleft0 : 0 ≤ left)
+    (hright : right + gdgTheta g < Real.pi - gdgTheta g)
+    (hMpos : 0 < M)
+    (hmax : IsGreatest
+      (gdgInteriorMagnitude g '' Set.Icc left right) M)
+    (hmaxNext : IsGreatest
+      (gdgInteriorMagnitude g ''
+        Set.Icc (left + gdgTheta g) (right + gdgTheta g)) Mnext) :
+    M < Mnext := by
+  obtain ⟨⟨p, hp, hpM⟩, -⟩ := hmax
+  have hge : 0 ≤ gdgInteriorNumeratorAbs g p := by
+    unfold gdgInteriorNumeratorAbs; exact abs_nonneg _
+  have hnump : 0 < gdgInteriorNumeratorAbs g p := by
+    rcases hge.lt_or_eq with h | h
+    · exact h
+    · exfalso
+      have hmz : gdgInteriorMagnitude g p = 0 := by
+        unfold gdgInteriorMagnitude
+        rw [← h]
+        exact zero_div _
+      rw [hpM] at hmz
+      linarith
+  have hp0 : 0 ≤ p := le_trans hleft0 hp.1
+  have hbefore : p + gdgTheta g < Real.pi - gdgTheta g := by
+    have hpr := hp.2; linarith
+  have hstep : gdgInteriorMagnitude g p < gdgInteriorMagnitude g (p + gdgTheta g) :=
+    gdgInteriorMagnitude_shift_lt hg hp0 hbefore hnump
+  have hmem : p + gdgTheta g ∈ Set.Icc (left + gdgTheta g) (right + gdgTheta g) :=
+    ⟨by linarith [hp.1], by linarith [hp.2]⟩
+  have hle2 : gdgInteriorMagnitude g (p + gdgTheta g) ≤ Mnext :=
+    hmaxNext.2 ⟨p + gdgTheta g, hmem, rfl⟩
+  calc M = gdgInteriorMagnitude g p := hpM.symm
+    _ < gdgInteriorMagnitude g (p + gdgTheta g) := hstep
+    _ ≤ Mnext := hle2
+
 end GdgSquarefree
