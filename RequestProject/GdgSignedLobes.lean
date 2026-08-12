@@ -5,7 +5,7 @@ signs, and a per-lobe φ-stationary-point (Rolle) witness.
 The magnitude function gdgInteriorMagnitude orders maxima but cannot be
 differentiated cleanly through its absolute value at the zero endpoints. This
 module introduces the SIGNED real pullback gdgSignedInterior, relates it exactly
-to the magnitude on the nonsingular (denominator ≠ 0) domain, proves its parity
+to the magnitude on the positive-denominator domain, proves its parity
 signs and regularity, and applies Rolle to get a genuine HasDerivAt … 0 witness
 inside every retained lobe. Division is totalized in Lean; the mathematical cover
 is used ONLY where the denominator is nonzero — the removed pole is never treated
