@@ -1,8 +1,8 @@
 /-
 gd_g reduced block cover — NATURAL LOBE geometry and positive-maximum existence.
 
-θ_g = gdgTheta g = 2π/g. The numerator |2 cos(gφ) − 2(−1)^g| vanishes exactly at
-the natural zeros: φ_j = j·θ_g (even g, since (−1)^g = 1 and cos(gφ)=1) and
+θ_g = gdgTheta g = 2π/g. The numerator |2 cos(gφ) − 2(−1)^g| vanishes at
+the natural zero locations: φ_j = j·θ_g (even g, since (−1)^g = 1 and cos(gφ)=1) and
 φ_j = (j+1/2)·θ_g (odd g, since (−1)^g = −1 and cos(gφ)=−1). A natural lobe is the
 closed interval between one zero and the next; its midpoint has numerator exactly
 4. The zero at π−θ_g is the REMOVED POLE (the unreduced quotient is singular

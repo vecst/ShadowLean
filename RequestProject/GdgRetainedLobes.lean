@@ -182,4 +182,108 @@ theorem exists_pos_odd_retained_lobe_max {g : ℕ}
   exact exists_pos_odd_lobe_max hg hOdd
     (gdgLobeRight_odd_last_lt_pole hg hOdd hj)
 
+/-- **Phase 2A T1.** Full even membership ⟺ before-pole equivalence. -/
+theorem gdgEven_mem_iff_lobeRight_lt_pole {g j : ℕ}
+    (hg : 5 ≤ g) (hEven : Even g) :
+    j ∈ gdgRetainedLobeIndices g ↔
+      gdgLobeRight g j 0 < Real.pi - gdgTheta g := by
+  constructor
+  · intro hmem
+    exact gdgLobeRight_even_last_lt_pole hg hEven
+      (gdg_mem_retainedLobeIndices_iff.mp hmem)
+  · intro hlt
+    rw [gdgLobeRight_even_lt_pole_iff hg, gdgTheta] at hlt
+    have hg0 : (0 : ℝ) < (g : ℝ) := by exact_mod_cast (show 0 < g by omega)
+    rw [show ((j : ℝ) + 2) * (2 * Real.pi / (g : ℝ))
+          = ((j : ℝ) + 2) * (2 * Real.pi) / (g : ℝ) by ring, div_lt_iff₀ hg0] at hlt
+    have hnum : 2 * ((j : ℝ) + 2) < (g : ℝ) := by nlinarith [hlt, Real.pi_pos]
+    have hnat : 2 * (j + 2) < g := by exact_mod_cast hnum
+    rw [gdg_mem_retainedLobeIndices_iff]
+    obtain ⟨m, rfl⟩ := hEven
+    unfold gdgRetainedLobeCount
+    omega
+
+/-- **Phase 2A T2.** Full odd membership ⟺ before-pole equivalence. -/
+theorem gdgOdd_mem_iff_lobeRight_lt_pole {g j : ℕ}
+    (hg : 5 ≤ g) (hOdd : Odd g) :
+    j ∈ gdgRetainedLobeIndices g ↔
+      gdgLobeRight g j ((1 : ℝ) / 2) <
+        Real.pi - gdgTheta g := by
+  constructor
+  · intro hmem
+    exact gdgLobeRight_odd_last_lt_pole hg hOdd
+      (gdg_mem_retainedLobeIndices_iff.mp hmem)
+  · intro hlt
+    rw [gdgLobeRight_odd_lt_pole_iff hg, gdgTheta] at hlt
+    have hg0 : (0 : ℝ) < (g : ℝ) := by exact_mod_cast (show 0 < g by omega)
+    rw [show ((j : ℝ) + (5 : ℝ) / 2) * (2 * Real.pi / (g : ℝ))
+          = ((j : ℝ) + (5 : ℝ) / 2) * (2 * Real.pi) / (g : ℝ) by ring, div_lt_iff₀ hg0] at hlt
+    have hnum : 2 * (j : ℝ) + 5 < (g : ℝ) := by nlinarith [hlt, Real.pi_pos]
+    have hnat : 2 * j + 5 < g := by exact_mod_cast hnum
+    rw [gdg_mem_retainedLobeIndices_iff]
+    obtain ⟨m, rfl⟩ := hOdd
+    unfold gdgRetainedLobeCount
+    omega
+
+/-- **Phase 2A T3.** Shifted even one-step pole guard. -/
+theorem gdgEven_next_lobe_before_pole {g j : ℕ}
+    (hg : 5 ≤ g) (hEven : Even g)
+    (hjnext : j + 1 ∈ gdgRetainedLobeIndices g) :
+    gdgLobeRight g j 0 + gdgTheta g <
+      Real.pi - gdgTheta g := by
+  have hid : gdgLobeRight g j 0 + gdgTheta g = gdgLobeRight g (j + 1) 0 := by
+    unfold gdgLobeRight gdgLobeLeft
+    push_cast
+    ring
+  rw [hid]
+  exact (gdgEven_mem_iff_lobeRight_lt_pole hg hEven).mp hjnext
+
+/-- **Phase 2A T4.** Shifted odd one-step pole guard. -/
+theorem gdgOdd_next_lobe_before_pole {g j : ℕ}
+    (hg : 5 ≤ g) (hOdd : Odd g)
+    (hjnext : j + 1 ∈ gdgRetainedLobeIndices g) :
+    gdgLobeRight g j ((1 : ℝ) / 2) + gdgTheta g <
+      Real.pi - gdgTheta g := by
+  have hid : gdgLobeRight g j ((1 : ℝ) / 2) + gdgTheta g
+      = gdgLobeRight g (j + 1) ((1 : ℝ) / 2) := by
+    unfold gdgLobeRight gdgLobeLeft
+    push_cast
+    ring
+  rw [hid]
+  exact (gdgOdd_mem_iff_lobeRight_lt_pole hg hOdd).mp hjnext
+
+/-- **Phase 2A T5.** Distinct lobes have pairwise-disjoint open interiors. -/
+theorem gdgLobe_interiors_disjoint_of_lt {g j k : ℕ}
+    (hg : 1 ≤ g) (hjk : j < k) (offset : ℝ) :
+    Disjoint
+      (Set.Ioo
+        (gdgLobeLeft g j offset)
+        (gdgLobeRight g j offset))
+      (Set.Ioo
+        (gdgLobeLeft g k offset)
+        (gdgLobeRight g k offset)) := by
+  have hθ : 0 < gdgTheta g := gdgTheta_pos hg
+  have hjk1 : (j : ℝ) + 1 ≤ (k : ℝ) := by exact_mod_cast (show j + 1 ≤ k by omega)
+  have hle : gdgLobeRight g j offset ≤ gdgLobeLeft g k offset := by
+    unfold gdgLobeRight gdgLobeLeft
+    nlinarith [hθ, hjk1]
+  rw [Set.disjoint_left]
+  rintro x ⟨_, hxj2⟩ ⟨hxk1, _⟩
+  linarith [hxj2, hle, hxk1]
+
+/-- **Phase 2A T6 (g=5).** No retained interior lobe. -/
+@[simp] theorem gdgRetainedLobeCount_five :
+    gdgRetainedLobeCount 5 = 0 := by
+  unfold gdgRetainedLobeCount; rfl
+
+/-- **Phase 2A T6 (g=6).** One retained even lobe. -/
+@[simp] theorem gdgRetainedLobeCount_six :
+    gdgRetainedLobeCount 6 = 1 := by
+  unfold gdgRetainedLobeCount; rfl
+
+/-- **Phase 2A T6 (g=7).** One retained odd lobe. -/
+@[simp] theorem gdgRetainedLobeCount_seven :
+    gdgRetainedLobeCount 7 = 1 := by
+  unfold gdgRetainedLobeCount; rfl
+
 end GdgSquarefree

@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 287 public theorem/lemma declarations. Run with:
+Axiom audit for all 295 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 287/287 public-proof audit.
+-- Keeping them explicit makes this driver a 295/295 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -376,3 +376,13 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgLobeRight_odd_last_lt_pole
 #print axioms GdgSquarefree.exists_pos_even_retained_lobe_max
 #print axioms GdgSquarefree.exists_pos_odd_retained_lobe_max
+
+-- gd_g retained lobes (Phase 2A completion): membership iffs, shifted pole guards, disjoint interiors, small-g counts
+#print axioms GdgSquarefree.gdgEven_mem_iff_lobeRight_lt_pole
+#print axioms GdgSquarefree.gdgOdd_mem_iff_lobeRight_lt_pole
+#print axioms GdgSquarefree.gdgEven_next_lobe_before_pole
+#print axioms GdgSquarefree.gdgOdd_next_lobe_before_pole
+#print axioms GdgSquarefree.gdgLobe_interiors_disjoint_of_lt
+#print axioms GdgSquarefree.gdgRetainedLobeCount_five
+#print axioms GdgSquarefree.gdgRetainedLobeCount_six
+#print axioms GdgSquarefree.gdgRetainedLobeCount_seven
