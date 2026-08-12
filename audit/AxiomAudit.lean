@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 295 public theorem/lemma declarations. Run with:
+Axiom audit for all 304 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 295/295 public-proof audit.
+-- Keeping them explicit makes this driver a 304/304 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -386,3 +386,14 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgRetainedLobeCount_five
 #print axioms GdgSquarefree.gdgRetainedLobeCount_six
 #print axioms GdgSquarefree.gdgRetainedLobeCount_seven
+
+-- gd_g zero classification (Phase 2B): global Int-index + finite pre-pole endpoint + no hidden zeros
+#print axioms GdgSquarefree.gdg_mem_retainedZeroIndices_iff
+#print axioms GdgSquarefree.gdg_card_retainedZeroIndices
+#print axioms GdgSquarefree.gdg_mem_retainedLobeIndices_iff_endpoint_pair
+#print axioms GdgSquarefree.gdgEven_numerator_zero_iff_int_index
+#print axioms GdgSquarefree.gdgOdd_numerator_zero_iff_int_index
+#print axioms GdgSquarefree.gdgEven_numerator_zero_iff_existsUnique_retained_endpoint
+#print axioms GdgSquarefree.gdgOdd_numerator_zero_iff_existsUnique_retained_endpoint
+#print axioms GdgSquarefree.gdgEven_numerator_pos_on_lobeInterior
+#print axioms GdgSquarefree.gdgOdd_numerator_pos_on_lobeInterior
