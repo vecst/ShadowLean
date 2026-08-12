@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 304 public theorem/lemma declarations. Run with:
+Axiom audit for all 315 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 304/304 public-proof audit.
+-- Keeping them explicit makes this driver a 315/315 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -397,3 +397,16 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgOdd_numerator_zero_iff_existsUnique_retained_endpoint
 #print axioms GdgSquarefree.gdgEven_numerator_pos_on_lobeInterior
 #print axioms GdgSquarefree.gdgOdd_numerator_pos_on_lobeInterior
+
+-- gd_g signed lobes (Phase 3A): signed pullback regularity, parity signs, per-lobe Rolle witness
+#print axioms GdgSquarefree.abs_gdgSignedInterior_eq_gdgInteriorMagnitude
+#print axioms GdgSquarefree.gdgSignedInterior_eq_neg_magnitude_of_even
+#print axioms GdgSquarefree.gdgSignedInterior_eq_magnitude_of_odd
+#print axioms GdgSquarefree.continuousOn_gdgSignedInterior_of_before_pole
+#print axioms GdgSquarefree.differentiableAt_gdgSignedInterior_of_denominator_ne_zero
+#print axioms GdgSquarefree.gdgSignedInterior_even_endpoint_values
+#print axioms GdgSquarefree.gdgSignedInterior_odd_endpoint_values
+#print axioms GdgSquarefree.gdgSignedInterior_neg_on_even_retained_lobeInterior
+#print axioms GdgSquarefree.gdgSignedInterior_pos_on_odd_retained_lobeInterior
+#print axioms GdgSquarefree.exists_even_retained_lobe_hasDerivAt_gdgSignedInterior_zero
+#print axioms GdgSquarefree.exists_odd_retained_lobe_hasDerivAt_gdgSignedInterior_zero
