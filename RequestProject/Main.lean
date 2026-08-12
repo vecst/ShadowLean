@@ -38,6 +38,7 @@ import RequestProject.GdgCriticalCandidateLocation
 import RequestProject.GdgCriticalValueSeparation
 import RequestProject.GdgLobeTranslation
 import RequestProject.GdgNaturalLobes
+import RequestProject.GdgRetainedLobes
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
