@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 315 public theorem/lemma declarations. Run with:
+Axiom audit for all 326 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 315/315 public-proof audit.
+-- Keeping them explicit makes this driver a 326/326 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -410,3 +410,16 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgSignedInterior_pos_on_odd_retained_lobeInterior
 #print axioms GdgSquarefree.exists_even_retained_lobe_hasDerivAt_gdgSignedInterior_zero
 #print axioms GdgSquarefree.exists_odd_retained_lobe_hasDerivAt_gdgSignedInterior_zero
+
+-- gd_g critical bridge (Phase 3B): pulled cover on the unit circle -> located criticalTetranomial roots
+#print axioms GdgSquarefree.gdgUnitCircle_ne_zero
+#print axioms GdgSquarefree.gdgUnitCircle_add_inv_eq_blockCoord
+#print axioms GdgSquarefree.coverQuadratic_gdgUnitCircle
+#print axioms GdgSquarefree.coverNumerator_sq_gdgUnitCircle
+#print axioms GdgSquarefree.gdgPulledCover_gdgUnitCircle_eq_signed
+#print axioms GdgSquarefree.gdgPulledCover_hasDerivAt
+#print axioms GdgSquarefree.gdgBlockCoord_hasDerivAt
+#print axioms GdgSquarefree.gdgBlockCoord_deriv_ne_zero_on_prePole
+#print axioms GdgSquarefree.criticalTetranomial_gdgUnitCircle_eq_zero_of_stationary
+#print axioms GdgSquarefree.exists_even_retained_lobe_criticalTetranomial_unitCircle_root
+#print axioms GdgSquarefree.exists_odd_retained_lobe_criticalTetranomial_unitCircle_root

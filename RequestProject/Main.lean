@@ -41,6 +41,7 @@ import RequestProject.GdgNaturalLobes
 import RequestProject.GdgRetainedLobes
 import RequestProject.GdgZeroClassification
 import RequestProject.GdgSignedLobes
+import RequestProject.GdgCriticalBridge
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
