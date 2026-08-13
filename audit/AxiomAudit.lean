@@ -441,3 +441,14 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgCriticalPolynomial_derivative_eval_ne_zero_of_root
 #print axioms GdgSquarefree.gdgCriticalPolynomial_separable
 #print axioms GdgSquarefree.gdgCriticalPolynomial_squarefree
+
+-- gd_g forced quadratic (Phase 4C): exact forced factor Q | P, monic quotient P/ₘQ deg g-2, squarefree factors, coprime (g>=5)
+#print axioms GdgSquarefree.gdgQuadraticPolynomial_dvd_critical
+#print axioms GdgSquarefree.gdgQuadratic_mul_channelQuotient
+#print axioms GdgSquarefree.gdgChannelQuotientPolynomial_natDegree
+#print axioms GdgSquarefree.gdgChannelQuotientPolynomial_ne_zero
+#print axioms GdgSquarefree.gdgQuadraticPolynomial_squarefree
+#print axioms GdgSquarefree.gdgChannelQuotientPolynomial_squarefree
+#print axioms GdgSquarefree.gdgQuadratic_channelQuotient_isCoprime
+#print axioms GdgSquarefree.gdgCriticalPolynomial_eval_factorization
+#print axioms GdgSquarefree.gdgChannelQuotient_eval_eq_zero_iff
