@@ -429,3 +429,15 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgCriticalTetranomial_root_ne_zero
 #print axioms GdgSquarefree.gdgCriticalTetranomial_deriv_ne_zero_of_root
 #print axioms GdgSquarefree.gdgCriticalTetranomial_no_common_root
+
+-- gd_g critical polynomial (Phase 4B): Polynomial realization, exact degree, separability, squarefree (g>=5)
+#print axioms GdgSquarefree.gdgCriticalPolynomial_eval
+#print axioms GdgSquarefree.gdgCriticalPolynomial_derivative_eval
+#print axioms GdgSquarefree.gdgQuadraticPolynomial_eval
+#print axioms GdgSquarefree.gdgCriticalPolynomial_natDegree
+#print axioms GdgSquarefree.gdgQuadraticPolynomial_monic
+#print axioms GdgSquarefree.gdgQuadraticPolynomial_natDegree
+#print axioms GdgSquarefree.gdgCriticalPolynomial_ne_zero
+#print axioms GdgSquarefree.gdgCriticalPolynomial_derivative_eval_ne_zero_of_root
+#print axioms GdgSquarefree.gdgCriticalPolynomial_separable
+#print axioms GdgSquarefree.gdgCriticalPolynomial_squarefree
