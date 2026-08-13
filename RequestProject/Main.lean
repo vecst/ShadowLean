@@ -42,6 +42,7 @@ import RequestProject.GdgRetainedLobes
 import RequestProject.GdgZeroClassification
 import RequestProject.GdgSignedLobes
 import RequestProject.GdgCriticalBridge
+import RequestProject.GdgCriticalNoCommonRoot
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

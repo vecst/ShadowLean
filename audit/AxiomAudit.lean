@@ -1,5 +1,5 @@
 /-
-Axiom audit for all 326 public theorem/lemma declarations. Run with:
+Axiom audit for all 330 public theorem/lemma declarations. Run with:
   lake env lean audit/AxiomAudit.lean
 Every dependency list must be a subset of
 [propext, Classical.choice, Quot.sound]. Public definitions are covered by the
@@ -181,7 +181,7 @@ import RequestProject.Main
 #print axioms SpinFactor.jordan_identity
 
 -- Public proof helpers omitted by the former principal-theorem selection.
--- Keeping them explicit makes this driver a 326/326 public-proof audit.
+-- Keeping them explicit makes this driver a 330/330 public-proof audit.
 #print axioms ResidueSlices.unique_residue_packet
 #print axioms ResidueSlices.slice_nonneg
 #print axioms ResidueSlices.square_even_odd
@@ -423,3 +423,9 @@ import RequestProject.Main
 #print axioms GdgSquarefree.criticalTetranomial_gdgUnitCircle_eq_zero_of_stationary
 #print axioms GdgSquarefree.exists_even_retained_lobe_criticalTetranomial_unitCircle_root
 #print axioms GdgSquarefree.exists_odd_retained_lobe_criticalTetranomial_unitCircle_root
+
+-- gd_g critical no-common-root (Phase 4A): tetranomial and its derivative share no root (g>=5)
+#print axioms GdgSquarefree.gdgCriticalTetranomial_at_zero
+#print axioms GdgSquarefree.gdgCriticalTetranomial_root_ne_zero
+#print axioms GdgSquarefree.gdgCriticalTetranomial_deriv_ne_zero_of_root
+#print axioms GdgSquarefree.gdgCriticalTetranomial_no_common_root
