@@ -452,3 +452,17 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgQuadratic_channelQuotient_isCoprime
 #print axioms GdgSquarefree.gdgCriticalPolynomial_eval_factorization
 #print axioms GdgSquarefree.gdgChannelQuotient_eval_eq_zero_iff
+
+-- gd_g reciprocal residual (Phase 4D): odd u=1 removal, parity-correct self-reciprocal squarefree residual, no fixed reciprocal roots (g>=5)
+#print axioms GdgSquarefree.gdgChannelQuotient_eval_one_of_odd
+#print axioms GdgSquarefree.gdgChannelQuotient_eval_one_of_even
+#print axioms GdgSquarefree.gdgChannelQuotient_eval_neg_one
+#print axioms GdgSquarefree.gdgXSubOne_mul_oddResidual
+#print axioms GdgSquarefree.gdgOddResidualPolynomial_natDegree
+#print axioms GdgSquarefree.gdgChannelQuotientPolynomial_reverse
+#print axioms GdgSquarefree.gdgOddResidualPolynomial_reverse
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_natDegree
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_reverse
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_squarefree
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_eval_one_ne_zero
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_eval_neg_one_ne_zero
