@@ -49,6 +49,7 @@ import RequestProject.GdgReciprocalResidual
 import RequestProject.GdgBlockDescent
 import RequestProject.GdgBlockRootBridge
 import RequestProject.GdgExteriorRoot
+import RequestProject.GdgDegreeExhaustion
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

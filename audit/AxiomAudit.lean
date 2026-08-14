@@ -514,3 +514,12 @@ import RequestProject.Main
 #print axioms GdgSquarefree.existsUnique_exterior_blockRoot
 #print axioms GdgSquarefree.gdgPulledCover_gdgExteriorUnit
 #print axioms GdgSquarefree.gdgExteriorCoverValue_pos
+
+-- gd_g degree exhaustion (Phase 6A): d_g distinct complex roots exhausted, all roots real (g>=5)
+#print axioms GdgSquarefree.card_gdgBlockRootSlot
+#print axioms GdgSquarefree.exists_retained_lobe_blockRoot_embedding
+#print axioms GdgSquarefree.exists_gdgBlockRootSlot_embedding
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_root_set_finite
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_root_set_ncard
+#print axioms GdgSquarefree.exists_gdgBlockRootSlot_classification
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_all_roots_real
