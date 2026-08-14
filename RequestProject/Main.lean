@@ -48,6 +48,7 @@ import RequestProject.GdgForcedQuadratic
 import RequestProject.GdgReciprocalResidual
 import RequestProject.GdgBlockDescent
 import RequestProject.GdgBlockRootBridge
+import RequestProject.GdgExteriorRoot
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

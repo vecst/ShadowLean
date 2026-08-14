@@ -495,3 +495,22 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgBlockCoord_ne_of_odd_retained_lobes
 #print axioms GdgSquarefree.exists_even_retained_lobe_blockRoot_embedding
 #print axioms GdgSquarefree.exists_odd_retained_lobe_blockRoot_embedding
+
+-- gd_g exterior root (Phase 5): unique exterior critical point, unique block root b<-2, positive cover value (g>=5)
+#print axioms GdgSquarefree.gdgExteriorCriticalRatio_continuous
+#print axioms GdgSquarefree.gdgExteriorCriticalRatio_zero
+#print axioms GdgSquarefree.tendsto_gdgExteriorCriticalRatio_atTop
+#print axioms GdgSquarefree.exists_gdgExteriorCriticalRatio_eq_cos
+#print axioms GdgSquarefree.existsUnique_gdgExteriorCriticalRatio_eq_cos
+#print axioms GdgSquarefree.gdgExteriorUnit_ne_zero
+#print axioms GdgSquarefree.gdgExteriorUnit_ne_one
+#print axioms GdgSquarefree.gdgExteriorUnit_add_inv
+#print axioms GdgSquarefree.gdgExteriorBlockCoord_lt_neg_two
+#print axioms GdgSquarefree.criticalTetranomial_gdgExteriorUnit_eq_zero_iff
+#print axioms GdgSquarefree.coverQuadratic_gdgExteriorUnit_ne_zero
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_exterior_eq_zero_iff
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_exterior_eq_zero_iff
+#print axioms GdgSquarefree.existsUnique_exterior_parametrized_blockRoot
+#print axioms GdgSquarefree.existsUnique_exterior_blockRoot
+#print axioms GdgSquarefree.gdgPulledCover_gdgExteriorUnit
+#print axioms GdgSquarefree.gdgExteriorCoverValue_pos
