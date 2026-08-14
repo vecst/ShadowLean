@@ -466,3 +466,17 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_squarefree
 #print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_eval_one_ne_zero
 #print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_eval_neg_one_ne_zero
+
+-- gd_g block descent (Phase 4E): reciprocal basis + constructive block polynomial B_g deg (g-2)/2, exact descent R(u)=u^d B(u+u^-1) (g>=5)
+#print axioms GdgSquarefree.gdgReciprocalBasis_eval
+#print axioms GdgSquarefree.gdgReciprocalBasis_natDegree
+#print axioms GdgSquarefree.gdgReciprocalBasis_monic
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_ne_zero
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_coeff_zero_ne_zero
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_root_ne_zero
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_coeff_blockDegree
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_natDegree
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_ne_zero
+#print axioms GdgSquarefree.gdgReciprocalResidual_eval_eq_block
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_eval_eq_zero_iff
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_root_of_residual_root

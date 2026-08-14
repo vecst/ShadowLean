@@ -46,6 +46,7 @@ import RequestProject.GdgCriticalNoCommonRoot
 import RequestProject.GdgCriticalPolynomial
 import RequestProject.GdgForcedQuadratic
 import RequestProject.GdgReciprocalResidual
+import RequestProject.GdgBlockDescent
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
