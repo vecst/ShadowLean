@@ -480,3 +480,18 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgReciprocalResidual_eval_eq_block
 #print axioms GdgSquarefree.gdgBlockCriticalPolynomial_eval_eq_zero_iff
 #print axioms GdgSquarefree.gdgBlockCriticalPolynomial_root_of_residual_root
+
+-- gd_g block root bridge (Phase 4F): retained-lobe witnesses -> injective family of block roots (g>=5)
+#print axioms GdgSquarefree.gdgUnitCircle_ne_one_of_blockCoord_lt_two
+#print axioms GdgSquarefree.gdgChannelQuotientPolynomial_gdgUnitCircle_eq_zero
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_gdgUnitCircle_eq_zero_of_even
+#print axioms GdgSquarefree.gdgReciprocalResidualPolynomial_gdgUnitCircle_eq_zero_of_odd
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_gdgUnitCircle_eq_zero
+#print axioms GdgSquarefree.gdgBlockCoord_strictAntiOn
+#print axioms GdgSquarefree.gdgBlockCoord_ne_of_lt
+#print axioms GdgSquarefree.exists_even_retained_lobe_blockCriticalPolynomial_root
+#print axioms GdgSquarefree.exists_odd_retained_lobe_blockCriticalPolynomial_root
+#print axioms GdgSquarefree.gdgBlockCoord_ne_of_even_retained_lobes
+#print axioms GdgSquarefree.gdgBlockCoord_ne_of_odd_retained_lobes
+#print axioms GdgSquarefree.exists_even_retained_lobe_blockRoot_embedding
+#print axioms GdgSquarefree.exists_odd_retained_lobe_blockRoot_embedding
