@@ -1,0 +1,28 @@
+ShadowLean uses a split license so that source code and research materials can
+be reused under terms appropriate to each kind of work.
+
+Copyright (c) 2026 Lukas Carroll
+
+SOURCE CODE AND FORMALIZATIONS
+
+Unless a file states otherwise, Lean source, executable source code, scripts,
+tests, build files, and continuous-integration configuration are licensed
+under the BSD 3-Clause License (SPDX identifier: BSD-3-Clause). The complete
+license text is in LICENSES/BSD-3-Clause.txt.
+
+RESEARCH AND DOCUMENTATION
+
+Unless a file states otherwise, manuscripts, research notes, prose
+documentation, diagrams, and original figures are licensed under the Creative
+Commons Attribution 4.0 International License (SPDX identifier: CC-BY-4.0).
+The license notice and canonical legal-code location are in
+LICENSES/CC-BY-4.0.txt.
+
+README.md is documentation and is therefore covered by CC BY 4.0. Files in
+RequestProject/, audit/, and .github/, together with Lean project and build
+configuration, are source or formalization material and are therefore covered
+by BSD-3-Clause.
+
+Third-party material remains under its original license. Nothing in this file
+changes the license of a dependency or of material that this repository does
+not own.

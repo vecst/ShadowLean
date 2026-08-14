@@ -12,16 +12,25 @@ in `audit/` and enforced in CI.
 
 | Component | Version |
 |---|---|
-| Lean | `leanprover/lean4:v4.28.0` |
-| Mathlib | tag `v4.28.0` (`8f9d9cff6bd728b17a24e163c9402775d9e6a365`) |
+| Lean | `leanprover/lean4:v4.33.0-rc2` |
+| Mathlib | locked commit `8cbb95e6e08446476813711ab8f45e59d4fda94d` |
+
+These identities come from `lean-toolchain` and `lake-manifest.json`. Keep the
+manifest locked when verifying a frozen commit; do not run `lake update` as an
+audit step.
 
 ## Build and verify
 
 ```
 lake exe cache get   # fetch Mathlib binary cache
-lake build           # build all modules (no sorry, no warnings-as-errors failures)
-lake env lean audit/AxiomAudit.lean   # audit all 137 public theorem/lemma declarations
+lake build --wfail   # build all modules with warnings treated as errors
+lake env lean audit/AxiomAudit.lean   # audit every listed public theorem/lemma
 ```
+
+At commit `6388fc5`, `RequestProject.Main` imports 51 project modules and the
+axiom driver checks 403 public theorem/lemma declarations. Counts are
+commit-scoped and will change as new proof modules land; the audit file is the
+authoritative declaration list for the checked-out commit.
 
 ## Theorem ↔ paper/formal-interface map
 
@@ -226,10 +235,10 @@ the limit constructions. From `shadow_packetization_companions.tex`.
 Exact channel evolution `packetSpectralFlow α V n k = Vₖ·(1 + α·ζ^k)^n` and its
 IFFT reconstruction: an initially zero channel stays zero, so support is
 *contained* in the initial set `S` at every time (an evolution factor may vanish
-and shrink support; none is created). **Scope note:** this module does *not*
-formalize equivalence with the coordinate recurrence
-`C_{0,n+1}=C_{0,n}+x·C_{g-1,n}`, `C_{j,n+1}=C_{j-1,n}+C_{j,n}` — a separate later
-target.
+and shrink support; none is created). The one-step coordinate recurrence and
+its finite iterates are now connected to this flow by
+`IFFTCoordinateBridge.lean` and `IFFTIteratedFlow.lean`; they are no longer a
+future target.
 | Lean declaration | Statement |
 |---|---|
 | `packetSpectralFlow_zero` | Time-zero state: `packetSpectralFlow α V 0 = V` |
@@ -239,6 +248,14 @@ target.
 | `packetSpectrum_evolvedPreparedPacket` | Exact reconstruction (`α ≠ 0`): `packetSpectrum α (evolved …) = packetSpectralFlow α V n` |
 | `packetSpectrum_evolvedPreparedPacket_succ` | The reconstruction realizes the exact `× (1 + α·ζ^k)` channel recurrence |
 | `evolvedPreparedPacket_no_spectral_leakage` | No leakage at any time: reconstructed spectrum zero off `S`, all `n` |
+
+### `RequestProject/IFFTCoordinateBridge.lean` and `IFFTIteratedFlow.lean` — finite coordinate-flow bridge
+These modules prove the exact one-step wraparound coordinate recurrence,
+identify its finite iterates with spectral multiplication by
+`(1 + α·ζ^k)^n`, and transport the prepared-support statements through every
+finite iterate. This is a finite cyclic linear-flow result. It does not prove
+positivity of every evolved state, projective or asymptotic convergence,
+Poissonized flow, nonlinear support closure, or estimator error rates.
 
 ### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm (standalone formal result)
 A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
@@ -266,6 +283,22 @@ and the flagship cutoff constant `1/2`) are **not yet certified**.
 | `ratio_three_closed_form` | Closed form on the recovery channel `δ=3` (`N ≥ 1`): `ratio 3 N = u + 2√2·(3−2√2)^N/(1−(3−2√2)^N)` |
 | `even_pole_residue` | The even-row pole at `δ=−1` has residue exactly `2/m` (`m ≥ 1`), via the punctured limit `nhdsWithin (−1) {−1}ᶜ` — no `0/0` identification |
 
+### `RequestProject/Gdg*.lean` — `gd_g` critical geometry (formal construction in progress)
+The imported `GdgCriticalTetranomial` through `GdgExteriorRoot` modules now
+formalize the specialized critical tetranomial, repeated-root exclusion,
+natural retained lobes, Rolle witnesses and their algebraic transfer, a
+squarefree reciprocal residual, constructive descent to the block polynomial
+`B_g`, an injective family of retained interior block roots, and exactly one
+block root below `-2`. The exterior root is parametrized by
+`u = -exp(t)`, has block coordinate `b = -2*cosh(t)`, and has a strictly
+positive exact pulled-cover value.
+
+This is not yet the completed paper endpoint. The active modules do not yet
+use the exact degree to exhaust all block roots, prove uniqueness in every
+interior lobe, classify every block root as real, order all interior critical
+values, separate the exterior value from every interior value, or prove
+monodromy, a Galois group, or the solvability threshold.
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -288,6 +321,12 @@ compact-uniform additions).
   The mapped inverse-Fourier preparation, moving-packet Fourier/high-pass,
   and finite-difference/Stirling statements are the machine-checked portion
   of that paper.
+- From the general `gd_g` program: degree exhaustion, uniqueness of the
+  interior critical point in each retained lobe, all-real root classification,
+  pairwise critical-value separation, monodromy, the wreath-product Galois
+  group, and the universal solvability threshold. The current exact endpoint
+  is the injective retained interior-root family plus the unique exterior block
+  root below `-2` and its positive cover value.
 - Spin factor: bilinearity as exported lemmas, full power-associativity,
   conjugation as an involution, the inverse formula, and the downstream
   cross-norm closure and tree-indexed transport theorems.
@@ -315,3 +354,15 @@ Portions of this project were generated by
 ```
 Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
 ```
+
+## License
+
+Copyright © 2026 Lukas Carroll.
+
+- Lean, executable source, scripts, tests, build files, and CI configuration:
+  [BSD 3-Clause](LICENSES/BSD-3-Clause.txt).
+- Manuscripts, research notes, prose documentation, diagrams, and original
+  figures: [Creative Commons Attribution 4.0 International](LICENSES/CC-BY-4.0.txt).
+
+See [LICENSE](LICENSE) for the file-category boundary and third-party-material
+exception.
