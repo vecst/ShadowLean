@@ -543,3 +543,11 @@ import RequestProject.Main
 #print axioms GdgSquarefree.odd_consecutive_retained_stationary_magnitude_lt
 #print axioms GdgSquarefree.even_consecutive_retained_stationary_value_gt
 #print axioms GdgSquarefree.odd_consecutive_retained_stationary_value_lt
+
+-- gd_g critical value pairwise (Phase 7B): pairwise j<k ordering + distinct-lobe value noncollision (g>=5)
+#print axioms GdgSquarefree.even_pairwise_retained_stationary_magnitude_lt
+#print axioms GdgSquarefree.odd_pairwise_retained_stationary_magnitude_lt
+#print axioms GdgSquarefree.even_pairwise_retained_stationary_value_gt
+#print axioms GdgSquarefree.odd_pairwise_retained_stationary_value_lt
+#print axioms GdgSquarefree.even_distinct_retained_stationary_values_ne
+#print axioms GdgSquarefree.odd_distinct_retained_stationary_values_ne
