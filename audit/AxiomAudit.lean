@@ -523,3 +523,15 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgBlockCriticalPolynomial_root_set_ncard
 #print axioms GdgSquarefree.exists_gdgBlockRootSlot_classification
 #print axioms GdgSquarefree.gdgBlockCriticalPolynomial_all_roots_real
+
+-- gd_g lobe uniqueness (Phase 6B): exactly one stationary phase per retained lobe = unique positive magnitude maximizer (g>=5)
+#print axioms GdgSquarefree.even_retained_lobe_stationary_blockRoot
+#print axioms GdgSquarefree.odd_retained_lobe_stationary_blockRoot
+#print axioms GdgSquarefree.exists_even_complete_retained_lobe_blockRoot_family
+#print axioms GdgSquarefree.exists_odd_complete_retained_lobe_blockRoot_family
+#print axioms GdgSquarefree.existsUnique_even_retained_lobe_stationary
+#print axioms GdgSquarefree.existsUnique_odd_retained_lobe_stationary
+#print axioms GdgSquarefree.even_retained_lobe_stationary_iff_isGreatest
+#print axioms GdgSquarefree.odd_retained_lobe_stationary_iff_isGreatest
+#print axioms GdgSquarefree.existsUnique_even_retained_lobe_magnitude_maximizer
+#print axioms GdgSquarefree.existsUnique_odd_retained_lobe_magnitude_maximizer

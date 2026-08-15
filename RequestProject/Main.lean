@@ -50,6 +50,7 @@ import RequestProject.GdgBlockDescent
 import RequestProject.GdgBlockRootBridge
 import RequestProject.GdgExteriorRoot
 import RequestProject.GdgDegreeExhaustion
+import RequestProject.GdgLobeUniqueness
 import RequestProject.SilverCrossover
 
 open scoped BigOperators
