@@ -535,3 +535,11 @@ import RequestProject.Main
 #print axioms GdgSquarefree.odd_retained_lobe_stationary_iff_isGreatest
 #print axioms GdgSquarefree.existsUnique_even_retained_lobe_magnitude_maximizer
 #print axioms GdgSquarefree.existsUnique_odd_retained_lobe_magnitude_maximizer
+
+-- gd_g critical value ordering (Phase 7A): strict consecutive retained-lobe value ordering, parity-correct (g>=5)
+#print axioms GdgSquarefree.even_retained_lobe_stationary_isGreatest_pos
+#print axioms GdgSquarefree.odd_retained_lobe_stationary_isGreatest_pos
+#print axioms GdgSquarefree.even_consecutive_retained_stationary_magnitude_lt
+#print axioms GdgSquarefree.odd_consecutive_retained_stationary_magnitude_lt
+#print axioms GdgSquarefree.even_consecutive_retained_stationary_value_gt
+#print axioms GdgSquarefree.odd_consecutive_retained_stationary_value_lt
