@@ -551,3 +551,10 @@ import RequestProject.Main
 #print axioms GdgSquarefree.odd_pairwise_retained_stationary_value_lt
 #print axioms GdgSquarefree.even_distinct_retained_stationary_values_ne
 #print axioms GdgSquarefree.odd_distinct_retained_stationary_values_ne
+
+-- gd_g exterior value maximum (Phase 8A): exterior critical param = global maximizer of cover value on t>0 (g>=5)
+#print axioms GdgSquarefree.gdgExteriorCoverValue_hasDerivAt
+#print axioms GdgSquarefree.gdgExterior_logSlope_pos_of_lt_critical
+#print axioms GdgSquarefree.gdgExterior_logSlope_neg_of_critical_lt
+#print axioms GdgSquarefree.gdgExteriorCoverValue_isGreatest_of_critical
+#print axioms GdgSquarefree.gdgExteriorCoverValue_theta_le_of_critical
