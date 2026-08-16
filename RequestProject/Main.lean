@@ -54,6 +54,7 @@ import RequestProject.GdgLobeUniqueness
 import RequestProject.GdgCriticalValueOrdering
 import RequestProject.GdgCriticalValuePairwise
 import RequestProject.GdgExteriorValueMaximum
+import RequestProject.GdgExteriorInteriorOdd
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

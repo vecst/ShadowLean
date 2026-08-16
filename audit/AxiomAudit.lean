@@ -558,3 +558,11 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgExterior_logSlope_neg_of_critical_lt
 #print axioms GdgSquarefree.gdgExteriorCoverValue_isGreatest_of_critical
 #print axioms GdgSquarefree.gdgExteriorCoverValue_theta_le_of_critical
+
+-- gd_g exterior/interior odd (Phase 8B): odd-row exterior critical value strictly above every retained interior magnitude (g>=7)
+#print axioms GdgSquarefree.gdgOdd_retained_lobeRight_le_pi_sub_two_theta
+#print axioms GdgSquarefree.gdgOdd_retained_interior_denominator_lower_bound
+#print axioms GdgSquarefree.gdgOdd_retained_interior_magnitude_le
+#print axioms GdgSquarefree.gdgExteriorCoverValue_at_theta
+#print axioms GdgSquarefree.gdg_uniformInteriorBound_lt_exterior_theta
+#print axioms GdgSquarefree.gdgOdd_retained_lobe_magnitude_lt_exterior_critical
