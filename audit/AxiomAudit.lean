@@ -566,3 +566,10 @@ import RequestProject.Main
 #print axioms GdgSquarefree.gdgExteriorCoverValue_at_theta
 #print axioms GdgSquarefree.gdg_uniformInteriorBound_lt_exterior_theta
 #print axioms GdgSquarefree.gdgOdd_retained_lobe_magnitude_lt_exterior_critical
+
+-- gd_g exterior/interior noncollision (Phase 8C): parity-specific interior stationary value != exterior critical value (g>=5)
+#print axioms GdgSquarefree.gdgRetainedLobeIndices_five_eq_empty
+#print axioms GdgSquarefree.even_retained_stationary_value_lt_exterior_critical
+#print axioms GdgSquarefree.odd_retained_stationary_value_lt_exterior_critical
+#print axioms GdgSquarefree.even_retained_stationary_value_ne_exterior_critical
+#print axioms GdgSquarefree.odd_retained_stationary_value_ne_exterior_critical
