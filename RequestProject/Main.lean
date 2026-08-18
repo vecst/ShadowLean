@@ -56,6 +56,7 @@ import RequestProject.GdgCriticalValuePairwise
 import RequestProject.GdgExteriorValueMaximum
 import RequestProject.GdgExteriorInteriorOdd
 import RequestProject.GdgExteriorInteriorNoncollision
+import RequestProject.GdgFlagshipCriticalFamily
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

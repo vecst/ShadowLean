@@ -573,3 +573,10 @@ import RequestProject.Main
 #print axioms GdgSquarefree.odd_retained_stationary_value_lt_exterior_critical
 #print axioms GdgSquarefree.even_retained_stationary_value_ne_exterior_critical
 #print axioms GdgSquarefree.odd_retained_stationary_value_ne_exterior_critical
+
+-- gd_g flagship critical family (Phase 9): publication-facing certificate, roots simple/squarefree, exists for every g>=5
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_roots_nodup
+#print axioms GdgSquarefree.gdgBlockCriticalPolynomial_squarefree
+#print axioms GdgSquarefree.nonempty_even_gdgCriticalFamilyCertificate
+#print axioms GdgSquarefree.nonempty_odd_gdgCriticalFamilyCertificate
+#print axioms GdgSquarefree.nonempty_gdgCriticalFamilyCertificate
