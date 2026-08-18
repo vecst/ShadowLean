@@ -12,16 +12,110 @@ in `audit/` and enforced in CI.
 
 | Component | Version |
 |---|---|
-| Lean | `leanprover/lean4:v4.28.0` |
-| Mathlib | tag `v4.28.0` (`8f9d9cff6bd728b17a24e163c9402775d9e6a365`) |
+| Lean | `leanprover/lean4:v4.33.0-rc2` |
+| Mathlib | locked revision `8cbb95e6e08446476813711ab8f45e59d4fda94d` |
 
 ## Build and verify
 
 ```
 lake exe cache get   # fetch Mathlib binary cache
-lake build           # build all modules (no sorry, no warnings-as-errors failures)
-lake env lean audit/AxiomAudit.lean   # audit all 137 public theorem/lemma declarations
+lake build --wfail   # build all modules, treating warnings as errors
+lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
+
+At commit `ff679db963f306d93a3361a2af355546d2d89762`,
+`RequestProject/Main.lean` imports 59 project modules and
+`audit/AxiomAudit.lean` contains 453 explicit `#print axioms` checks. Of these,
+450 declarations report exactly `propext`, `Classical.choice`, and
+`Quot.sound`; three older small-row count declarations are axiom-free.
+
+The current tip has been rebuilt locally under the patched toolchain. The most
+recent complete independent third-party fresh/Comparator/default-kernel audit
+is separately frozen at commit `7eabca3`; its evidence does not certify later
+commits by inheritance. A new independent replay should cite `ff679db`
+explicitly.
+
+## Scope labels used below
+
+- **Direct paper match:** the named Lean statement has been compared with a
+  specific claim in a tracked paper.
+- **Structurally aligned:** the Lean theorem proves an exact ingredient, but a
+  normalization, substitution, or additional bridge is still required.
+- **Standalone formal result / paper-facing candidate:** the Lean statement is
+  kernel-checked at its exact type, but no exact canonical-paper counterpart is
+  asserted here.
+
+These labels concern statement correspondence, not proof validity. A module
+name or source preamble is not evidence for a stronger claim than its exported
+theorem types.
+
+## Complete imported-module census
+
+This table covers every project import in `RequestProject/Main.lean` at
+`ff679db`. Detailed theorem rows follow for the older paper-mapped surface; the
+scope column is authoritative where a module has no detailed table.
+
+| Module | Correspondence status | Certified scope |
+|---|---|---|
+| `ResidueSlices` | direct paper match | finite residue slices, reconstruction, and the `g=2` ratio |
+| `GeneralResidueConvergence` | direct paper match | roots-of-unity extraction and qualitative positive-axis convergence |
+| `QuantitativeSpectralGap` | direct paper match | existential-constant geometric spectral rate |
+| `ExplicitSpectralRate` | direct paper match | explicit threshold and positive-axis error inequality |
+| `RpowCorollaries` | direct paper match | literal `Real.rpow` convergence and rate forms |
+| `HeadTailZeta` | direct paper match | exact head-tail identity and integer-zeta enclosure |
+| `SpinFactorCrossNorm` | direct paper match | spin-factor product, cross norm, associator, and Jordan identity at the stated bilinear scope |
+| `DiagonalZeta` | direct paper match | uniform diagonal channel suppression |
+| `ReversedApproximants` | direct paper match | corrected reversed real approximants, including the endpoint channel |
+| `RationalZeta` | direct paper match | rational-exponent diagonal zeta convergence and three-term estimate |
+| `CompactUniform` | direct paper match | compact-uniform real positive-axis convergence |
+| `ReversedRate` | direct paper match | combined geometric endpoint/spectral rate |
+| `ResidualCertificate` | standalone formal interface | natural-power residual ordering, intersections, and relative enclosures |
+| `SlitPlane` | direct ingredient match | forward principal-branch complex convergence |
+| `SlitPlaneReversed` | direct paper match | reversed pointwise and compact-uniform slit-plane convergence |
+| `MetallicCutoff` | standalone, incomplete track | exact recurrence algebra and even-pole residue; generic cutoff asymptotics remain open |
+| `BinomialLogConvergence` | standalone formal result | fixed-`g` row limit, surrogate limit, and iterated convergence; no explicit diagonal schedule |
+| `IFFTPreparation` | direct finite paper match | exact prepared inverse-Fourier reconstruction, support, realness, and positivity conditions |
+| `PacketHighPass` | standalone formal result | exact moving-packet Fourier identity and product-form variation bound |
+| `PacketDerivativeJet` | standalone formal result | exact cyclic Fourier and Stirling moments; no analytic derivative limit |
+| `PacketHighPassDivided` | standalone formal result | divided nonzero-frequency high-pass estimates |
+| `IFFTSupportFlow` | direct finite paper match | finite-time spectral multiplier and support containment |
+| `IFFTCoordinateBridge` | direct finite paper match | exact one-step coordinate/spectral recurrence bridge |
+| `IFFTIteratedFlow` | direct finite paper match | exact finite-iterate coordinate flow, semigroup, and support laws |
+| `SilverFiniteRowBridge` | paper-facing candidate | finite `g=3` packet bridge for the cubic silver constant |
+| `SilverFiniteRowRemainder` | paper-facing candidate | exact normalized equation and conditional remainder bound |
+| `SilverFiniteRowFixedPoint` | paper-facing candidate | finite-row positive fixed-point existence |
+| `SilverFiniteRowElasticity` | paper-facing candidate | combinatorial elasticity bound used for uniqueness |
+| `SilverFiniteRowUnique` | paper-facing candidate | finite-row fixed-point uniqueness via the elasticity route |
+| `SliceHyperbolic` | structurally aligned | uncompressed `g=2` hyperbolic forms; compressed/stereographic translation remains explicit |
+| `SliceMultisection` | mixed | `zeroth_multisection` is a direct finite match; `char_product` is standalone |
+| `SliceFilter` | direct finite paper match | full roots-of-unity multisection filter |
+| `Gudermann3` | paper-facing candidate | local `g=3` derivative, trigonometric, and cross-multiplied ODE identities |
+| `Gudermann4` | paper-facing candidate | local `g=4` derivative, trigonometric, and cross-multiplied ODE identities |
+| `GdgCriticalTetranomial` | paper-facing candidate | critical tetranomial and repeated-root reduction |
+| `GdgCriticalCandidateLocation` | paper-facing candidate | exact repeated-root candidate locations |
+| `GdgCriticalValueSeparation` | paper-facing candidate | scalar analytic inequalities used by the later exterior comparison |
+| `GdgLobeTranslation` | paper-facing candidate | exact lobe translation and dominance relations |
+| `GdgNaturalLobes` | paper-facing candidate | natural closed-lobe geometry and positive maxima |
+| `GdgRetainedLobes` | paper-facing candidate | retained finite index sets, locations, and counts |
+| `GdgZeroClassification` | paper-facing candidate | exhaustive numerator-zero and endpoint classification |
+| `GdgSignedLobes` | paper-facing candidate | signed pullback, parity signs, and stationary witnesses |
+| `GdgCriticalBridge` | paper-facing candidate | phase/unit-circle/reciprocal-block critical bridge |
+| `GdgCriticalNoCommonRoot` | paper-facing candidate | functional derivative nonvanishing at critical roots |
+| `GdgCriticalPolynomial` | paper-facing candidate | polynomial realization, degree, separability, and squarefreeness |
+| `GdgForcedQuadratic` | paper-facing candidate | forced quadratic factor and quotient degree |
+| `GdgReciprocalResidual` | paper-facing candidate | parity-correct fixed-factor removal and reciprocal residual |
+| `GdgBlockDescent` | paper-facing candidate | constructive reciprocal descent and exact block degree |
+| `GdgBlockRootBridge` | paper-facing candidate | injective retained-lobe family of block roots |
+| `GdgExteriorRoot` | paper-facing candidate | unique exterior block root and its positive cover value |
+| `GdgDegreeExhaustion` | paper-facing candidate | exact root count, slot classification, and reality of every block root |
+| `GdgLobeUniqueness` | paper-facing candidate | exactly one stationary point and maximum in each retained lobe |
+| `GdgCriticalValueOrdering` | paper-facing candidate | consecutive interior critical-value ordering |
+| `GdgCriticalValuePairwise` | paper-facing candidate | arbitrary pairwise interior ordering and noncollision |
+| `GdgExteriorValueMaximum` | paper-facing candidate | global exterior cover-value maximization |
+| `GdgExteriorInteriorOdd` | paper-facing candidate | strict odd-row exterior/interior magnitude separation |
+| `GdgExteriorInteriorNoncollision` | paper-facing candidate | signed exterior/interior noncollision for both parities |
+| `GdgFlagshipCriticalFamily` | paper-facing candidate | complete simple critical-root certificate and injective critical values for every `g >= 5` |
+| `SilverCrossover` | standalone formal result | normalized quadratic crossover algebra for the cubic residual |
 
 ## Theorem ↔ paper/formal-interface map
 
@@ -191,7 +285,8 @@ its derivative-jet moment cancellation. From `shadow_packetization_companions.te
 ### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
 Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
 under an arbitrary moving selector `a`, plus a cyclic-total-variation high-pass
-bound (all finite algebra over `ZMod g`; from `shadow_packetization_companions.tex`).
+bound (all finite algebra over `ZMod g`). These are standalone formal results
+unless an exact canonical-paper location is supplied.
 | Lean declaration | Statement |
 |---|---|
 | `dft_movingPacketMass` | Exact identity: `DFT(M)(ℓ) = ∑_q χ(a(q)·ℓ)·DFT(b_q)(ℓ)` |
@@ -226,10 +321,9 @@ the limit constructions. From `shadow_packetization_companions.tex`.
 Exact channel evolution `packetSpectralFlow α V n k = Vₖ·(1 + α·ζ^k)^n` and its
 IFFT reconstruction: an initially zero channel stays zero, so support is
 *contained* in the initial set `S` at every time (an evolution factor may vanish
-and shrink support; none is created). **Scope note:** this module does *not*
-formalize equivalence with the coordinate recurrence
-`C_{0,n+1}=C_{0,n}+x·C_{g-1,n}`, `C_{j,n+1}=C_{j-1,n}+C_{j,n}` — a separate later
-target.
+and shrink support; none is created). The exact coordinate-recurrence bridge is
+now supplied by `IFFTCoordinateBridge.lean`, and its finite iteration by
+`IFFTIteratedFlow.lean`.
 | Lean declaration | Statement |
 |---|---|
 | `packetSpectralFlow_zero` | Time-zero state: `packetSpectralFlow α V 0 = V` |
@@ -239,6 +333,22 @@ target.
 | `packetSpectrum_evolvedPreparedPacket` | Exact reconstruction (`α ≠ 0`): `packetSpectrum α (evolved …) = packetSpectralFlow α V n` |
 | `packetSpectrum_evolvedPreparedPacket_succ` | The reconstruction realizes the exact `× (1 + α·ζ^k)` channel recurrence |
 | `evolvedPreparedPacket_no_spectral_leakage` | No leakage at any time: reconstructed spectrum zero off `S`, all `n` |
+
+### `RequestProject/IFFTCoordinateBridge.lean` — one-step coordinate/spectral bridge
+
+This direct finite paper match identifies the coordinate update
+`C₀' = C₀ + α^g C_{g-1}`, `Cⱼ' = Cⱼ + C_{j-1}` with multiplication of channel
+`k` by `1 + α·χ(k)`. It proves both reconstruction/injectivity facts and the
+one-step equivalence. It does not assert convergence, positivity of every
+evolved state, Poissonization, or nonlinear support closure.
+
+### `RequestProject/IFFTIteratedFlow.lean` — finite coordinate iteration
+
+This direct finite paper match iterates the preceding one-step bridge: the
+`n`-fold coordinate update has channel multiplier `(1 + α·χ(k))^n`, agrees with
+the prepared spectral evolution, obeys the finite semigroup law, and preserves
+initial spectral support. It is a finite-`g`, finite-`n` theorem, not an
+asymptotic or continuous-transform statement.
 
 ### `RequestProject/BinomialLogConvergence.lean` — dual-slice logarithm (standalone formal result)
 A finite evaluator `binomialLog g N x` (integer powers, binomial coefficients,
@@ -266,6 +376,50 @@ and the flagship cutoff constant `1/2`) are **not yet certified**.
 | `ratio_three_closed_form` | Closed form on the recovery channel `δ=3` (`N ≥ 1`): `ratio 3 N = u + 2√2·(3−2√2)^N/(1−(3−2√2)^N)` |
 | `even_pole_residue` | The even-row pole at `δ=−1` has residue exactly `2/m` (`m ≥ 1`), via the punctured limit `nhdsWithin (−1) {−1}ᶜ` — no `0/0` identification |
 
+### Silver finite-row and crossover modules — standalone candidates
+
+`SilverCrossover` and the five `SilverFiniteRow*` modules concern the cubic
+constant `α^3 = 7 + 7α`, not the metallic ratio `1 + sqrt 2`. They provide the
+exact packet/cubic bridge, normalized remainder algebra, positive fixed-point
+existence, the combinatorial elasticity estimate, and finite-row uniqueness.
+The active uniqueness proof uses the elasticity route; no omitted concavity
+target should be inferred from historical source commentary. These modules are
+kernel-checked at their exact types but have no asserted canonical-paper match
+in this README.
+
+### Multisection and local Gudermann modules
+
+`SliceMultisection.zeroth_multisection` and
+`SliceFilter.multisection_filter` directly match the finite roots-of-unity
+multisection formulas. `SliceMultisection.char_product` is an exact standalone
+identity. `SliceHyperbolic` is structurally aligned with the canonical `g=2`
+bridge: it uses uncompressed even/odd sums, so the compressed-slice factor and
+the substitution `u = tan(r/2)` must still be supplied when comparing theorem
+statements.
+
+`Gudermann3` and `Gudermann4` are paper-facing candidates. Their active
+theorems establish local derivative, trigonometric, and cross-multiplied ODE
+identities. They do not, merely from those statements, establish a global
+special-function equivalence, a canonical `sigma_g` theorem, or a theorem that
+`g=4` is the last elementary rung.
+
+### `gd_g` critical-family chain — analytic certificate, standalone candidate
+
+The modules from `GdgCriticalTetranomial` through
+`GdgFlagshipCriticalFamily` form one cumulative analytic development. At the
+Phase 9 tip, `nonempty_gdgCriticalFamilyCertificate` packages, for every
+`g >= 5`, the complete root family of the declared descended block-critical
+polynomial: exact count, simple and real roots, one root in each retained
+interior slot plus the unique exterior slot, exact block and cover-value
+realizations, and injectivity of the critical values. The smallest boundary
+`g=5` is represented by an empty interior carrier plus the exterior slot.
+
+This is the analytic completion gate only. No theorem in the chain identifies
+a monodromy group or Galois group, proves the local branch-cycle generators,
+or establishes the advertised elementary/non-elementary solvability threshold.
+Until an exact canonical-paper claim is cited side by side, the chain is
+labelled a paper-facing candidate rather than a direct paper match.
+
 ## Not machine-checked (coverage boundary)
 
 For honesty in both directions: the following paper claims are **not**
@@ -285,9 +439,14 @@ compact-uniform additions).
   Schröder, and Householder residual laws; filter classification and canonical
   filters; nonlinear sublattice cancellation; prime-power blocks; recursive
   descent; Poissonized flow; construction spectra; and power-chain results.
-  The mapped inverse-Fourier preparation, moving-packet Fourier/high-pass,
-  and finite-difference/Stirling statements are the machine-checked portion
-  of that paper.
+  The finite inverse-Fourier preparation, support flow, coordinate bridge, and
+  finite iteration are directly paper-matched. The moving-packet
+  Fourier/high-pass and finite-difference/Stirling modules are exact standalone
+  results unless a canonical theorem location is supplied.
+- From the `gd_g` program: local branch cycles, monodromy and Galois group
+  identification, the full wreath-product kernel, and the universal
+  solvability threshold. Phase 9 certifies the analytic critical family and
+  critical-value injectivity, not these group-theoretic consequences.
 - Spin factor: bilinearity as exported lemmas, full power-associativity,
   conjugation as an involution, the inverse formula, and the downstream
   cross-norm closure and tree-indexed transport theorems.
@@ -306,6 +465,12 @@ compact-uniform additions).
   verified locally.
 - Independent third-party audit (build, axiom, claim-correspondence) performed
   2026-07-19 on the initial three-module core: claim status *exact*.
+- A later authenticated patched-Lean fresh/Comparator/default-kernel audit
+  passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
+- The Phase 9 tip `ff679db` was independently reviewed locally on 2026-08-18:
+  the new module, integrated `Main`, and complete 453-entry axiom driver pass
+  under patched Lean `v4.33.0-rc2`. A fresh third-party replay of this exact tip
+  remains the next trust milestone.
 
 ## Attribution
 
