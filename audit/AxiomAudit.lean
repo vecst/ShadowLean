@@ -580,3 +580,15 @@ import RequestProject.Main
 #print axioms GdgSquarefree.nonempty_even_gdgCriticalFamilyCertificate
 #print axioms GdgSquarefree.nonempty_odd_gdgCriticalFamilyCertificate
 #print axioms GdgSquarefree.nonempty_gdgCriticalFamilyCertificate
+
+-- IFFT sublattice projector (Phase 1A): divisor-sublattice averaging projector on ZMod g (d | g)
+#print axioms ResidueSlices.divisor_pos_of_dvd
+#print axioms ResidueSlices.divisor_quotient_pos
+#print axioms ResidueSlices.mem_divisorSublattice_iff
+#print axioms ResidueSlices.card_divisorSublattice
+#print axioms ResidueSlices.sublatticeProjector_normalization
+#print axioms ResidueSlices.sublatticeProjector_apply
+#print axioms ResidueSlices.positiveDFT_sublatticeProjector_of_mem
+#print axioms ResidueSlices.positiveDFT_sublatticeProjector_of_not_mem
+#print axioms ResidueSlices.sublatticeProjector_idempotent
+#print axioms ResidueSlices.positiveDFT_sublatticeProjector_supported
