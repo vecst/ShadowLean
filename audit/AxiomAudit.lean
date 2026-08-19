@@ -599,3 +599,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.finiteConvolutionSeries_supported
 #print axioms ResidueSlices.truncatedLogSpectrum_supported
 #print axioms ResidueSlices.truncatedLogSpectrum_projected_supported
+
+-- Executable diagonal logarithm (Phase 2A): explicit surrogate-bias bound
+#print axioms ResidueSlices.abs_sub_tanh_le_cube
+#print axioms ResidueSlices.logSurrogate_error_bound
+#print axioms ResidueSlices.logIntervalBound_nonneg
+#print axioms ResidueSlices.abs_log_le_logIntervalBound
+#print axioms ResidueSlices.logSurrogate_error_bound_Icc
+#print axioms ResidueSlices.one_le_logSurrogateBiasModulus
+#print axioms ResidueSlices.logSurrogate_error_lt_of_biasModulus
