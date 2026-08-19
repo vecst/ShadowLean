@@ -608,3 +608,9 @@ import RequestProject.Main
 #print axioms ResidueSlices.logSurrogate_error_bound_Icc
 #print axioms ResidueSlices.one_le_logSurrogateBiasModulus
 #print axioms ResidueSlices.logSurrogate_error_lt_of_biasModulus
+
+-- Executable diagonal logarithm (Phase 2B): explicit finite-row rate
+#print axioms ResidueSlices.logRowGap_mem_unitInterval
+#print axioms ResidueSlices.binomialLog_row_explicit_rate
+#print axioms ResidueSlices.binomialLog_row_interval_rate_of_gap_bound
+#print axioms ResidueSlices.binomialLog_row_error_lt_of_qualified
