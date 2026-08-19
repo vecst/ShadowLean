@@ -614,3 +614,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.binomialLog_row_explicit_rate
 #print axioms ResidueSlices.binomialLog_row_interval_rate_of_gap_bound
 #print axioms ResidueSlices.binomialLog_row_error_lt_of_qualified
+
+-- Executable diagonal logarithm (Phase 2C1): explicit interval spectral-gap envelope
+#print axioms ResidueSlices.logRowGapEnvelope_pos
+#print axioms ResidueSlices.logRowGapEnvelope_lt_one
+#print axioms ResidueSlices.channelRatio_le_logRowGapEnvelope
+#print axioms ResidueSlices.logRowGap_le_logRowGapEnvelope
+#print axioms ResidueSlices.logRowGapEnvelope_mem_unitInterval
+#print axioms ResidueSlices.binomialLog_row_interval_rate
+#print axioms ResidueSlices.binomialLog_row_error_lt_of_envelope_qualified
