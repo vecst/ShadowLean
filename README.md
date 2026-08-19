@@ -23,17 +23,17 @@ lake build --wfail   # build all modules, treating warnings as errors
 lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
-At commit `0e966e0343d66a8b232f83382be9987cc386d43f`,
-`RequestProject/Main.lean` imports 62 project modules and
-`audit/AxiomAudit.lean` contains 475 explicit `#print axioms` checks. Of these,
-470 declarations report exactly `propext`, `Classical.choice`, and
+At commit `d9994a4914328603231daef24b4ec79c0d8cff3b`,
+`RequestProject/Main.lean` imports 63 project modules and
+`audit/AxiomAudit.lean` contains 479 explicit `#print axioms` checks. Of these,
+474 declarations report exactly `propext`, `Classical.choice`, and
 `Quot.sound`; two divisor-positivity declarations report only `propext`; and
 three older small-row count declarations are axiom-free.
 
 The current tip has been rebuilt locally under the patched toolchain. The most
 recent complete independent third-party fresh/Comparator/default-kernel audit
 is separately frozen at commit `7eabca3`; its evidence does not certify later
-commits by inheritance. A new independent replay should cite `0e966e0`
+commits by inheritance. A new independent replay should cite `d9994a4`
 explicitly.
 
 ## Scope labels used below
@@ -53,7 +53,7 @@ theorem types.
 ## Complete imported-module census
 
 This table covers every project import in `RequestProject/Main.lean` at
-`0e966e0`. Detailed theorem rows follow for the older paper-mapped surface; the
+`d9994a4`. Detailed theorem rows follow for the older paper-mapped surface; the
 scope column is authoritative where a module has no detailed table.
 
 | Module | Correspondence status | Certified scope |
@@ -76,6 +76,7 @@ scope column is authoritative where a module has no detailed table.
 | `MetallicCutoff` | standalone, incomplete track | exact recurrence algebra and even-pole residue; generic cutoff asymptotics remain open |
 | `BinomialLogConvergence` | standalone formal result | fixed-`g` row limit, surrogate limit, and iterated convergence; no explicit diagonal schedule |
 | `BinomialLogDiagonalBias` | standalone formal result | global cubic tanh bound, exact `1/(12g²)` surrogate-bias estimate, and compact-interval bias modulus; no finite-row `N` bound |
+| `BinomialLogRowRate` | standalone formal result | exact finite-row spectral rate and interval bound conditional on a supplied uniform gap envelope; no explicit envelope or row selector |
 | `IFFTPreparation` | direct finite paper match | exact prepared inverse-Fourier reconstruction, support, realness, and positivity conditions |
 | `PacketHighPass` | standalone formal result | exact moving-packet Fourier identity and product-form variation bound |
 | `PacketDerivativeJet` | standalone formal result | exact cyclic Fourier and Stirling moments; no analytic derivative limit |
@@ -471,9 +472,9 @@ compact-uniform additions).
   2026-07-19 on the initial three-module core: claim status *exact*.
 - A later authenticated patched-Lean fresh/Comparator/default-kernel audit
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
-- The logarithm Phase 2A tip `0e966e0` was independently reviewed locally on
-  2026-08-19: the new surrogate-bias module, integrated `Main`, and complete
-  475-entry axiom driver pass
+- The logarithm Phase 2B tip `d9994a4` was independently reviewed locally on
+  2026-08-19: the new finite-row-rate module, integrated `Main`, and complete
+  479-entry axiom driver pass
   under patched Lean `v4.33.0-rc2`. A fresh third-party replay of this exact tip
   remains the next trust milestone.
 
