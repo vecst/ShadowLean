@@ -58,6 +58,7 @@ import RequestProject.GdgExteriorInteriorOdd
 import RequestProject.GdgExteriorInteriorNoncollision
 import RequestProject.GdgFlagshipCriticalFamily
 import RequestProject.IFFTSublatticeProjector
+import RequestProject.IFFTSublatticeConvolution
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

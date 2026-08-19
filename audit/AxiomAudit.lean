@@ -592,3 +592,10 @@ import RequestProject.Main
 #print axioms ResidueSlices.positiveDFT_sublatticeProjector_of_not_mem
 #print axioms ResidueSlices.sublatticeProjector_idempotent
 #print axioms ResidueSlices.positiveDFT_sublatticeProjector_supported
+
+-- IFFT sublattice convolution closure (Phase 1B): finite convolution support closure on ZMod g
+#print axioms ResidueSlices.cyclicConvolution_supported
+#print axioms ResidueSlices.cyclicConvolutionPow_supported
+#print axioms ResidueSlices.finiteConvolutionSeries_supported
+#print axioms ResidueSlices.truncatedLogSpectrum_supported
+#print axioms ResidueSlices.truncatedLogSpectrum_projected_supported
