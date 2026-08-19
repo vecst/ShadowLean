@@ -23,16 +23,17 @@ lake build --wfail   # build all modules, treating warnings as errors
 lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
-At commit `ff679db963f306d93a3361a2af355546d2d89762`,
-`RequestProject/Main.lean` imports 59 project modules and
-`audit/AxiomAudit.lean` contains 453 explicit `#print axioms` checks. Of these,
-450 declarations report exactly `propext`, `Classical.choice`, and
-`Quot.sound`; three older small-row count declarations are axiom-free.
+At commit `38b1c736d955096502b9254ead752d98bfa2fe13`,
+`RequestProject/Main.lean` imports 61 project modules and
+`audit/AxiomAudit.lean` contains 468 explicit `#print axioms` checks. Of these,
+463 declarations report exactly `propext`, `Classical.choice`, and
+`Quot.sound`; two divisor-positivity declarations report only `propext`; and
+three older small-row count declarations are axiom-free.
 
 The current tip has been rebuilt locally under the patched toolchain. The most
 recent complete independent third-party fresh/Comparator/default-kernel audit
 is separately frozen at commit `7eabca3`; its evidence does not certify later
-commits by inheritance. A new independent replay should cite `ff679db`
+commits by inheritance. A new independent replay should cite `38b1c73`
 explicitly.
 
 ## Scope labels used below
@@ -52,7 +53,7 @@ theorem types.
 ## Complete imported-module census
 
 This table covers every project import in `RequestProject/Main.lean` at
-`ff679db`. Detailed theorem rows follow for the older paper-mapped surface; the
+`38b1c73`. Detailed theorem rows follow for the older paper-mapped surface; the
 scope column is authoritative where a module has no detailed table.
 
 | Module | Correspondence status | Certified scope |
@@ -81,6 +82,8 @@ scope column is authoritative where a module has no detailed table.
 | `IFFTSupportFlow` | direct finite paper match | finite-time spectral multiplier and support containment |
 | `IFFTCoordinateBridge` | direct finite paper match | exact one-step coordinate/spectral recurrence bridge |
 | `IFFTIteratedFlow` | direct finite paper match | exact finite-iterate coordinate flow, semigroup, and support laws |
+| `IFFTSublatticeProjector` | standalone formal result | divisor-sublattice averaging projector, exact on/off Fourier action, cardinality, and idempotence |
+| `IFFTSublatticeConvolution` | standalone formal result | additive-subgroup support closure under convolution powers and finite logarithmic convolution series |
 | `SilverFiniteRowBridge` | paper-facing candidate | finite `g=3` packet bridge for the cubic silver constant |
 | `SilverFiniteRowRemainder` | paper-facing candidate | exact normalized equation and conditional remainder bound |
 | `SilverFiniteRowFixedPoint` | paper-facing candidate | finite-row positive fixed-point existence |
@@ -467,8 +470,9 @@ compact-uniform additions).
   2026-07-19 on the initial three-module core: claim status *exact*.
 - A later authenticated patched-Lean fresh/Comparator/default-kernel audit
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
-- The Phase 9 tip `ff679db` was independently reviewed locally on 2026-08-18:
-  the new module, integrated `Main`, and complete 453-entry axiom driver pass
+- The IFFT Phase 1B tip `38b1c73` was independently reviewed locally on
+  2026-08-19: the two new IFFT modules, integrated `Main`, and complete
+  468-entry axiom driver pass
   under patched Lean `v4.33.0-rc2`. A fresh third-party replay of this exact tip
   remains the next trust milestone.
 
