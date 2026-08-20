@@ -633,3 +633,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.two_le_diagonalLogG
 #print axioms ResidueSlices.biasModulus_le_diagonalLogG
 #print axioms ResidueSlices.diagonalBinomialLog_error_lt
+
+-- Analytic derivative bridge (Phase A3A): unwrapped scaled stencil + no-wrap packet bridge
+#print axioms ResidueSlices.forwardDiffPacket_realSamplePacket_eq
+#print axioms ResidueSlices.unwrappedForwardDiff_centeredMonomial_vanish
+#print axioms ResidueSlices.unwrappedForwardDiff_centeredMonomial_top
+#print axioms ResidueSlices.normalizedForwardDiff_centeredMonomial_vanish
+#print axioms ResidueSlices.normalizedForwardDiff_centeredMonomial_top
+#print axioms ResidueSlices.unwrappedForwardDiff_centeredJetPolynomial
+#print axioms ResidueSlices.normalizedForwardDiff_centeredJetPolynomial
