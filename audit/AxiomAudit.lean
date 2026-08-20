@@ -623,3 +623,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.logRowGapEnvelope_mem_unitInterval
 #print axioms ResidueSlices.binomialLog_row_interval_rate
 #print axioms ResidueSlices.binomialLog_row_error_lt_of_envelope_qualified
+
+-- Diagonal logarithm (Phase 2C2): explicit row selector and final certified evaluator
+#print axioms ResidueSlices.logRowPowerTarget_pos
+#print axioms ResidueSlices.logRowPowerTarget_lt_one
+#print axioms ResidueSlices.one_le_logRowModulus
+#print axioms ResidueSlices.logRowGapEnvelope_pow_logRowModulus_le_target
+#print axioms ResidueSlices.logRowQualified_logRowModulus
+#print axioms ResidueSlices.two_le_diagonalLogG
+#print axioms ResidueSlices.biasModulus_le_diagonalLogG
+#print axioms ResidueSlices.diagonalBinomialLog_error_lt
