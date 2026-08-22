@@ -649,3 +649,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.unwrappedForwardDiff_error_le
 #print axioms ResidueSlices.normalizedForwardDiff_sub_jet_eq_div
 #print axioms ResidueSlices.normalizedForwardDiff_error_le
+
+-- Analytic derivative bridge (Phase A3C): Taylor certificate, derivative error, packet convergence
+#print axioms ResidueSlices.factorial_mul_derivativeJet
+#print axioms ResidueSlices.centeredJetPolynomial_derivativeJet_eq_taylor
+#print axioms ResidueSlices.hasCenteredJetRemainderAtNodes_derivativeJet
+#print axioms ResidueSlices.normalizedForwardDiff_iteratedDeriv_error_le
+#print axioms ResidueSlices.tendsto_normalizedForwardDiff_iteratedDeriv
+#print axioms ResidueSlices.normalizedForwardDiffPacket_eq
+#print axioms ResidueSlices.normalizedForwardDiffPacket_iteratedDeriv_error_le
+#print axioms ResidueSlices.tendsto_normalizedForwardDiffPacket_iteratedDeriv
