@@ -642,3 +642,10 @@ import RequestProject.Main
 #print axioms ResidueSlices.normalizedForwardDiff_centeredMonomial_top
 #print axioms ResidueSlices.unwrappedForwardDiff_centeredJetPolynomial
 #print axioms ResidueSlices.normalizedForwardDiff_centeredJetPolynomial
+
+-- Analytic derivative bridge (Phase A3B): explicit nodewise Taylor-remainder certificate
+#print axioms ResidueSlices.forwardDiffRemainderWeight_nonneg
+#print axioms ResidueSlices.unwrappedForwardDiff_sub_jet_eq_remainder_sum
+#print axioms ResidueSlices.unwrappedForwardDiff_error_le
+#print axioms ResidueSlices.normalizedForwardDiff_sub_jet_eq_div
+#print axioms ResidueSlices.normalizedForwardDiff_error_le
