@@ -659,3 +659,13 @@ import RequestProject.Main
 #print axioms ResidueSlices.normalizedForwardDiffPacket_eq
 #print axioms ResidueSlices.normalizedForwardDiffPacket_iteratedDeriv_error_le
 #print axioms ResidueSlices.tendsto_normalizedForwardDiffPacket_iteratedDeriv
+
+-- Correlated derivative remainder (Phase A3D1): exact next Taylor term + O(h^2) certificate
+#print axioms ResidueSlices.forwardDiffSecondRemainderWeight_nonneg
+#print axioms ResidueSlices.unwrappedForwardDiff_centeredMonomial_succ
+#print axioms ResidueSlices.unwrappedForwardDiff_centeredJetPolynomial_succ
+#print axioms ResidueSlices.normalizedForwardDiff_centeredJetPolynomial_succ
+#print axioms ResidueSlices.unwrappedForwardDiff_sub_secondJet_eq_remainder_sum
+#print axioms ResidueSlices.unwrappedForwardDiff_second_error_le
+#print axioms ResidueSlices.normalizedForwardDiff_sub_secondJet_eq_div
+#print axioms ResidueSlices.normalizedForwardDiff_second_error_le
