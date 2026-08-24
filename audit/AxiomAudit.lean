@@ -681,3 +681,13 @@ import RequestProject.Main
 -- Metallic cutoff Phase B: corrected signed moving-pole law (Target 5)
 #print axioms MetallicCutoff.tendsto_even_moving_pole_signed
 #print axioms MetallicCutoff.tendsto_even_moving_pole
+
+-- Metallic cutoff Phase C1: canonical even-row recovery fixed point (Target 6)
+#print axioms MetallicCutoff.recovery_denominator_pos
+#print axioms MetallicCutoff.continuousOn_recoveryMap
+#print axioms MetallicCutoff.recoveryMap_silver_gt
+#print axioms MetallicCutoff.recoveryMap_three_lt
+#print axioms MetallicCutoff.strictAntiOn_scaledRecoveryRatio
+#print axioms MetallicCutoff.existsUnique_even_fixed_point
+#print axioms MetallicCutoff.evenFixedPoint_spec
+#print axioms MetallicCutoff.eq_evenFixedPoint_of_fixed
