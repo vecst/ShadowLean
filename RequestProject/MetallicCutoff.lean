@@ -14,34 +14,40 @@ and R_N(delta) = P_N(delta) / Q_N(delta).  Put
   beta = 2/u,
   B    = 3 + 2 sqrt 2 = u^2.
 
-Numerics at 200 decimal digits support the following even-row picture.  The
-map z |-> R_N(1 + beta*z) has a unique fixed point z_N just below u, with
+CORRECTED even-row picture.  An earlier version of this header placed the
+even-row recovery fixed point below u and recorded the transverse limits with
+the wrong signs.  High-precision signed tests (180 decimal digits) show the
+opposite: the local positive fixed point z_N of the map z |-> R_N(1 + beta*z)
+lies ABOVE u, and the corrected asymptotics are
 
-  B^N (u-z_N) -> 4u.
+  B^N (z_N - u) -> 4u,
+  B^N ((1 - beta*z_N) - (-1)) -> -8,
+  N * |R_N(1 - beta*z_N)| / B^N -> 1/2.
 
-Consequently the transverse pulse delta = 1-beta*z_N approaches the even-row
-pole delta=-1 at speed
+The exact landed formula R_N(3) > u (Target 3) is consistent with this
+corrected picture.  In particular there is no fixed point in
+[u - 1/10, u]; that existence claim is false and must not be formalized.
 
-  B^N ((1-beta*z_N)-(-1)) -> 8,
+Status of the targets in this file.
 
-and
+  Targets 1--4 (proved here): exact parity degeneration at delta = -1, the
+    silver normalizations, the closed form on the recovery channel delta = 3,
+    and the static even-pole residue.
+  Target 5 (proved here, Pass B): the two-sided signed moving-pole law
+    `tendsto_even_moving_pole_signed` together with its absolute companion
+    `tendsto_even_moving_pole`.  For any perturbation sequence with
+    B^(2m) * epsilon m -> c and c ≠ 0 (either sign, in particular c = -8),
 
-  N * |R_N(1-beta*z_N)| / B^N -> 1/2.
+      (2m) * R_{2m}(-1 + epsilon m) / B^(2m) -> 4/c,
+      (2m) * |R_{2m}(-1 + epsilon m)| / B^(2m) -> 4/|c|.
 
-The file deliberately separates exact algebra, the moving-pole estimate, and
-the fixed-point asymptotic.  Please prove actual named constants.  Do not move
-an unproved target into a comment block; if a target cannot be completed,
-leave it out of the returned file and report it explicitly.
-
-Suggested order:
-
-  Pass A: Targets 1--4 (exact algebra and static pole).
-  Pass B: Target 5 (uniform moving-pole asymptotic).
-  Pass C: Targets 6--8 (fixed point and cutoff constant).
-
-Minor changes to Mathlib lemma names and harmless strengthening of hypotheses
-are fine.  Do not weaken the constants 4u, 8, or 1/2, and preserve the even
-row and m>=1 boundaries.
+    This is strong enough to accept the transverse scale c = -8, but it does
+    not prove existence of the fixed point.
+  Targets 6--8: FUTURE CORRECTED WORK, not proved here and not claimed.  They
+    concern existence and uniqueness of the even-row fixed point z_N above u,
+    the asymptotic B^N (z_N - u) -> 4u, and the resulting cutoff constant
+    obtained by feeding c = -8 into Target 5.  Nothing in this file asserts
+    any of them.
 -/
 
 import Mathlib
@@ -197,7 +203,10 @@ theorem ratio_three_closed_form {N : Nat} (hN : 1 <= N) :
   have h_denom_ne : (2 + Real.sqrt 2) ^ N - (2 - Real.sqrt 2) ^ N ≠ 0 := by
     have h_lt : (2 - Real.sqrt 2) ^ N < (2 + Real.sqrt 2) ^ N := by
       gcongr
-      · nlinarith [Real.sq_sqrt (by norm_num : (2 : ℝ) ≥ 0)]
+      all_goals
+        first
+          | omega
+          | nlinarith [Real.sq_sqrt (by norm_num : (2 : ℝ) ≥ 0), Real.sqrt_nonneg 2]
     linarith
   -- Now use field_simp to clear denominators
   rw [silver_eq]
@@ -356,5 +365,412 @@ theorem even_pole_residue {m : Nat} (hm : 1 <= m) :
   simp only [ratio, numerator, denominator]
   rw [state_even_factorization]
   field_simp [show x + 1 ≠ 0 from add_eq_zero_iff_eq_neg.not.mpr hx]
+
+
+/- Target 5 (Pass B): the corrected two-sided signed moving-pole law.
+
+The proof runs through uniform (in the row index) estimates for the two-step
+data at `delta = -1 + e`, where the perturbation `e` is allowed to vary with
+the row.  Writing `P k = evenNumerator (-1+e) k` and
+`D k = evenDenominatorFactor (-1+e) k`, the recurrences read
+
+  P (k+1) = (e^2 - 2e + 2) * P k + e^2 * D k,
+  D (k+1) = P k + 2 * D k,
+
+so `P k` is an `O(|e| k (2+4|e|)^k)` perturbation of `2^k` and `D k` is an
+`O(|e| k^2 (2+4|e|)^k)` perturbation of `k * 2^k / 2`.  Since
+`spectralBase * spectralRatio = 1`, the scale hypothesis forces
+`k * |e k| -> 0`, which makes both relative errors vanish along the diagonal. -/
+
+private lemma evenNumerator_succ (delta : ℝ) (k : ℕ) :
+    evenNumerator delta (k + 1) =
+      (delta ^ 2 + 1) * evenNumerator delta k +
+        (delta + 1) ^ 2 * evenDenominatorFactor delta k := by
+  rw [evenNumerator]
+
+private lemma evenDenominatorFactor_succ (delta : ℝ) (k : ℕ) :
+    evenDenominatorFactor delta (k + 1) =
+      evenNumerator delta k + 2 * evenDenominatorFactor delta k := by
+  rw [evenDenominatorFactor]
+
+/-- Uniform growth of the two-step data at `delta = -1 + e`, valid for every
+row index `k` and every perturbation `e` with `|e| ≤ 1`. -/
+private lemma even_two_step_growth_bound (e : ℝ) (he : |e| ≤ 1) (k : ℕ) :
+    |evenNumerator (-1 + e) k| + |e| * |evenDenominatorFactor (-1 + e) k| ≤
+      (2 + 4 * |e|) ^ k := by
+  have ha : (0 : ℝ) ≤ |e| := abs_nonneg e
+  induction k with
+  | zero => simp [evenNumerator, evenDenominatorFactor]
+  | succ k ih =>
+    have hP : evenNumerator (-1 + e) (k + 1) =
+        ((-1 + e) ^ 2 + 1) * evenNumerator (-1 + e) k +
+          e ^ 2 * evenDenominatorFactor (-1 + e) k := by
+      rw [evenNumerator_succ]
+      ring_nf
+    have hD : evenDenominatorFactor (-1 + e) (k + 1) =
+        evenNumerator (-1 + e) k + 2 * evenDenominatorFactor (-1 + e) k :=
+      evenDenominatorFactor_succ _ k
+    set P := evenNumerator (-1 + e) k
+    set D := evenDenominatorFactor (-1 + e) k
+    have hp0 : (0 : ℝ) ≤ |P| := abs_nonneg _
+    have hd0 : (0 : ℝ) ≤ |D| := abs_nonneg _
+    have hcoef : |(-1 + e) ^ 2 + 1| ≤ 2 + 2 * |e| + |e| ^ 2 := by
+      rw [abs_le]
+      constructor <;> nlinarith [neg_abs_le e, le_abs_self e, sq_abs e]
+    have h1 : |evenNumerator (-1 + e) (k + 1)| ≤
+        (2 + 2 * |e| + |e| ^ 2) * |P| + |e| ^ 2 * |D| := by
+      rw [hP]
+      refine (abs_add_le _ _).trans ?_
+      rw [abs_mul, abs_mul, abs_pow]
+      gcongr
+    have h2 : |e| * |evenDenominatorFactor (-1 + e) (k + 1)| ≤ |e| * (|P| + 2 * |D|) := by
+      rw [hD]
+      have htri : |P + 2 * D| ≤ |P| + 2 * |D| := by
+        refine (abs_add_le _ _).trans ?_
+        rw [abs_mul]
+        simp
+      exact mul_le_mul_of_nonneg_left htri ha
+    have hsq : |e| ^ 2 ≤ |e| := by nlinarith
+    have hkey :
+        (2 + 2 * |e| + |e| ^ 2) * |P| + |e| ^ 2 * |D| + |e| * (|P| + 2 * |D|) ≤
+          (2 + 4 * |e|) * (|P| + |e| * |D|) := by
+      nlinarith [mul_le_mul_of_nonneg_right hsq hp0, mul_nonneg (mul_nonneg ha ha) hd0]
+    calc |evenNumerator (-1 + e) (k + 1)| + |e| * |evenDenominatorFactor (-1 + e) (k + 1)|
+        ≤ ((2 + 2 * |e| + |e| ^ 2) * |P| + |e| ^ 2 * |D|) + |e| * (|P| + 2 * |D|) := by
+          linarith
+      _ ≤ (2 + 4 * |e|) * (|P| + |e| * |D|) := hkey
+      _ ≤ (2 + 4 * |e|) * (2 + 4 * |e|) ^ k :=
+          mul_le_mul_of_nonneg_left ih (by linarith)
+      _ = (2 + 4 * |e|) ^ (k + 1) := by ring
+
+/-- The numerator of the two-step data is a controlled perturbation of `2^k`,
+uniformly in the row index. -/
+private lemma even_numerator_error_bound (e : ℝ) (he : |e| ≤ 1) (k : ℕ) :
+    |evenNumerator (-1 + e) k - 2 ^ k| ≤ 2 * |e| * k * (2 + 4 * |e|) ^ k := by
+  have ha : (0 : ℝ) ≤ |e| := abs_nonneg e
+  induction k with
+  | zero => simp [evenNumerator]
+  | succ k ih =>
+    have hgrow := even_two_step_growth_bound e he k
+    have hbase : (0 : ℝ) ≤ 2 + 4 * |e| := by linarith
+    have hbasepow : (0 : ℝ) ≤ (2 + 4 * |e|) ^ k := pow_nonneg hbase k
+    have hP : evenNumerator (-1 + e) (k + 1) - 2 ^ (k + 1) =
+        2 * (evenNumerator (-1 + e) k - 2 ^ k) +
+            (e ^ 2 - 2 * e) * evenNumerator (-1 + e) k +
+          e ^ 2 * evenDenominatorFactor (-1 + e) k := by
+      rw [evenNumerator_succ]
+      ring
+    set P := evenNumerator (-1 + e) k
+    set D := evenDenominatorFactor (-1 + e) k
+    have hp0 : (0 : ℝ) ≤ |P| := abs_nonneg _
+    have hd0 : (0 : ℝ) ≤ |D| := abs_nonneg _
+    have hcoef : |e ^ 2 - 2 * e| ≤ 3 * |e| := by
+      rw [abs_le]
+      constructor <;> nlinarith [neg_abs_le e, le_abs_self e, sq_abs e]
+    have habs : |evenNumerator (-1 + e) (k + 1) - 2 ^ (k + 1)| ≤
+        2 * |P - 2 ^ k| + 3 * |e| * |P| + |e| * (|e| * |D|) := by
+      rw [hP]
+      have t1 := abs_add_three (2 * (P - 2 ^ k)) ((e ^ 2 - 2 * e) * P) (e ^ 2 * D)
+      have t2 : |2 * (P - 2 ^ k)| = 2 * |P - 2 ^ k| := by
+        rw [abs_mul]
+        norm_num
+      have t3 : |(e ^ 2 - 2 * e) * P| ≤ 3 * |e| * |P| := by
+        rw [abs_mul]
+        gcongr
+      have t4 : |e ^ 2 * D| = |e| * (|e| * |D|) := by
+        rw [abs_mul, abs_pow]
+        ring
+      linarith
+    have hsum : 3 * |e| * |P| + |e| * (|e| * |D|) ≤ 4 * |e| * (2 + 4 * |e|) ^ k := by
+      have hstep : 3 * |e| * |P| + |e| * (|e| * |D|) ≤ 4 * |e| * (|P| + |e| * |D|) := by
+        nlinarith [mul_nonneg ha hp0, mul_nonneg ha (mul_nonneg ha hd0)]
+      have hstep2 : 4 * |e| * (|P| + |e| * |D|) ≤ 4 * |e| * (2 + 4 * |e|) ^ k :=
+        mul_le_mul_of_nonneg_left hgrow (by linarith)
+      linarith
+    have hpow2 : 2 * (2 + 4 * |e|) ^ k ≤ (2 + 4 * |e|) ^ (k + 1) := by
+      have hexp : (2 + 4 * |e|) ^ (k + 1) = (2 + 4 * |e|) * (2 + 4 * |e|) ^ k := by ring
+      nlinarith
+    have hfinal : 2 * (2 * |e| * k * (2 + 4 * |e|) ^ k) + 4 * |e| * (2 + 4 * |e|) ^ k ≤
+        2 * |e| * ((k : ℝ) + 1) * (2 + 4 * |e|) ^ (k + 1) := by
+      have hcoef2 : (0 : ℝ) ≤ 2 * |e| * ((k : ℝ) + 1) := by positivity
+      nlinarith [mul_le_mul_of_nonneg_left hpow2 hcoef2]
+    push_cast
+    calc |evenNumerator (-1 + e) (k + 1) - 2 ^ (k + 1)|
+        ≤ 2 * |P - 2 ^ k| + 3 * |e| * |P| + |e| * (|e| * |D|) := habs
+      _ ≤ 2 * (2 * |e| * k * (2 + 4 * |e|) ^ k) + 4 * |e| * (2 + 4 * |e|) ^ k := by
+          linarith
+      _ ≤ 2 * |e| * ((k : ℝ) + 1) * (2 + 4 * |e|) ^ (k + 1) := hfinal
+
+/-- The reduced denominator of the two-step data is a controlled perturbation
+of `k * 2^k / 2`, uniformly in the row index. -/
+private lemma even_denominator_error_bound (e : ℝ) (he : |e| ≤ 1) (k : ℕ) :
+    |evenDenominatorFactor (-1 + e) k - (k : ℝ) * 2 ^ k / 2| ≤
+      |e| * (k : ℝ) ^ 2 * (2 + 4 * |e|) ^ k := by
+  have ha : (0 : ℝ) ≤ |e| := abs_nonneg e
+  induction k with
+  | zero => simp [evenDenominatorFactor]
+  | succ k ih =>
+    have hnum := even_numerator_error_bound e he k
+    have hbase : (0 : ℝ) ≤ 2 + 4 * |e| := by linarith
+    have hbasepow : (0 : ℝ) ≤ (2 + 4 * |e|) ^ k := pow_nonneg hbase k
+    have hD : evenDenominatorFactor (-1 + e) (k + 1) - ((k : ℝ) + 1) * 2 ^ (k + 1) / 2 =
+        (evenNumerator (-1 + e) k - 2 ^ k) +
+          2 * (evenDenominatorFactor (-1 + e) k - (k : ℝ) * 2 ^ k / 2) := by
+      rw [evenDenominatorFactor_succ]
+      ring
+    have habs : |evenDenominatorFactor (-1 + e) (k + 1) - ((k : ℝ) + 1) * 2 ^ (k + 1) / 2| ≤
+        |evenNumerator (-1 + e) k - 2 ^ k| +
+          2 * |evenDenominatorFactor (-1 + e) k - (k : ℝ) * 2 ^ k / 2| := by
+      rw [hD]
+      refine (abs_add_le _ _).trans ?_
+      rw [abs_mul]
+      norm_num
+    have hpow2 : 2 * (2 + 4 * |e|) ^ k ≤ (2 + 4 * |e|) ^ (k + 1) := by
+      have hexp : (2 + 4 * |e|) ^ (k + 1) = (2 + 4 * |e|) * (2 + 4 * |e|) ^ k := by ring
+      nlinarith
+    have hk0 : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k
+    have hfinal :
+        2 * |e| * k * (2 + 4 * |e|) ^ k + 2 * (|e| * (k : ℝ) ^ 2 * (2 + 4 * |e|) ^ k) ≤
+          |e| * ((k : ℝ) + 1) ^ 2 * (2 + 4 * |e|) ^ (k + 1) := by
+      have hcoef : (0 : ℝ) ≤ |e| * ((k : ℝ) + 1) ^ 2 := by positivity
+      nlinarith [mul_le_mul_of_nonneg_left hpow2 hcoef,
+        mul_nonneg (mul_nonneg ha hk0) hbasepow]
+    push_cast
+    calc |evenDenominatorFactor (-1 + e) (k + 1) - ((k : ℝ) + 1) * 2 ^ (k + 1) / 2|
+        ≤ |evenNumerator (-1 + e) k - 2 ^ k| +
+            2 * |evenDenominatorFactor (-1 + e) k - (k : ℝ) * 2 ^ k / 2| := habs
+      _ ≤ 2 * |e| * k * (2 + 4 * |e|) ^ k + 2 * (|e| * (k : ℝ) ^ 2 * (2 + 4 * |e|) ^ k) := by
+          linarith
+      _ ≤ |e| * ((k : ℝ) + 1) ^ 2 * (2 + 4 * |e|) ^ (k + 1) := hfinal
+
+private lemma one_add_two_abs_pow_le_exp (e : ℝ) (k : ℕ) :
+    (1 + 2 * |e|) ^ k ≤ Real.exp (2 * ((k : ℝ) * |e|)) := by
+  have ha : (0 : ℝ) ≤ |e| := abs_nonneg e
+  have h1 : 1 + 2 * |e| ≤ Real.exp (2 * |e|) := by
+    linarith [Real.add_one_le_exp (2 * |e|)]
+  calc (1 + 2 * |e|) ^ k ≤ (Real.exp (2 * |e|)) ^ k :=
+        pow_le_pow_left₀ (by linarith) h1 k
+    _ = Real.exp (2 * ((k : ℝ) * |e|)) := by
+        rw [show (2 : ℝ) * ((k : ℝ) * |e|) = (k : ℝ) * (2 * |e|) by ring, Real.exp_nat_mul]
+
+/-- The scale hypothesis at the even pole forces the perturbation to decay
+faster than any polynomial rate; this is the form used below. -/
+private lemma tendsto_nat_mul_abs_epsilon {epsilon : ℕ → ℝ} {c : ℝ}
+    (hepsilon_scale :
+      Tendsto (fun m : ℕ => spectralBase ^ (2 * m) * epsilon m) atTop (nhds c)) :
+    Tendsto (fun m : ℕ => (m : ℝ) * |epsilon m|) atTop (nhds 0) := by
+  obtain ⟨-, -, -, hBr⟩ := silver_identities
+  have hsqrt : Real.sqrt 2 < 3 / 2 := by
+    have h2 : Real.sqrt 2 < 2 := by
+      norm_num [Real.sqrt_lt']
+    nlinarith [Real.sq_sqrt (by norm_num : (0:ℝ) ≤ 2), Real.sqrt_nonneg 2]
+  have hrpos : 0 < spectralRatio := by
+    unfold spectralRatio
+    linarith
+  have hr1 : spectralRatio < 1 := by
+    unfold spectralRatio
+    nlinarith [Real.sq_sqrt (by norm_num : (0:ℝ) ≤ 2), Real.sqrt_nonneg 2,
+      Real.sqrt_lt_sqrt (by norm_num : (0:ℝ) ≤ 1) (by norm_num : (1:ℝ) < 2),
+      Real.sqrt_one]
+  have hgeo : Tendsto (fun m : ℕ => (m : ℝ) * (spectralRatio ^ 2) ^ m) atTop (nhds 0) := by
+    refine tendsto_self_mul_const_pow_of_abs_lt_one ?_
+    rw [abs_of_pos (by positivity)]
+    nlinarith
+  have habs := hepsilon_scale.abs
+  have hmul := habs.mul hgeo
+  rw [mul_zero] at hmul
+  refine hmul.congr ?_
+  intro m
+  have hBpow : spectralBase ^ (2 * m) * (spectralRatio ^ 2) ^ m = 1 := by
+    have : spectralBase ^ (2 * m) * (spectralRatio ^ 2) ^ m =
+        (spectralBase * spectralRatio) ^ (2 * m) := by
+      rw [mul_pow]
+      rw [show (spectralRatio ^ 2) ^ m = spectralRatio ^ (2 * m) by
+        rw [← pow_mul, mul_comm]]
+    rw [this, hBr, one_pow]
+  have hBnonneg : (0 : ℝ) ≤ spectralBase ^ (2 * m) := by
+    have : (0 : ℝ) < spectralBase := by
+      unfold spectralBase
+      positivity
+    positivity
+  calc |spectralBase ^ (2 * m) * epsilon m| * ((m : ℝ) * (spectralRatio ^ 2) ^ m)
+      = (spectralBase ^ (2 * m) * (spectralRatio ^ 2) ^ m) * ((m : ℝ) * |epsilon m|) := by
+        rw [abs_mul, abs_of_nonneg hBnonneg]
+        ring
+    _ = (m : ℝ) * |epsilon m| := by rw [hBpow, one_mul]
+
+/-- Varying-row limit for the numerator of the two-step data. -/
+private lemma tendsto_evenNumerator_div_two_pow {epsilon : ℕ → ℝ}
+    (hsmall : Tendsto (fun m : ℕ => (m : ℝ) * |epsilon m|) atTop (nhds 0)) :
+    Tendsto (fun m : ℕ => evenNumerator (-1 + epsilon m) m / 2 ^ m) atTop (nhds 1) := by
+  have hbound : ∀ᶠ m : ℕ in atTop,
+      ‖evenNumerator (-1 + epsilon m) m / 2 ^ m - 1‖ ≤
+        2 * ((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|)) := by
+    filter_upwards [hsmall.eventually_lt_const (by norm_num : (0:ℝ) < 1),
+      eventually_ge_atTop 1] with m hm1 hm
+    have hmR : (1 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm
+    have habs1 : |epsilon m| ≤ 1 := by
+      nlinarith [abs_nonneg (epsilon m)]
+    have hbnd := even_numerator_error_bound (epsilon m) habs1 m
+    have h2pow : (0 : ℝ) < 2 ^ m := by positivity
+    have hsplit : (2 + 4 * |epsilon m|) ^ m = 2 ^ m * (1 + 2 * |epsilon m|) ^ m := by
+      rw [← mul_pow]
+      ring_nf
+    have hrewrite : evenNumerator (-1 + epsilon m) m / 2 ^ m - 1 =
+        (evenNumerator (-1 + epsilon m) m - 2 ^ m) / 2 ^ m := by
+      field_simp
+    have hkey : ‖evenNumerator (-1 + epsilon m) m / 2 ^ m - 1‖ =
+        |evenNumerator (-1 + epsilon m) m - 2 ^ m| / 2 ^ m := by
+      rw [Real.norm_eq_abs, hrewrite, abs_div, abs_of_pos h2pow]
+    rw [hkey, div_le_iff₀ h2pow]
+    calc |evenNumerator (-1 + epsilon m) m - 2 ^ m|
+        ≤ 2 * |epsilon m| * m * (2 + 4 * |epsilon m|) ^ m := hbnd
+      _ = (2 * ((m : ℝ) * |epsilon m|) * (1 + 2 * |epsilon m|) ^ m) * 2 ^ m := by
+          rw [hsplit]; ring
+      _ ≤ (2 * ((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|))) * 2 ^ m := by
+          have hco : (0 : ℝ) ≤ 2 * ((m : ℝ) * |epsilon m|) := by positivity
+          have := one_add_two_abs_pow_le_exp (epsilon m) m
+          have hmul := mul_le_mul_of_nonneg_left this hco
+          nlinarith [h2pow.le]
+  have hg : Tendsto
+      (fun m : ℕ => 2 * ((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|)))
+      atTop (nhds 0) := by
+    have hcont : Continuous fun t : ℝ => 2 * t * Real.exp (2 * t) := by
+      fun_prop
+    have := (hcont.tendsto 0).comp hsmall
+    simpa [Function.comp_def] using this
+  have hzero := squeeze_zero_norm' hbound hg
+  have hshift := hzero.add_const 1
+  simpa using hshift
+
+/-- Varying-row limit for the reduced denominator of the two-step data. -/
+private lemma tendsto_evenDenominatorFactor_div {epsilon : ℕ → ℝ}
+    (hsmall : Tendsto (fun m : ℕ => (m : ℝ) * |epsilon m|) atTop (nhds 0)) :
+    Tendsto (fun m : ℕ => evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ)))
+      atTop (nhds (1 / 2)) := by
+  have hbound : ∀ᶠ m : ℕ in atTop,
+      ‖evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ)) - 1 / 2‖ ≤
+        ((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|)) := by
+    filter_upwards [hsmall.eventually_lt_const (by norm_num : (0:ℝ) < 1),
+      eventually_ge_atTop 1] with m hm1 hm
+    have hmR : (1 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm
+    have hmpos : (0 : ℝ) < (m : ℝ) := by linarith
+    have habs1 : |epsilon m| ≤ 1 := by
+      nlinarith [abs_nonneg (epsilon m)]
+    have hbnd := even_denominator_error_bound (epsilon m) habs1 m
+    have h2pow : (0 : ℝ) < 2 ^ m := by positivity
+    have hprod : (0 : ℝ) < 2 ^ m * (m : ℝ) := by positivity
+    have hsplit : (2 + 4 * |epsilon m|) ^ m = 2 ^ m * (1 + 2 * |epsilon m|) ^ m := by
+      rw [← mul_pow]
+      ring_nf
+    have hrewrite : evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ)) - 1 / 2 =
+        (evenDenominatorFactor (-1 + epsilon m) m - (m : ℝ) * 2 ^ m / 2) / (2 ^ m * (m : ℝ)) := by
+      field_simp
+    have hkey : ‖evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ)) - 1 / 2‖ =
+        |evenDenominatorFactor (-1 + epsilon m) m - (m : ℝ) * 2 ^ m / 2| / (2 ^ m * (m : ℝ)) := by
+      rw [Real.norm_eq_abs, hrewrite, abs_div, abs_of_pos hprod]
+    rw [hkey, div_le_iff₀ hprod]
+    calc |evenDenominatorFactor (-1 + epsilon m) m - (m : ℝ) * 2 ^ m / 2|
+        ≤ |epsilon m| * (m : ℝ) ^ 2 * (2 + 4 * |epsilon m|) ^ m := hbnd
+      _ = (((m : ℝ) * |epsilon m|) * (1 + 2 * |epsilon m|) ^ m) * (2 ^ m * (m : ℝ)) := by
+          rw [hsplit]; ring
+      _ ≤ (((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|))) *
+            (2 ^ m * (m : ℝ)) := by
+          have hco : (0 : ℝ) ≤ (m : ℝ) * |epsilon m| := by positivity
+          have := one_add_two_abs_pow_le_exp (epsilon m) m
+          have hmul := mul_le_mul_of_nonneg_left this hco
+          nlinarith [hprod.le]
+  have hg : Tendsto
+      (fun m : ℕ => ((m : ℝ) * |epsilon m|) * Real.exp (2 * ((m : ℝ) * |epsilon m|)))
+      atTop (nhds 0) := by
+    have hcont : Continuous fun t : ℝ => t * Real.exp (2 * t) := by
+      fun_prop
+    have := (hcont.tendsto 0).comp hsmall
+    simpa [Function.comp_def] using this
+  have hzero := squeeze_zero_norm' hbound hg
+  have hshift := hzero.add_const (1 / 2)
+  simpa using hshift
+
+theorem tendsto_even_moving_pole_signed
+    {epsilon : ℕ → ℝ} {c : ℝ}
+    (hc : c ≠ 0)
+    (hepsilon_scale :
+      Tendsto
+        (fun m : ℕ => spectralBase ^ (2 * m) * epsilon m)
+        atTop (nhds c)) :
+    Tendsto
+      (fun m : ℕ =>
+        (((2 * m : ℕ) : ℝ) * ratio (-1 + epsilon m) (2 * m)) /
+          spectralBase ^ (2 * m))
+      atTop (nhds (4 / c)) := by
+  have hsmall := tendsto_nat_mul_abs_epsilon hepsilon_scale
+  have hnum := tendsto_evenNumerator_div_two_pow hsmall
+  have hden := tendsto_evenDenominatorFactor_div hsmall
+  have hG : Tendsto
+      (fun m : ℕ =>
+        2 * (evenNumerator (-1 + epsilon m) m / 2 ^ m) /
+          (evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ))))
+      atTop (nhds 4) := by
+    have h := (hnum.const_mul (2 : ℝ)).div hden (by norm_num)
+    norm_num at h
+    exact h
+  have hquot := hG.div hepsilon_scale hc
+  have hlim : Tendsto
+      (fun m : ℕ =>
+        (2 * (evenNumerator (-1 + epsilon m) m / 2 ^ m) /
+            (evenDenominatorFactor (-1 + epsilon m) m / (2 ^ m * (m : ℝ)))) /
+          (spectralBase ^ (2 * m) * epsilon m))
+      atTop (nhds (4 / c)) := hquot
+  refine hlim.congr' ?_
+  filter_upwards [hepsilon_scale.eventually_ne hc, eventually_ge_atTop 1] with m hne hm
+  have hmR : (0 : ℝ) < (m : ℝ) := by
+    have : (1 : ℕ) ≤ m := hm
+    exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one this
+  have hBpos : (0 : ℝ) < spectralBase := by
+    unfold spectralBase
+    positivity
+  have hBpow : (0 : ℝ) < spectralBase ^ (2 * m) := by positivity
+  have heps : epsilon m ≠ 0 := by
+    intro h
+    apply hne
+    rw [h, mul_zero]
+  have h2pow : (0 : ℝ) < 2 ^ m := by positivity
+  have hratio : ratio (-1 + epsilon m) (2 * m) =
+      evenNumerator (-1 + epsilon m) m /
+        (epsilon m * evenDenominatorFactor (-1 + epsilon m) m) := by
+    rw [ratio, numerator, denominator, state_even_factorization]
+    norm_num
+  rw [hratio]
+  push_cast
+  rcases eq_or_ne (evenDenominatorFactor (-1 + epsilon m) m) 0 with hD | hD
+  · rw [hD]
+    simp
+  · field_simp
+
+theorem tendsto_even_moving_pole
+    {epsilon : ℕ → ℝ} {c : ℝ}
+    (hc : c ≠ 0)
+    (hepsilon_scale :
+      Tendsto
+        (fun m : ℕ => spectralBase ^ (2 * m) * epsilon m)
+        atTop (nhds c)) :
+    Tendsto
+      (fun m : ℕ =>
+        (((2 * m : ℕ) : ℝ) * |ratio (-1 + epsilon m) (2 * m)|) /
+          spectralBase ^ (2 * m))
+      atTop (nhds (4 / |c|)) := by
+  have hsigned := tendsto_even_moving_pole_signed hc hepsilon_scale
+  have habs := hsigned.abs
+  have hval : |4 / c| = 4 / |c| := by
+    rw [abs_div]
+    norm_num
+  rw [hval] at habs
+  refine habs.congr ?_
+  intro m
+  have hBpos : (0 : ℝ) < spectralBase := by
+    unfold spectralBase
+    positivity
+  have hBpow : (0 : ℝ) < spectralBase ^ (2 * m) := by positivity
+  rw [abs_div, abs_mul, abs_of_pos hBpow, abs_of_nonneg (by positivity : (0:ℝ) ≤ ((2 * m : ℕ) : ℝ))]
 
 end MetallicCutoff

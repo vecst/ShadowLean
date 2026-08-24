@@ -677,3 +677,7 @@ import RequestProject.Main
 #print axioms ResidueSlices.tendsto_scaled_normalizedForwardDiff_error
 #print axioms ResidueSlices.normalizedForwardDiffPacket_iteratedDeriv_second_error_le
 #print axioms ResidueSlices.tendsto_scaled_normalizedForwardDiffPacket_error
+
+-- Metallic cutoff Phase B: corrected signed moving-pole law (Target 5)
+#print axioms MetallicCutoff.tendsto_even_moving_pole_signed
+#print axioms MetallicCutoff.tendsto_even_moving_pole
