@@ -707,3 +707,16 @@ import RequestProject.Main
 #print axioms MetallicCutoff.positiveFixedRoot_recovery_fixed_iff
 #print axioms MetallicCutoff.evenFixedPoint_sub_silver_bound
 #print axioms MetallicCutoff.tendsto_evenFixedPoint
+
+-- Metallic cutoff Phase C2B: sharp asymptotic coefficient of the fixed point (Target 7B)
+#print axioms MetallicCutoff.evenFixedPointDelta
+#print axioms MetallicCutoff.evenFixedPointRoot
+#print axioms MetallicCutoff.evenFixedPointSpectralRatio
+#print axioms MetallicCutoff.silver_lt_evenFixedPoint
+#print axioms MetallicCutoff.tendsto_evenFixedPointDelta
+#print axioms MetallicCutoff.tendsto_evenFixedPointRoot
+#print axioms MetallicCutoff.tendsto_scaled_evenFixedPointSpectralRatio_pow
+#print axioms MetallicCutoff.tendsto_scaled_evenFixedPoint_recovery_defect
+#print axioms MetallicCutoff.evenFixedPoint_factorization
+#print axioms MetallicCutoff.tendsto_evenFixedPoint_correctionFactor
+#print axioms MetallicCutoff.tendsto_scaled_evenFixedPoint_sub_silver

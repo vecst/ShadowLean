@@ -17,6 +17,7 @@ import RequestProject.SlitPlaneReversed
 import RequestProject.MetallicCutoff
 import RequestProject.MetallicFixedPoint
 import RequestProject.MetallicFixedPointConvergence
+import RequestProject.MetallicFixedPointSharp
 import RequestProject.BinomialLogConvergence
 import RequestProject.BinomialLogDiagonalBias
 import RequestProject.BinomialLogRowRate
