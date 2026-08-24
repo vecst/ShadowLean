@@ -669,3 +669,11 @@ import RequestProject.Main
 #print axioms ResidueSlices.unwrappedForwardDiff_second_error_le
 #print axioms ResidueSlices.normalizedForwardDiff_sub_secondJet_eq_div
 #print axioms ResidueSlices.normalizedForwardDiff_second_error_le
+
+-- Correlated derivative remainder (Phase A3D2): r/2 analytic coefficient + scaled packet limit
+#print axioms ResidueSlices.factorial_choose_mul_derivativeJet_succ
+#print axioms ResidueSlices.hasCenteredJetSecondRemainderAtNodes_derivativeJet
+#print axioms ResidueSlices.normalizedForwardDiff_iteratedDeriv_second_error_le
+#print axioms ResidueSlices.tendsto_scaled_normalizedForwardDiff_error
+#print axioms ResidueSlices.normalizedForwardDiffPacket_iteratedDeriv_second_error_le
+#print axioms ResidueSlices.tendsto_scaled_normalizedForwardDiffPacket_error
