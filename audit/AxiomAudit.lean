@@ -694,3 +694,16 @@ import RequestProject.Main
 #print axioms MetallicCutoff.existsUnique_even_fixed_point
 #print axioms MetallicCutoff.evenFixedPoint_spec
 #print axioms MetallicCutoff.eq_evenFixedPoint_of_fixed
+
+-- Metallic cutoff Phase C2A: spectral form and convergence of the fixed point (Target 7A)
+#print axioms MetallicCutoff.positiveFixedRoot
+#print axioms MetallicCutoff.negativeFixedRoot
+#print axioms MetallicCutoff.rowSpectralRatio
+#print axioms MetallicCutoff.rowSpectralRatio_mem_unitInterval
+#print axioms MetallicCutoff.ratio_spectral_decomposition
+#print axioms MetallicCutoff.roots_and_ratio_at_three
+#print axioms MetallicCutoff.recoveryMap_sub_positiveFixedRoot_bound
+#print axioms MetallicCutoff.tendstoUniformlyOn_recoveryMap
+#print axioms MetallicCutoff.positiveFixedRoot_recovery_fixed_iff
+#print axioms MetallicCutoff.evenFixedPoint_sub_silver_bound
+#print axioms MetallicCutoff.tendsto_evenFixedPoint
