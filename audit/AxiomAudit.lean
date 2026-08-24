@@ -683,6 +683,9 @@ import RequestProject.Main
 #print axioms MetallicCutoff.tendsto_even_moving_pole
 
 -- Metallic cutoff Phase C1: canonical even-row recovery fixed point (Target 6)
+#print axioms MetallicCutoff.recoveryMap
+#print axioms MetallicCutoff.scaledRecoveryRatio
+#print axioms MetallicCutoff.evenFixedPoint
 #print axioms MetallicCutoff.recovery_denominator_pos
 #print axioms MetallicCutoff.continuousOn_recoveryMap
 #print axioms MetallicCutoff.recoveryMap_silver_gt
