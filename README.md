@@ -24,8 +24,8 @@ lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
 At theorem-surface commit `1570138`, `RequestProject/Main.lean` imports 77
-project modules and `audit/AxiomAudit.lean` contains 598 explicit
-`#print axioms` checks. Of these, 588 declarations report exactly `propext`,
+project modules and `audit/AxiomAudit.lean` contains 596 explicit
+`#print axioms` checks. Of these, 586 declarations report exactly `propext`,
 `Classical.choice`, and `Quot.sound`; four report only `propext`; three report
 `propext` and `Quot.sound`; and three are axiom-free.
 
@@ -526,7 +526,7 @@ current theorem surface `1570138`).
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
 - The theorem surface through the generic logarithmic sublattice bridge at
   `1570138` was locally rechecked on 2026-08-25: all 77 imported modules build
-  and the complete 598-entry axiom driver passes under patched Lean
+  and the complete 596-entry axiom driver passes under patched Lean
   `v4.33.0-rc2`.
   A fresh third-party
   replay of the eventual publication tip remains the next trust milestone.
