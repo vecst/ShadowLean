@@ -736,3 +736,15 @@ import RequestProject.Main
 #print axioms SliceHyperbolic.gd4_exponential_bridge
 #print axioms SliceHyperbolic.gd3_quotient_ode
 #print axioms SliceHyperbolic.gd4_quotient_ode
+
+-- Pointwise logarithmic sublattice support and exact filter annihilation
+#print axioms ResidueSlices.normalizedPositiveDFT
+#print axioms ResidueSlices.positiveDFT_injective
+#print axioms ResidueSlices.sublatticeProjector_eq_self_of_supported
+#print axioms ResidueSlices.sublatticeProjector_pointwise_map
+#print axioms ResidueSlices.positiveDFT_pointwise_map_supported_of_supported
+#print axioms ResidueSlices.positiveDFT_log_one_add_supported_of_supported
+#print axioms ResidueSlices.packetFilterValue
+#print axioms ResidueSlices.inverse_normalizedPositiveDFT
+#print axioms ResidueSlices.weighted_inverse_fourier_sum
+#print axioms ResidueSlices.logarithmic_estimator_annihilated
