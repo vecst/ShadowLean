@@ -23,10 +23,9 @@ lake build --wfail   # build all modules, treating warnings as errors
 lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
-At theorem-surface commit `6175d2c53a311a29c02f6350f6aa03e2b924625e`
-(unchanged by the license-only commit `fcb376f`), `RequestProject/Main.lean`
-imports 74 project modules and `audit/AxiomAudit.lean` contains 571 explicit
-`#print axioms` checks. Of these, 561 declarations report exactly `propext`,
+At theorem-surface commit `ec65215`, `RequestProject/Main.lean` imports 75
+project modules and `audit/AxiomAudit.lean` contains 575 explicit
+`#print axioms` checks. Of these, 565 declarations report exactly `propext`,
 `Classical.choice`, and `Quot.sound`; four report only `propext`; three report
 `propext` and `Quot.sound`; and three are axiom-free.
 
@@ -34,7 +33,7 @@ The current tip has been rebuilt locally under the patched toolchain. The most
 recent complete independent third-party fresh/Comparator/default-kernel audit
 is separately frozen at commit `7eabca3`; its evidence does not certify later
 commits by inheritance. A new independent replay should freeze and cite the
-exact publication tip containing theorem surface `6175d2c`.
+exact publication tip containing theorem surface `ec65215`.
 
 ## Scope labels used below
 
@@ -53,7 +52,7 @@ theorem types.
 ## Complete imported-module census
 
 This table covers every project import in `RequestProject/Main.lean` at
-theorem surface `6175d2c`. Detailed theorem rows follow for the older
+theorem surface `ec65215`. Detailed theorem rows follow for the older
 paper-mapped surface; the scope column is authoritative where a module has no
 detailed table.
 
@@ -106,6 +105,7 @@ detailed table.
 | `SliceFilter` | direct finite paper match | full roots-of-unity multisection filter |
 | `Gudermann3` | paper-facing candidate | local `g=3` derivative, trigonometric, and cross-multiplied ODE identities |
 | `Gudermann4` | paper-facing candidate | local `g=4` derivative, trigonometric, and cross-multiplied ODE identities |
+| `GudermannPaperBridge` | direct paper match | displayed `g=3,4` exponential bridges and local quotient autonomous laws |
 | `GdgCriticalTetranomial` | paper-facing candidate | critical tetranomial and repeated-root reduction |
 | `GdgCriticalCandidateLocation` | paper-facing candidate | exact repeated-root candidate locations |
 | `GdgCriticalValueSeparation` | paper-facing candidate | scalar analytic inequalities used by the later exterior comparison |
@@ -449,9 +449,12 @@ the substitution `u = tan(r/2)` must still be supplied when comparing theorem
 statements.
 
 `Gudermann3` and `Gudermann4` are paper-facing candidates. Their active
-theorems establish local derivative, trigonometric, and cross-multiplied ODE
-identities. They do not, merely from those statements, establish a global
-special-function equivalence, a canonical `sigma_g` theorem, or a theorem that
+theorems establish local derivative, trigonometric, and denominator-safe
+cross-multiplied ODE identities. `GudermannPaperBridge` now proves the two
+displayed cosine/exponential identities and the paper's quotient autonomous
+laws on the exact open domain `0 < u < 1`. These declarations do not, merely
+from those statements, establish a globally defined inverse bridge
+`psi(s)`, a canonical `sigma_g` theorem, or a theorem that
 `g=4` is the last elementary rung.
 
 ### `gd_g` critical-family chain — analytic certificate, standalone candidate
@@ -476,7 +479,7 @@ labelled a paper-facing candidate rather than a direct paper match.
 For honesty in both directions: the following paper claims are **not**
 certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and reconciled against the
-current theorem surface `6175d2c`).
+current theorem surface `ec65215`).
 
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
@@ -514,10 +517,10 @@ current theorem surface `6175d2c`).
   2026-07-19 on the initial three-module core: claim status *exact*.
 - A later authenticated patched-Lean fresh/Comparator/default-kernel audit
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
-- The theorem surface through metallic cutoff Phase C3 at `6175d2c` was
-  locally rechecked on 2026-08-24: all 74 imported modules build and the
-  complete 571-entry axiom driver passes under patched Lean `v4.33.0-rc2`.
-  The license-only child `fcb376f` changes no Lean source. A fresh third-party
+- The theorem surface through the Gudermann paper bridge at `ec65215` was
+  locally rechecked on 2026-08-24: all 75 imported modules build and the
+  complete 575-entry axiom driver passes under patched Lean `v4.33.0-rc2`.
+  A fresh third-party
   replay of the eventual publication tip remains the next trust milestone.
 
 ## Attribution
