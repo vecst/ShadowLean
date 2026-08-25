@@ -74,6 +74,7 @@ import RequestProject.GdgFlagshipCriticalFamily
 import RequestProject.IFFTSublatticeProjector
 import RequestProject.IFFTSublatticeConvolution
 import RequestProject.IFFTLogSublatticeBridge
+import RequestProject.IFFTLogSublatticeGeneric
 import RequestProject.SilverCrossover
 
 open scoped BigOperators

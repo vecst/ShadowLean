@@ -748,3 +748,16 @@ import RequestProject.Main
 #print axioms ResidueSlices.inverse_normalizedPositiveDFT
 #print axioms ResidueSlices.weighted_inverse_fourier_sum
 #print axioms ResidueSlices.logarithmic_estimator_annihilated
+
+-- Generic logarithmic sublattice and infinite convolution bridge
+#print axioms ResidueSlices.logarithmicConvolutionCoeff
+#print axioms ResidueSlices.logarithmicConvolutionSpectrum
+#print axioms ResidueSlices.normalizedPositiveDFT_pointwise_mul
+#print axioms ResidueSlices.normalizedPositiveDFT_pointwise_pow
+#print axioms ResidueSlices.normalizedPositiveDFT_truncatedLog
+#print axioms ResidueSlices.summable_logarithmicConvolutionSpectrum
+#print axioms ResidueSlices.normalizedPositiveDFT_log_one_add
+#print axioms ResidueSlices.logarithmicConvolutionSpectrum_supported
+#print axioms ResidueSlices.normalizedPositiveDFT_log_one_add_supported
+#print axioms ResidueSlices.packetFilterValue_eq_positive_at_neg
+#print axioms ResidueSlices.logarithmic_estimator_annihilated_of_norm_lt_one
