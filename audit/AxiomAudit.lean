@@ -720,3 +720,13 @@ import RequestProject.Main
 #print axioms MetallicCutoff.evenFixedPoint_factorization
 #print axioms MetallicCutoff.tendsto_evenFixedPoint_correctionFactor
 #print axioms MetallicCutoff.tendsto_scaled_evenFixedPoint_sub_silver
+
+-- Metallic cutoff Phase C3: transverse scale and the canonical cutoff (Target 8)
+#print axioms MetallicCutoff.evenFixedPointTransversePerturbation
+#print axioms MetallicCutoff.evenFixedPointTransverseDelta
+#print axioms MetallicCutoff.evenFixedPointTransversePerturbation_eq
+#print axioms MetallicCutoff.evenFixedPointTransverseDelta_lt_neg_one
+#print axioms MetallicCutoff.tendsto_scaled_evenFixedPointTransversePerturbation
+#print axioms MetallicCutoff.tendsto_evenFixedPointTransverseDelta
+#print axioms MetallicCutoff.tendsto_evenFixedPoint_cutoff_signed
+#print axioms MetallicCutoff.tendsto_evenFixedPoint_cutoff
