@@ -23,18 +23,18 @@ lake build --wfail   # build all modules, treating warnings as errors
 lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
-At commit `fdd8afcb567c54e0e7eee28ae963831ad169a8cc`,
-`RequestProject/Main.lean` imports 64 project modules and
-`audit/AxiomAudit.lean` contains 486 explicit `#print axioms` checks. Of these,
-481 declarations report exactly `propext`, `Classical.choice`, and
-`Quot.sound`; two divisor-positivity declarations report only `propext`; and
-three older small-row count declarations are axiom-free.
+At theorem-surface commit `6175d2c53a311a29c02f6350f6aa03e2b924625e`
+(unchanged by the license-only commit `fcb376f`), `RequestProject/Main.lean`
+imports 74 project modules and `audit/AxiomAudit.lean` contains 571 explicit
+`#print axioms` checks. Of these, 561 declarations report exactly `propext`,
+`Classical.choice`, and `Quot.sound`; four report only `propext`; three report
+`propext` and `Quot.sound`; and three are axiom-free.
 
 The current tip has been rebuilt locally under the patched toolchain. The most
 recent complete independent third-party fresh/Comparator/default-kernel audit
 is separately frozen at commit `7eabca3`; its evidence does not certify later
-commits by inheritance. A new independent replay should cite `fdd8afc`
-explicitly.
+commits by inheritance. A new independent replay should freeze and cite the
+exact publication tip containing theorem surface `6175d2c`.
 
 ## Scope labels used below
 
@@ -53,8 +53,9 @@ theorem types.
 ## Complete imported-module census
 
 This table covers every project import in `RequestProject/Main.lean` at
-`fdd8afc`. Detailed theorem rows follow for the older paper-mapped surface; the
-scope column is authoritative where a module has no detailed table.
+theorem surface `6175d2c`. Detailed theorem rows follow for the older
+paper-mapped surface; the scope column is authoritative where a module has no
+detailed table.
 
 | Module | Correspondence status | Certified scope |
 |---|---|---|
@@ -73,20 +74,28 @@ scope column is authoritative where a module has no detailed table.
 | `ResidualCertificate` | standalone formal interface | natural-power residual ordering, intersections, and relative enclosures |
 | `SlitPlane` | direct ingredient match | forward principal-branch complex convergence |
 | `SlitPlaneReversed` | direct paper match | reversed pointwise and compact-uniform slit-plane convergence |
-| `MetallicCutoff` | standalone, incomplete track | exact recurrence algebra and even-pole residue; generic cutoff asymptotics remain open |
-| `BinomialLogConvergence` | standalone formal result | fixed-`g` row limit, surrogate limit, and iterated convergence; no explicit diagonal schedule |
-| `BinomialLogDiagonalBias` | standalone formal result | global cubic tanh bound, exact `1/(12g²)` surrogate-bias estimate, and compact-interval bias modulus; no finite-row `N` bound |
-| `BinomialLogRowRate` | standalone formal result | exact finite-row spectral rate and interval bound conditional on a supplied uniform gap envelope; no explicit envelope or row selector |
-| `BinomialLogGapEnvelope` | standalone formal result | explicit strict interval spectral-gap envelope and the resulting unconditional interval row-rate interface; no explicit row selector |
+| `MetallicCutoff` | standalone formal result | recurrence algebra, static even-row pole, and generic signed/absolute moving-pole limits `4/c` and `4/|c|` |
+| `MetallicFixedPoint` | standalone formal result | existence and uniqueness of the canonical even-row recovery fixed point in `[silver,3]` for `m >= 1` |
+| `MetallicFixedPointConvergence` | standalone formal result | exact two-root spectral form, uniform recovery-map convergence, coarse geometric bound, and fixed-point convergence to `silver` |
+| `MetallicFixedPointSharp` | standalone formal result | sharp scaled fixed-point error `spectralBase^(2m) * (evenFixedPoint m - silver) -> 4*silver` |
+| `MetallicFixedPointCutoff` | standalone formal result | transverse scale `-8`, left-side pole approach, signed cutoff `-1/2`, and absolute cutoff `1/2` |
+| `BinomialLogConvergence` | standalone formal result | fixed-`g` row limit, surrogate limit, iterated convergence, and fixed-`g` compact-uniform row convergence |
+| `BinomialLogDiagonalBias` | standalone formal result | global cubic tanh bound, exact `1/(12g²)` surrogate-bias estimate, compact-interval modulus, and half-budget bias guarantee |
+| `BinomialLogRowRate` | standalone formal result | exact finite-row spectral rate and interval error guarantee conditional on a supplied uniform gap envelope |
+| `BinomialLogGapEnvelope` | standalone formal result | explicit strict interval spectral-gap envelope and unconditional interval row-rate interface |
+| `BinomialLogDiagonalSchedule` | standalone formal result | explicit mathematical `g`/`N` selectors and one uniform `< epsilon` logarithm error theorem on `[a,b]`; selectors are noncomputable |
 | `IFFTPreparation` | direct finite paper match | exact prepared inverse-Fourier reconstruction, support, realness, and positivity conditions |
 | `PacketHighPass` | standalone formal result | exact moving-packet Fourier identity and product-form variation bound |
-| `PacketDerivativeJet` | standalone formal result | exact cyclic Fourier and Stirling moments; no analytic derivative limit |
+| `PacketDerivativeJet` | standalone formal result | exact cyclic Fourier symbol and Stirling-moment identities |
+| `PacketDerivativeUnwrapped` | standalone formal result | scaled unwrapped stencil, exact `r < g` no-wrap packet bridge, and centered-polynomial response |
+| `PacketDerivativeRemainder` | standalone formal result | explicit nodewise Taylor-remainder certificate and normalized `O(|h|)` error bound |
+| `PacketDerivativeSecondRemainder` | standalone formal result | retained degree-`r+1` coefficient and abstract normalized `O(h²)` remainder certificate |
+| `PacketDerivativeConvergence` | standalone formal result | global-regularity derivative error bound and punctured `h -> 0` convergence, including the `r < g` packet transfer |
+| `PacketDerivativeSecondConvergence` | standalone formal result | exact `r/2` leading error coefficient, `O(h²)` bound, and scaled real/packet limits |
 | `PacketHighPassDivided` | standalone formal result | divided nonzero-frequency high-pass estimates |
 | `IFFTSupportFlow` | direct finite paper match | finite-time spectral multiplier and support containment |
 | `IFFTCoordinateBridge` | direct finite paper match | exact one-step coordinate/spectral recurrence bridge |
 | `IFFTIteratedFlow` | direct finite paper match | exact finite-iterate coordinate flow, semigroup, and support laws |
-| `IFFTSublatticeProjector` | standalone formal result | divisor-sublattice averaging projector, exact on/off Fourier action, cardinality, and idempotence |
-| `IFFTSublatticeConvolution` | standalone formal result | additive-subgroup support closure under convolution powers and finite logarithmic convolution series |
 | `SilverFiniteRowBridge` | paper-facing candidate | finite `g=3` packet bridge for the cubic silver constant |
 | `SilverFiniteRowRemainder` | paper-facing candidate | exact normalized equation and conditional remainder bound |
 | `SilverFiniteRowFixedPoint` | paper-facing candidate | finite-row positive fixed-point existence |
@@ -121,6 +130,8 @@ scope column is authoritative where a module has no detailed table.
 | `GdgExteriorInteriorOdd` | paper-facing candidate | strict odd-row exterior/interior magnitude separation |
 | `GdgExteriorInteriorNoncollision` | paper-facing candidate | signed exterior/interior noncollision for both parities |
 | `GdgFlagshipCriticalFamily` | paper-facing candidate | complete simple critical-root certificate and injective critical values for every `g >= 5` |
+| `IFFTSublatticeProjector` | standalone formal result | divisor-sublattice averaging projector, exact on/off Fourier action, cardinality, and idempotence |
+| `IFFTSublatticeConvolution` | standalone formal result | additive-subgroup support closure under convolution powers and finite logarithmic convolution series |
 | `SilverCrossover` | standalone formal result | normalized quadratic crossover algebra for the cubic residual |
 
 ## Theorem ↔ paper/formal-interface map
@@ -288,6 +299,19 @@ its derivative-jet moment cancellation. From `shadow_packetization_companions.te
 | `forwardDiff_moment_vanish` | Lower-moment annihilation: `∑_j c(r,j)·j^m = 0` for `m < r` |
 | `forwardDiff_top_moment` | Top-moment response: `∑_j c(r,j)·j^r = r!` |
 
+The five later `PacketDerivative*` modules bridge this exact cyclic algebra to
+analytic differentiation. `PacketDerivativeUnwrapped` introduces the physical
+step `h`, proves the exact packet/stencil identity under the anti-wrap
+hypothesis `r < g`, and evaluates centered polynomials. The first remainder
+and convergence pair gives an explicit normalized `O(|h|)` error and proves
+punctured `h -> 0` convergence to `iteratedDeriv r f x` under global
+`C^(r+1)` regularity and a global bound on the next derivative. The second pair
+retains one correlated Taylor coefficient, proves an `O(h²)` remainder, and
+identifies the scaled leading error as
+`(r/2) * iteratedDeriv (r+1) f x`, again transferring to the packet when
+`r < g`. These are global-hypothesis theorems, not local compact-interval
+results, and they remain standalone until an exact paper claim is mapped.
+
 ### `RequestProject/PacketHighPass.lean` — moving-packet Fourier identity & high-pass bound
 Exact finite Fourier identities for cyclic packet masses `M(r) = ∑_q b(q, a(q)+r)`
 under an arbitrary moving selector `a`, plus a cyclic-total-variation high-pass
@@ -369,18 +393,39 @@ is the *surrogate*, not `log x` — the natural log emerges only as `g → ∞`.
 | `binomialLog_iterated_converges_to_log` | **Flagship two-stage convergence**: `∀ε ∃G ∀g≥G ∃N₀ ∀N≥N₀, \|binomialLog g N x − log x\| < ε` |
 | `tendstoUniformlyOn_binomialLog_row` | Fixed `g ≥ 2`: row limit is compact-uniform on `K ⊆ (0,∞)` |
 
-### `RequestProject/MetallicCutoff.lean` — metallic-ratio recurrence (in progress)
-Deterministic foundation for a selector-controlled heavy-tail experiment, on
-the recurrence `P_{N+1}=δP_N+Q_N, Q_{N+1}=P_N+Q_N`, `R_N=P_N/Q_N`, with the
-silver ratio `u=1+√2` and `B=3+2√2=u²`. Exact algebra and the static even-row
-pole proved; the asymptotic targets (uniform moving pole, fixed-point error,
-and the flagship cutoff constant `1/2`) are **not yet certified**.
+The four later modules—`BinomialLogDiagonalBias`, `BinomialLogRowRate`,
+`BinomialLogGapEnvelope`, and `BinomialLogDiagonalSchedule`—make the two-stage
+statement quantitative on a compact positive interval. They prove the exact
+`1/(12g²)` surrogate-bias
+bound, an explicit finite-row spectral estimate, a strict uniform gap envelope,
+and explicit mathematical selectors `diagonalLogG a b ε` and
+`diagonalLogN a b ε`. The final theorem `diagonalBinomialLog_error_lt` states
+that `0 < a <= b` and `0 < ε` imply
+`|diagonalBinomialLog a b ε x - log x| < ε` for every `x in [a,b]`. The
+selectors use real logarithms, real powers, and `Nat.ceil`; they are
+noncomputable Lean definitions, not extracted executable code.
+
+### Metallic fixed-point and cutoff chain — standalone formal result
+
+The five `Metallic*` modules study the recurrence
+`P_{N+1}=δP_N+Q_N`, `Q_{N+1}=P_N+Q_N`, `R_N=P_N/Q_N`, with the
+silver ratio `u=1+√2` and `B=3+2√2=u²`. The development now includes the exact
+static-pole algebra, a generic moving-pole theorem, the canonical recovery
+fixed point, its sharp spectral asymptotic, and the resulting cutoff constant.
+No canonical-paper correspondence is asserted here.
+
 | Lean declaration | Statement |
 |---|---|
 | `state_neg_one_even` / `state_neg_one_odd` | Exact parity degeneration at the static pole `δ=−1`: `state(−1)(2m)=(2^m,0)`, `state(−1)(2m+1)=(−2^m,2^m)` |
 | `silver_identities` | `βu=2`, `B=u²`, `B·(3−2√2)=1` — the normalization for every later limit |
 | `ratio_three_closed_form` | Closed form on the recovery channel `δ=3` (`N ≥ 1`): `ratio 3 N = u + 2√2·(3−2√2)^N/(1−(3−2√2)^N)` |
 | `even_pole_residue` | The even-row pole at `δ=−1` has residue exactly `2/m` (`m ≥ 1`), via the punctured limit `nhdsWithin (−1) {−1}ᶜ` — no `0/0` identification |
+| `tendsto_even_moving_pole_signed` / `tendsto_even_moving_pole` | If `B^(2m) * ε(m) -> c != 0`, the signed normalized ratio tends to `4/c` and its absolute companion tends to `4/|c|` |
+| `existsUnique_even_fixed_point` | For `m >= 1`, the recovery map has exactly one fixed point in `[silver,3]` |
+| `tendsto_evenFixedPoint` | The canonical even-row fixed point tends to `silver` |
+| `tendsto_scaled_evenFixedPoint_sub_silver` | Sharp coefficient: `B^(2m) * (evenFixedPoint m - silver) -> 4*silver` |
+| `tendsto_scaled_evenFixedPointTransversePerturbation` | The induced transverse perturbation has scale `B^(2m) * (2 - beta*evenFixedPoint m) -> -8` |
+| `tendsto_evenFixedPoint_cutoff_signed` / `tendsto_evenFixedPoint_cutoff` | The canonical normalized cutoff tends to `-1/2` signed and `1/2` in absolute value |
 
 ### Silver finite-row and crossover modules — standalone candidates
 
@@ -430,25 +475,21 @@ labelled a paper-facing candidate rather than a direct paper match.
 
 For honesty in both directions: the following paper claims are **not**
 certified by any theorem in this repository (boundary confirmed by an
-independent statement-fidelity audit, 2026-07-19, and re-checked after the
-compact-uniform additions).
+independent statement-fidelity audit, 2026-07-19, and reconciled against the
+current theorem surface `6175d2c`).
 
-- Metallic-cutoff recurrence: the uniform moving-pole estimate, fixed-point
-  existence/uniqueness, the scaled fixed-point error `→ 4u`, and the flagship
-  cutoff constant `→ 1/2` (`MetallicCutoff.lean` Targets 5–8) — not yet
-  certified. The exact algebra, the `δ=3` closed form, and the even-row pole
-  residue `2/m` (Targets 1–4) are proved.
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
 - From `shadow_packetization_companions.tex`: the Newton, Halley, Chebyshev,
   Schröder, and Householder residual laws; filter classification and canonical
-  filters; nonlinear sublattice cancellation; prime-power blocks; recursive
-  descent; Poissonized flow; construction spectra; and power-chain results.
-  The finite inverse-Fourier preparation, support flow, coordinate bridge, and
-  finite iteration are directly paper-matched. The moving-packet
-  Fourier/high-pass and finite-difference/Stirling modules are exact standalone
-  results unless a canonical theorem location is supplied.
+  filters; infinite analytic logarithm/support closure beyond the proved finite
+  truncated convolution series; prime-power blocks; recursive descent;
+  Poissonized flow; construction spectra; and power-chain results. The finite
+  inverse-Fourier preparation, support flow, coordinate bridge, and finite
+  iteration are directly paper-matched. The sublattice, moving-packet
+  Fourier/high-pass, and analytic finite-difference modules are exact
+  standalone results unless a canonical theorem location is supplied.
 - From the `gd_g` program: local branch cycles, monodromy and Galois group
   identification, the full wreath-product kernel, and the universal
   solvability threshold. Phase 9 certifies the analytic critical family and
@@ -456,9 +497,9 @@ compact-uniform additions).
 - Spin factor: bilinearity as exported lemmas, full power-associativity,
   conjugation as an involution, the inverse formula, and the downstream
   cross-norm closure and tree-indexed transport theorems.
-- `ResidualCertificate.lean`, `BinomialLogConvergence.lean`, and
-  `MetallicCutoff.lean` are formal standalone interfaces/results unless and
-  until an explicit canonical-paper mapping is added. Their listed Lean
+- `ResidualCertificate.lean`, the `BinomialLog*`, analytic `PacketDerivative*`,
+  and `Metallic*` chains are formal standalone interfaces/results unless and
+  until explicit canonical-paper mappings are added. Their listed Lean
   statements are certified; surrounding experimental narratives are not.
 
 ## Provenance
@@ -473,11 +514,11 @@ compact-uniform additions).
   2026-07-19 on the initial three-module core: claim status *exact*.
 - A later authenticated patched-Lean fresh/Comparator/default-kernel audit
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
-- The logarithm Phase 2C1 tip `fdd8afc` was independently reviewed locally on
-  2026-08-19: the explicit gap-envelope module, integrated `Main`, and complete
-  486-entry axiom driver pass
-  under patched Lean `v4.33.0-rc2`. A fresh third-party replay of this exact tip
-  remains the next trust milestone.
+- The theorem surface through metallic cutoff Phase C3 at `6175d2c` was
+  locally rechecked on 2026-08-24: all 74 imported modules build and the
+  complete 571-entry axiom driver passes under patched Lean `v4.33.0-rc2`.
+  The license-only child `fcb376f` changes no Lean source. A fresh third-party
+  replay of the eventual publication tip remains the next trust milestone.
 
 ## Attribution
 
