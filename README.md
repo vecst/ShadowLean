@@ -23,9 +23,9 @@ lake build --wfail   # build all modules, treating warnings as errors
 lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
-At theorem-surface commit `ec65215`, `RequestProject/Main.lean` imports 75
-project modules and `audit/AxiomAudit.lean` contains 575 explicit
-`#print axioms` checks. Of these, 565 declarations report exactly `propext`,
+At theorem-surface commit `c2e9573`, `RequestProject/Main.lean` imports 76
+project modules and `audit/AxiomAudit.lean` contains 585 explicit
+`#print axioms` checks. Of these, 575 declarations report exactly `propext`,
 `Classical.choice`, and `Quot.sound`; four report only `propext`; three report
 `propext` and `Quot.sound`; and three are axiom-free.
 
@@ -33,7 +33,7 @@ The current tip has been rebuilt locally under the patched toolchain. The most
 recent complete independent third-party fresh/Comparator/default-kernel audit
 is separately frozen at commit `7eabca3`; its evidence does not certify later
 commits by inheritance. A new independent replay should freeze and cite the
-exact publication tip containing theorem surface `ec65215`.
+exact publication tip containing theorem surface `c2e9573`.
 
 ## Scope labels used below
 
@@ -52,7 +52,7 @@ theorem types.
 ## Complete imported-module census
 
 This table covers every project import in `RequestProject/Main.lean` at
-theorem surface `ec65215`. Detailed theorem rows follow for the older
+theorem surface `c2e9573`. Detailed theorem rows follow for the older
 paper-mapped surface; the scope column is authoritative where a module has no
 detailed table.
 
@@ -132,6 +132,7 @@ detailed table.
 | `GdgFlagshipCriticalFamily` | paper-facing candidate | complete simple critical-root certificate and injective critical values for every `g >= 5` |
 | `IFFTSublatticeProjector` | standalone formal result | divisor-sublattice averaging projector, exact on/off Fourier action, cardinality, and idempotence |
 | `IFFTSublatticeConvolution` | standalone formal result | additive-subgroup support closure under convolution powers and finite logarithmic convolution series |
+| `IFFTLogSublatticeBridge` | structurally aligned | normalized inversion and exact pointwise-log/filter conclusion for every divisor sublattice `H_d` |
 | `SilverCrossover` | standalone formal result | normalized quadratic crossover algebra for the cubic residual |
 
 ## Theorem ↔ paper/formal-interface map
@@ -479,18 +480,20 @@ labelled a paper-facing candidate rather than a direct paper match.
 For honesty in both directions: the following paper claims are **not**
 certified by any theorem in this repository (boundary confirmed by an
 independent statement-fidelity audit, 2026-07-19, and reconciled against the
-current theorem surface `ec65215`).
+current theorem surface `c2e9573`).
 
 - From the rational-approximation paper: Padé identification, monotonicity,
   node-placement/Zolotarev claims, filter acceleration, Veronese interlacing,
   and ray-root pole geometry.
 - From `shadow_packetization_companions.tex`: the Newton, Halley, Chebyshev,
   Schröder, and Householder residual laws; filter classification and canonical
-  filters; infinite analytic logarithm/support closure beyond the proved finite
-  truncated convolution series; prime-power blocks; recursive descent;
-  Poissonized flow; construction spectra; and power-chain results. The finite
-  inverse-Fourier preparation, support flow, coordinate bridge, and finite
-  iteration are directly paper-matched. The sublattice, moving-packet
+  filters; the arbitrary-additive-subgroup form of logarithmic support; the
+  displayed infinite Taylor/convolution identity itself; prime-power blocks;
+  recursive descent; Poissonized flow; construction spectra; and power-chain
+  results. The finite inverse-Fourier preparation, support flow, coordinate
+  bridge, and finite iteration are directly paper-matched. The
+  divisor-sublattice pointwise-log and exact filter-annihilation conclusions
+  are proved specializations. The remaining finite convolution, moving-packet
   Fourier/high-pass, and analytic finite-difference modules are exact
   standalone results unless a canonical theorem location is supplied.
 - From the `gd_g` program: local branch cycles, monodromy and Galois group
@@ -517,9 +520,9 @@ current theorem surface `ec65215`).
   2026-07-19 on the initial three-module core: claim status *exact*.
 - A later authenticated patched-Lean fresh/Comparator/default-kernel audit
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
-- The theorem surface through the Gudermann paper bridge at `ec65215` was
-  locally rechecked on 2026-08-24: all 75 imported modules build and the
-  complete 575-entry axiom driver passes under patched Lean `v4.33.0-rc2`.
+- The theorem surface through the logarithmic sublattice bridge at `c2e9573` was
+  locally rechecked on 2026-08-24: all 76 imported modules build and the
+  complete 585-entry axiom driver passes under patched Lean `v4.33.0-rc2`.
   A fresh third-party
   replay of the eventual publication tip remains the next trust milestone.
 
