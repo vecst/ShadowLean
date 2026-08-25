@@ -46,6 +46,7 @@ import RequestProject.SliceMultisection
 import RequestProject.SliceFilter
 import RequestProject.Gudermann3
 import RequestProject.Gudermann4
+import RequestProject.GudermannPaperBridge
 import RequestProject.GdgCriticalTetranomial
 import RequestProject.GdgCriticalCandidateLocation
 import RequestProject.GdgCriticalValueSeparation

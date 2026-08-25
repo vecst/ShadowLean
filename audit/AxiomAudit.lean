@@ -730,3 +730,9 @@ import RequestProject.Main
 #print axioms MetallicCutoff.tendsto_evenFixedPointTransverseDelta
 #print axioms MetallicCutoff.tendsto_evenFixedPoint_cutoff_signed
 #print axioms MetallicCutoff.tendsto_evenFixedPoint_cutoff
+
+-- Paper-facing gd3/gd4 exponential bridges and quotient autonomous laws
+#print axioms SliceHyperbolic.gd3_exponential_bridge
+#print axioms SliceHyperbolic.gd4_exponential_bridge
+#print axioms SliceHyperbolic.gd3_quotient_ode
+#print axioms SliceHyperbolic.gd4_quotient_ode
