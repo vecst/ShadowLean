@@ -761,3 +761,4 @@ import RequestProject.Main
 #print axioms ResidueSlices.normalizedPositiveDFT_log_one_add_supported
 #print axioms ResidueSlices.packetFilterValue_eq_positive_at_neg
 #print axioms ResidueSlices.logarithmic_estimator_annihilated_of_norm_lt_one
+#print axioms ResidueSlices.eventually_logarithmic_estimator_annihilated

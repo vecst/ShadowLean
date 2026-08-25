@@ -263,4 +263,46 @@ theorem logarithmic_estimator_annihilated_of_norm_lt_one
       · rw [normalizedPositiveDFT_log_one_add_supported H e heNorm heSupport k hk,
           zero_mul]
 
+/--
+The sequence-level form used in the paper: pointwise convergence to zero on the
+finite residue group eventually supplies the strict unit-disk hypothesis needed
+by the logarithmic Taylor bridge.  Subgroup support is assumed at every row, so
+the weighted logarithmic contribution is eventually exactly zero.
+-/
+theorem eventually_logarithmic_estimator_annihilated
+    {g : Nat} [NeZero g] (H : AddSubgroup (ZMod g))
+    (e : Nat → ZMod g → Complex) (w : ZMod g → Complex)
+    (heTendsto : ∀ j, Filter.Tendsto (fun n => e n j)
+      Filter.atTop (nhds 0))
+    (heSupport : ∀ n k, k ∉ H → normalizedPositiveDFT (e n) k = 0)
+    (hw : ∀ k, k ∈ H →
+      (∑ j : ZMod g, w j * ZMod.stdAddChar (j * k)) = 0) :
+    ∀ᶠ n in Filter.atTop,
+      ∑ j : ZMod g, w j * Complex.log (1 + e n j) = 0 := by
+  classical
+  have heNormEventually : ∀ᶠ n in Filter.atTop, ∀ j, norm (e n j) < 1 := by
+    have hfin : ∀ s : Finset (ZMod g),
+        ∀ᶠ n in Filter.atTop, ∀ j ∈ s, norm (e n j) < 1 := by
+      intro s
+      induction s using Finset.induction_on with
+      | empty => simp
+      | @insert a s ha ih =>
+          have haBall : ∀ᶠ n in Filter.atTop, e n a ∈ Metric.ball (0 : Complex) 1 :=
+            (heTendsto a).eventually (Metric.ball_mem_nhds 0 (by norm_num))
+          have haNorm : ∀ᶠ n in Filter.atTop, norm (e n a) < 1 := by
+            filter_upwards [haBall] with n hn
+            simpa [Metric.mem_ball, dist_zero_right] using hn
+          filter_upwards [haNorm, ih] with n han hsn
+          intro j hj
+          rw [Finset.mem_insert] at hj
+          rcases hj with rfl | hj
+          · exact han
+          · exact hsn j hj
+    filter_upwards [hfin Finset.univ] with n hn
+    intro j
+    exact hn j (Finset.mem_univ j)
+  filter_upwards [heNormEventually] with n hn
+  exact logarithmic_estimator_annihilated_of_norm_lt_one H (e n) w hn
+    (heSupport n) hw
+
 end ResidueSlices

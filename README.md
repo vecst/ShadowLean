@@ -24,8 +24,8 @@ lake env lean -DwarningAsError=true audit/AxiomAudit.lean
 ```
 
 At theorem-surface commit `1570138`, `RequestProject/Main.lean` imports 77
-project modules and `audit/AxiomAudit.lean` contains 596 explicit
-`#print axioms` checks. Of these, 586 declarations report exactly `propext`,
+project modules and `audit/AxiomAudit.lean` contains 597 explicit
+`#print axioms` checks. Of these, 587 declarations report exactly `propext`,
 `Classical.choice`, and `Quot.sound`; four report only `propext`; three report
 `propext` and `Quot.sound`; and three are axiom-free.
 
@@ -133,7 +133,7 @@ detailed table.
 | `IFFTSublatticeProjector` | standalone formal result | divisor-sublattice averaging projector, exact on/off Fourier action, cardinality, and idempotence |
 | `IFFTSublatticeConvolution` | standalone formal result | additive-subgroup support closure under convolution powers and finite logarithmic convolution series |
 | `IFFTLogSublatticeBridge` | structurally aligned | normalized inversion and exact pointwise-log/filter conclusion for every divisor sublattice `H_d` |
-| `IFFTLogSublatticeGeneric` | direct analytic paper match | normalized product/convolution powers, the convergent infinite logarithmic convolution identity under `‖e(j)‖ < 1`, arbitrary-additive-subgroup support, and exact filter annihilation |
+| `IFFTLogSublatticeGeneric` | direct analytic paper match | normalized product/convolution powers, the convergent infinite logarithmic convolution identity under `‖e(j)‖ < 1`, arbitrary-additive-subgroup support, exact filter annihilation, and its eventual sequence form for `e_n(j) → 0` |
 | `SilverCrossover` | standalone formal result | normalized quadratic crossover algebra for the cubic residual |
 
 ## Theorem ↔ paper/formal-interface map
@@ -494,12 +494,11 @@ current theorem surface `1570138`).
   directly paper-matched. The arbitrary-additive-subgroup logarithmic support,
   normalized infinite Taylor/convolution identity, and exact filter-
   annihilation conclusion are proved under the explicit strict condition
-  `‖e(j)‖ < 1`. The paper's outer step from pointwise `e_n(j) → 0` on the
-  finite residue group to eventual satisfaction of that condition is not
-  separately packaged as a named sequence theorem. The remaining finite
-  convolution, moving-packet Fourier/high-pass, and analytic finite-difference
-  modules are exact standalone results unless a canonical theorem location is
-  supplied.
+  `‖e(j)‖ < 1`; the outer step from pointwise `e_n(j) → 0` on the finite
+  residue group to eventual exact annihilation is also a named theorem. The
+  remaining finite convolution, moving-packet Fourier/high-pass, and analytic
+  finite-difference modules are exact standalone results unless a canonical
+  theorem location is supplied.
 - From the `gd_g` program: local branch cycles, monodromy and Galois group
   identification, the full wreath-product kernel, and the universal
   solvability threshold. Phase 9 certifies the analytic critical family and
@@ -526,7 +525,7 @@ current theorem surface `1570138`).
   passed for the exact frozen commit `7eabca3`. Its evidence is commit-scoped.
 - The theorem surface through the generic logarithmic sublattice bridge at
   `1570138` was locally rechecked on 2026-08-25: all 77 imported modules build
-  and the complete 596-entry axiom driver passes under patched Lean
+  and the complete 597-entry axiom driver passes under patched Lean
   `v4.33.0-rc2`.
   A fresh third-party
   replay of the eventual publication tip remains the next trust milestone.
