@@ -762,3 +762,12 @@ import RequestProject.Main
 #print axioms ResidueSlices.packetFilterValue_eq_positive_at_neg
 #print axioms ResidueSlices.logarithmic_estimator_annihilated_of_norm_lt_one
 #print axioms ResidueSlices.eventually_logarithmic_estimator_annihilated
+
+-- Cubic-silver finite-row crossover Phase B1: relative normalized center-remainder transfer
+#print axioms SilverFiniteRow.tendsto_movingCrossoverScale
+#print axioms SilverFiniteRow.tendsto_movingMuShift
+#print axioms SilverFiniteRow.tendsto_movingDelta
+#print axioms SilverFiniteRow.eventually_moving_affineInput_pos
+#print axioms SilverFiniteRow.tendsto_moving_fixedPointFactor
+#print axioms SilverFiniteRow.relativeCenterRemainder_le
+#print axioms SilverFiniteRow.tendsto_relativeCenterRemainder_of_relativeDeviationVariation
