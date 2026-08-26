@@ -771,3 +771,12 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.tendsto_moving_fixedPointFactor
 #print axioms SilverFiniteRow.relativeCenterRemainder_le
 #print axioms SilverFiniteRow.tendsto_relativeCenterRemainder_of_relativeDeviationVariation
+
+-- Cubic-silver finite-row crossover: exact derivative bridge
+#print axioms SilverFiniteRow.hasDerivAt_packetRatio
+#print axioms SilverFiniteRow.hasDerivAt_cubeRoot
+#print axioms SilverFiniteRow.hasDerivAt_packetErrorFunction
+#print axioms SilverFiniteRow.packetDeviation_eq_packetErrorFunction
+#print axioms SilverFiniteRow.deviationVariation_eq_packetErrorFunction_sub
+#print axioms SilverFiniteRow.hasDerivAt_packetDeviation
+#print axioms SilverFiniteRow.deviationVariation_eq_deriv_mul

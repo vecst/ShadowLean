@@ -41,6 +41,7 @@ import RequestProject.SilverFiniteRowRemainder
 import RequestProject.SilverFiniteRowRelative
 import RequestProject.SilverFiniteRowFixedPoint
 import RequestProject.SilverFiniteRowElasticity
+import RequestProject.SilverFiniteRowDerivativeBridge
 import RequestProject.SilverFiniteRowUnique
 import RequestProject.SliceHyperbolic
 import RequestProject.SliceMultisection
