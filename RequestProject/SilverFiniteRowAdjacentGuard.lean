@@ -10,8 +10,9 @@ EXACT center-error identity (`centerError_channel_formula`, N ≥ 1):
   centerError N alpha
     = alpha * (2*Re((omega^2-1)*q^N) + centerEndpointTerm N alpha)
         / centerDenominatorWave N alpha.
-The leading channel is oscillatory, so NO all-row lower bound
-`c*rho^N ≤ |centerError N alpha|` holds. The flagship
+The leading channel is oscillatory. No all-row lower bound is assumed here, and
+numerical phase cancellation indicates that such a bound should not generally be
+expected. The flagship
 `eventually_adjacent_centerError_guard` is the constructive bounded-delay
 replacement: eventually at least one of rows N, N+1 has a center error of size
 at least `c = alpha*centerProjectionConstant alpha/2 > 0` times its own rho

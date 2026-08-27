@@ -44,6 +44,7 @@ import RequestProject.SilverFiniteRowElasticity
 import RequestProject.SilverFiniteRowDerivativeBridge
 import RequestProject.SilverFiniteRowUnique
 import RequestProject.SilverFiniteRowAdjacentGuard
+import RequestProject.SilverFiniteRowLocalDerivativeRate
 import RequestProject.SliceHyperbolic
 import RequestProject.SliceMultisection
 import RequestProject.SliceFilter
