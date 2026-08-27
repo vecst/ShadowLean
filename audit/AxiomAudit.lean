@@ -780,3 +780,26 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.deviationVariation_eq_packetErrorFunction_sub
 #print axioms SilverFiniteRow.hasDerivAt_packetDeviation
 #print axioms SilverFiniteRow.deviationVariation_eq_deriv_mul
+
+-- Cubic-silver finite-row crossover Phase B2B: adjacent-row noncancellation
+#print axioms SilverFiniteRow.centerT_pos
+#print axioms SilverFiniteRow.centerOmega_isPrimitiveRoot
+#print axioms SilverFiniteRow.centerChannel_ne_zero
+#print axioms SilverFiniteRow.centerRho_pos
+#print axioms SilverFiniteRow.packetRatio_center_numerator_wave
+#print axioms SilverFiniteRow.packetRatio_center_denominator_wave
+#print axioms SilverFiniteRow.centerDenominatorWave_pos
+#print axioms SilverFiniteRow.packetRatio_center_channel_formula
+#print axioms SilverFiniteRow.centerError_channel_formula
+#print axioms SilverFiniteRow.centerRho_mem_unitInterval
+#print axioms SilverFiniteRow.centerEndpointRate_nonneg
+#print axioms SilverFiniteRow.centerEndpointRate_lt_one
+#print axioms SilverFiniteRow.centerEndpointRate_lt_centerRho
+#print axioms SilverFiniteRow.norm_centerUnitChannel
+#print axioms SilverFiniteRow.centerUnitChannel_im_ne_zero
+#print axioms SilverFiniteRow.centerProjectionConstant_pos
+#print axioms SilverFiniteRow.adjacent_real_projection_lower
+#print axioms SilverFiniteRow.adjacent_center_projection_lower
+#print axioms SilverFiniteRow.tendsto_centerDenominatorWave
+#print axioms SilverFiniteRow.tendsto_centerEndpointTerm_div_rho_pow
+#print axioms SilverFiniteRow.eventually_adjacent_centerError_guard
