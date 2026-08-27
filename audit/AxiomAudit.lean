@@ -844,3 +844,16 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.tendsto_localDerivativeRate_div_centerHalfRate
 #print axioms SilverFiniteRow.packetErrorDerivative_local_geometric_bound
 #print axioms SilverFiniteRow.exists_centerError_and_localDerivative_bounds
+
+-- Cubic-silver finite-row crossover Phase B2D: adaptive adjacent-row selection
+#print axioms SilverFiniteRow.adaptiveRow_eq_self_or_succ
+#print axioms SilverFiniteRow.le_adaptiveRow
+#print axioms SilverFiniteRow.adaptiveRow_le_succ
+#print axioms SilverFiniteRow.normalizedCenterError_adaptiveRow_eq_max
+#print axioms SilverFiniteRow.tendsto_adaptiveRow
+#print axioms SilverFiniteRow.eventually_adaptiveRow_normalized_guard
+#print axioms SilverFiniteRow.eventually_adaptiveRow_centerError_lower
+#print axioms SilverFiniteRow.eventually_adaptiveRow_centerError_upper
+#print axioms SilverFiniteRow.eventually_adaptiveRow_centerError_ne_zero
+#print axioms SilverFiniteRow.eventually_adaptiveRow_packetErrorDerivative_bound
+#print axioms SilverFiniteRow.tendsto_adaptiveRow_localDerivativeRate_div_centerHalfRate
