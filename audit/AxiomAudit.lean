@@ -873,3 +873,16 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_all_finiteRow_fixedPoints_near
 #print axioms SilverFiniteRow.silverFiniteRowFixedPoint_spec
 #print axioms SilverFiniteRow.tendsto_silverFiniteRowFixedPoint
+
+-- Cubic-silver finite-row crossover Phase B4B1: fixed-point converse and normalized crossover residual
+#print axioms SilverFiniteRow.signedRelativeCenterRemainder
+#print axioms SilverFiniteRow.normalizedCrossoverResidual
+#print axioms SilverFiniteRow.fixedPointFactor_pos_of_affineInput_pos
+#print axioms SilverFiniteRow.finiteMap_eq_self_iff_quadraticCrossover_eq_centerRemainder
+#print axioms SilverFiniteRow.abs_signedRelativeCenterRemainder
+#print axioms SilverFiniteRow.tendsto_adaptiveRow_signedRelativeCenterRemainder
+#print axioms SilverFiniteRow.normalizedCrossoverResidual_eq_zero_iff_fixed
+#print axioms SilverFiniteRow.normalizedCrossoverResidual_eq_positive
+#print axioms SilverFiniteRow.normalizedCrossoverResidual_eq_negative
+#print axioms SilverFiniteRow.tendsto_reindexed_adaptiveRow_normalizedCrossoverResidual_positive
+#print axioms SilverFiniteRow.tendsto_reindexed_adaptiveRow_normalizedCrossoverResidual_negative
