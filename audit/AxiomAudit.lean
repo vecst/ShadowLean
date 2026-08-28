@@ -864,3 +864,12 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_adaptiveRow_relativeDeviationVariation_lt
 #print axioms SilverFiniteRow.tendsto_adaptiveRow_relativeDeviationVariation
 #print axioms SilverFiniteRow.tendsto_adaptiveRow_relativeCenterRemainder
+
+-- Cubic-silver finite-row crossover Phase B4A: silver finite-row fixed-point convergence
+#print axioms SilverFiniteRow.silverFiniteRowFixedPoint
+#print axioms SilverFiniteRow.limitingMap_sub_self_pos_of_lt
+#print axioms SilverFiniteRow.limitingMap_sub_self_neg_of_lt
+#print axioms SilverFiniteRow.eventually_finiteMap_bracket_sign
+#print axioms SilverFiniteRow.eventually_all_finiteRow_fixedPoints_near
+#print axioms SilverFiniteRow.silverFiniteRowFixedPoint_spec
+#print axioms SilverFiniteRow.tendsto_silverFiniteRowFixedPoint
