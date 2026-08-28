@@ -857,3 +857,10 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_adaptiveRow_centerError_ne_zero
 #print axioms SilverFiniteRow.eventually_adaptiveRow_packetErrorDerivative_bound
 #print axioms SilverFiniteRow.tendsto_adaptiveRow_localDerivativeRate_div_centerHalfRate
+
+-- Cubic-silver finite-row crossover Phase B3: selected relative deviation and center-remainder convergence
+#print axioms SilverFiniteRow.tendsto_relativeCenterRemainder_of_reindexed_relativeDeviationVariation
+#print axioms SilverFiniteRow.eventually_adaptiveRow_relativeDeviationVariation_bound
+#print axioms SilverFiniteRow.eventually_adaptiveRow_relativeDeviationVariation_lt
+#print axioms SilverFiniteRow.tendsto_adaptiveRow_relativeDeviationVariation
+#print axioms SilverFiniteRow.tendsto_adaptiveRow_relativeCenterRemainder
