@@ -896,3 +896,9 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_exists_negative_crossover_fixedPoint_in_bracket
 #print axioms SilverFiniteRow.eventually_exists_positive_crossover_fixedPoint_near_simple_root
 #print axioms SilverFiniteRow.eventually_exists_negative_crossover_fixedPoint_near_simple_root
+
+-- Cubic-silver finite-row crossover Phase B4B3: select one convergent crossover branch
+#print axioms SilverFiniteRow.exists_tendsto_selection_of_eventually_exists_near
+#print axioms SilverFiniteRow.tendsto_reindexed_moving_fixedPoint_value
+#print axioms SilverFiniteRow.exists_tendsto_positive_crossover_fixedPoint_branch
+#print axioms SilverFiniteRow.exists_tendsto_negative_crossover_fixedPoint_branch
