@@ -931,3 +931,12 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.endpointTaylorDiscriminants_mul_neg_of_separated
 #print axioms SilverFiniteRow.endpointTaylorDiscriminant_signs_of_driver_pos
 #print axioms SilverFiniteRow.endpointTaylorDiscriminant_signs_of_driver_neg
+
+-- Cubic-silver finite-row crossover Phase B4B7: packet 2nd-derivative and center-discriminant bridge
+#print axioms SilverFiniteRow.hasDerivAt_packetRatioDerivative
+#print axioms SilverFiniteRow.hasDerivAt_finiteResidual
+#print axioms SilverFiniteRow.hasDerivAt_finiteResidualDerivative
+#print axioms SilverFiniteRow.finiteResidualDerivative_center
+#print axioms SilverFiniteRow.finiteResidualSecondDerivative_center
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_eq_abstract
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_eq_packet_data
