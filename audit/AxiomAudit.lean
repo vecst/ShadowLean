@@ -922,3 +922,12 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.negativeCrossoverRoots_eq_half_of_abs_eq_two
 #print axioms SilverFiniteRow.negativeCrossoverRootMinus_lt_plus_of_two_lt_abs
 #print axioms SilverFiniteRow.negative_crossover_eq_zero_iff_of_two_lt_abs
+
+-- Cubic-silver finite-row crossover Phase B4B6: double-root Taylor-discriminant algebra
+#print axioms SilverFiniteRow.endpointTaylorDiscriminant_eq_packet_data
+#print axioms SilverFiniteRow.endpointTaylorDiscriminant_two_sub_neg_two
+#print axioms SilverFiniteRow.endpointTaylorDiscriminant_two_add_neg_two
+#print axioms SilverFiniteRow.mul_neg_of_abs_add_lt_abs_sub
+#print axioms SilverFiniteRow.endpointTaylorDiscriminants_mul_neg_of_separated
+#print axioms SilverFiniteRow.endpointTaylorDiscriminant_signs_of_driver_pos
+#print axioms SilverFiniteRow.endpointTaylorDiscriminant_signs_of_driver_neg
