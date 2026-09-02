@@ -940,3 +940,13 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.finiteResidualSecondDerivative_center
 #print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_eq_abstract
 #print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_eq_packet_data
+
+-- Cubic-silver finite-row crossover Phase B4B8: critical curvature-cancellation and separation interface
+#print axioms SilverFiniteRow.hasDerivAt_centerDerivativeError
+#print axioms SilverFiniteRow.centerCurvatureDefect_eq_derivative_bridge
+#print axioms SilverFiniteRow.endpointDriver_eq_critical
+#print axioms SilverFiniteRow.endpointSymmetryDefect_eq_critical
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_two_sub_neg_two_critical
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminant_two_add_neg_two_critical
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminants_separated_of_critical_bounds
+#print axioms SilverFiniteRow.centerEndpointTaylorDiscriminants_mul_neg_of_critical_bounds
