@@ -995,3 +995,15 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.tendsto_centerCriticalSymmetryDefect
 #print axioms SilverFiniteRow.eventually_adaptiveDerivativeRow_centerCriticalSymmetryDefect_geometric_upper
 #print axioms SilverFiniteRow.tendsto_adaptiveDerivativeRow_centerCriticalSymmetryDefect
+
+-- Cubic-silver finite-row crossover Phase B4B12: bounded-window joint negative-error + derivative-noncancellation selector
+#print axioms SilverFiniteRow.exists_jointCenterGuardScore_max
+#print axioms SilverFiniteRow.jointCenterGuardRow_bounds
+#print axioms SilverFiniteRow.jointCenterGuardRow_score_max
+#print axioms SilverFiniteRow.tendsto_jointCenterGuardRow
+#print axioms SilverFiniteRow.tendsto_centerError_sub_phase_normalized
+#print axioms SilverFiniteRow.tendsto_centerDerivativeError_sub_phase_normalized
+#print axioms SilverFiniteRow.exists_bounded_joint_center_phase_guard
+#print axioms SilverFiniteRow.eventually_bounded_jointCenterGuardScore
+#print axioms SilverFiniteRow.eventually_jointCenterGuardRow_guards
+#print axioms SilverFiniteRow.eventually_jointCenterGuardRow_innerScale_lower
