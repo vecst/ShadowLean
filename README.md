@@ -3,10 +3,14 @@
 Machine-checked Lean 4 proofs for the residue-slice (Pascal packetization) and
 quadratic-space shadow-calculus research program of Lukas Carroll.
 
-Every theorem in this repository is verified by the Lean kernel, builds with
+Every theorem in the RequestProject library is verified by the Lean kernel, builds with
 **zero `sorry`/`admit`**, and depends only on the three standard axioms
-(`propext`, `Classical.choice`, `Quot.sound`) — confirmed by the audit file
-in `audit/` and enforced in CI.
+(`propext`, `Classical.choice`, `Quot.sound`). CI discovers and imports every
+`RequestProject` source module, then checks the transitive axiom dependencies
+of every project-origin declaration, including private/generated declarations.
+It rejects any axiom outside that explicit allowlist and rejects an empty
+declaration inventory. The handwritten `#print axioms` report is supplementary;
+it does not define the coverage of the enforced audit.
 
 ## Environment (pinned)
 
@@ -20,8 +24,31 @@ in `audit/` and enforced in CI.
 ```
 lake exe cache get   # fetch Mathlib binary cache
 lake build --wfail   # build all modules, treating warnings as errors
-lake env lean -DwarningAsError=true audit/AxiomAudit.lean
+lake env python3 audit/check_axioms.py --self-test
+lake env lean -DwarningAsError=true audit/AxiomAudit.lean  # supplementary report
 ```
+
+The automated gate uses `audit/AllProjectAxioms.lean` and Python 3's standard
+library. Source discovery is independent of `Main` and the named audit list;
+an unbuilt or unimportable source fails the check. Declarations are selected by
+their originating module, not by their namespace. There is no axiom denylist.
+Both compilation failures and allowlist failures are fatal in CI, and the logs
+are retained as workflow artifacts.
+
+The self-test first requires the real project audit to pass, then compiles
+fixtures in a temporary directory. It verifies rejection of a direct custom
+axiom and private/public declarations depending transitively on an external
+custom axiom, with declaration names outside the project namespace. It checks
+the expected axiom diagnostics, so a syntax error or missing import cannot count
+as successful rejection. A separate empty-inventory control must also fail.
+These fixtures are never imported into the real project or its build products.
+
+At source revision `ce46194e9832ee0683d74a94cd3b38120d8c4e1f`, the automated
+inventory covers 97 source modules and checks 2,401 declarations, including
+2,129 theorems, originating in 96 modules (`Main` has no declarations).
+The supplementary named report contains 804 explicit checks. The allowlist
+repair changes the gate, not that theorem surface; subsequent runs print their
+own census instead of relying on these historical counts.
 
 At theorem-surface commit `1570138`, `RequestProject/Main.lean` imports 77
 project modules and `audit/AxiomAudit.lean` contains 597 explicit
