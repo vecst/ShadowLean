@@ -1015,3 +1015,10 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7A1.scalar_log_derivative
 #print axioms SphericalProofRequest7A1.product_tangency
 #print axioms SphericalProofRequest7A1.equator_witness
+
+-- Spherical repair 7A.2: full logarithm and actual composition derivative
+#print axioms SphericalProofRequest7A2.polar_branch
+#print axioms SphericalProofRequest7A2.base_value
+#print axioms SphericalProofRequest7A2.log_derivative
+#print axioms SphericalProofRequest7A2.composition_derivative
+#print axioms SphericalProofRequest7A2.actions_and_equator
