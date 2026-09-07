@@ -1029,3 +1029,10 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7A3.coordinate_identities
 #print axioms SphericalProofRequest7A3.composition_factorization
 #print axioms SphericalProofRequest7A3.radial_and_equator
+
+-- Spherical repair 7B.1: L2 ambient geometry and the moving frame
+#print axioms SphericalProofRequest7B1.ambient_metric
+#print axioms SphericalProofRequest7B1.level_and_projection
+#print axioms SphericalProofRequest7B1.frame_isometry
+#print axioms SphericalProofRequest7B1.projected_frame_derivative
+#print axioms SphericalProofRequest7B1.lifted_derivatives
