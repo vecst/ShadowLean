@@ -1007,3 +1007,11 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_bounded_jointCenterGuardScore
 #print axioms SilverFiniteRow.eventually_jointCenterGuardRow_guards
 #print axioms SilverFiniteRow.eventually_jointCenterGuardRow_innerScale_lower
+
+-- Spherical repair 7A.1: exponential origin and actual product derivative
+#print axioms SphericalProofRequest7A1.origin_and_unit
+#print axioms SphericalProofRequest7A1.exp_derivative_zero
+#print axioms SphericalProofRequest7A1.product_derivative
+#print axioms SphericalProofRequest7A1.scalar_log_derivative
+#print axioms SphericalProofRequest7A1.product_tangency
+#print axioms SphericalProofRequest7A1.equator_witness

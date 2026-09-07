@@ -95,6 +95,7 @@ import RequestProject.IFFTSublatticeConvolution
 import RequestProject.IFFTLogSublatticeBridge
 import RequestProject.IFFTLogSublatticeGeneric
 import RequestProject.SilverCrossover
+import RequestProject.SphericalProductDifferential
 
 open scoped BigOperators
 open scoped Real
