@@ -1022,3 +1022,10 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7A2.log_derivative
 #print axioms SphericalProofRequest7A2.composition_derivative
 #print axioms SphericalProofRequest7A2.actions_and_equator
+
+-- Spherical repair 7A.3: independent exponential differential and coordinate factorization
+#print axioms SphericalProofRequest7A3.exp_derivative
+#print axioms SphericalProofRequest7A3.jacobi_inverse
+#print axioms SphericalProofRequest7A3.coordinate_identities
+#print axioms SphericalProofRequest7A3.composition_factorization
+#print axioms SphericalProofRequest7A3.radial_and_equator

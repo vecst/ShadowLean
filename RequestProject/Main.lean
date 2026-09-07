@@ -97,6 +97,7 @@ import RequestProject.IFFTLogSublatticeGeneric
 import RequestProject.SilverCrossover
 import RequestProject.SphericalProductDifferential
 import RequestProject.SphericalFullLogarithm
+import RequestProject.SphericalExpFactorization
 
 open scoped BigOperators
 open scoped Real
