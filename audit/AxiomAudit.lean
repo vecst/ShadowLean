@@ -1044,3 +1044,9 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7B2.metric_compatibility
 #print axioms SphericalProofRequest7B2.bracket_and_torsion
 #print axioms SphericalProofRequest7B2.along_curve_and_frame
+
+-- Spherical repair 7B.3: uniqueness and radial parallel transport
+#print axioms SphericalProofRequest7B3.along_metric
+#print axioms SphericalProofRequest7B3.parallel_uniqueness
+#print axioms SphericalProofRequest7B3.radial_characterization
+#print axioms SphericalProofRequest7B3.radial_transport

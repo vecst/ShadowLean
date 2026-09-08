@@ -100,6 +100,7 @@ import RequestProject.SphericalFullLogarithm
 import RequestProject.SphericalExpFactorization
 import RequestProject.SphericalAmbientFrame
 import RequestProject.SphericalProjectedConnection
+import RequestProject.SphericalRadialTransport
 
 open scoped BigOperators
 open scoped Real
