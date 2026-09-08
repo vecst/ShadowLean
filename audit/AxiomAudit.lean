@@ -1036,3 +1036,11 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7B1.frame_isometry
 #print axioms SphericalProofRequest7B1.projected_frame_derivative
 #print axioms SphericalProofRequest7B1.lifted_derivatives
+
+-- Spherical repair 7B.2: projected connection on sphere-field restrictions
+#print axioms SphericalProofRequest7B2.curve_tangency
+#print axioms SphericalProofRequest7B2.extension_independence
+#print axioms SphericalProofRequest7B2.connection_laws
+#print axioms SphericalProofRequest7B2.metric_compatibility
+#print axioms SphericalProofRequest7B2.bracket_and_torsion
+#print axioms SphericalProofRequest7B2.along_curve_and_frame

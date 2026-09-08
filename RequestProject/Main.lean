@@ -99,6 +99,7 @@ import RequestProject.SphericalProductDifferential
 import RequestProject.SphericalFullLogarithm
 import RequestProject.SphericalExpFactorization
 import RequestProject.SphericalAmbientFrame
+import RequestProject.SphericalProjectedConnection
 
 open scoped BigOperators
 open scoped Real
