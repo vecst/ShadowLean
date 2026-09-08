@@ -1050,3 +1050,9 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7B3.parallel_uniqueness
 #print axioms SphericalProofRequest7B3.radial_characterization
 #print axioms SphericalProofRequest7B3.radial_transport
+
+-- Spherical repair 7B.4: angular potential, tangent gradient and projected Hessian
+#print axioms SphericalProofRequest7B4.potential_gradient
+#print axioms SphericalProofRequest7B4.radial_values
+#print axioms SphericalProofRequest7B4.angular_hessian
+#print axioms SphericalProofRequest7B4.composition_hessian

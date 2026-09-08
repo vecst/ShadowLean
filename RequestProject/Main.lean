@@ -101,6 +101,7 @@ import RequestProject.SphericalExpFactorization
 import RequestProject.SphericalAmbientFrame
 import RequestProject.SphericalProjectedConnection
 import RequestProject.SphericalRadialTransport
+import RequestProject.SphericalAngularPotential
 
 open scoped BigOperators
 open scoped Real
