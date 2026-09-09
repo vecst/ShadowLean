@@ -29,7 +29,7 @@ established there and are reused here.
   precisely because `F p` is assumed tangent.  Transparency note: the hypotheses `u, v ∈
   tangentPlane p`, `‖p‖ = 1` and `G p ∈ tangentPlane p` are not all needed by every conjunct
   (additivity and the Leibniz rule use neither the tangency of `u` and `v` nor that of `G p`;
-  `‖p‖ = 1` is used for the tangency conjunct and for absorbing `F p`).  They are retained
+  `‖p‖ = 1` is needed only for the tangency conjunct; absorbing `F p` in the Leibniz rule uses the tangency of `F p` alone, not the unit norm).  They are retained
   because the specification states them.
 * `metric_compatibility` (G4): the genuine Frechet derivative of `q ↦ ⟪F q, G q⟫`, which
   exists because `F` and `G` are differentiable at `p`, equals
