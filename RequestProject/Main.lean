@@ -102,6 +102,7 @@ import RequestProject.SphericalAmbientFrame
 import RequestProject.SphericalProjectedConnection
 import RequestProject.SphericalRadialTransport
 import RequestProject.SphericalAngularPotential
+import RequestProject.SphericalPathDistance
 
 open scoped BigOperators
 open scoped Real

@@ -1056,3 +1056,9 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7B4.radial_values
 #print axioms SphericalProofRequest7B4.angular_hessian
 #print axioms SphericalProofRequest7B4.composition_hessian
+
+-- Spherical repair 7B.5: intrinsic length distance (ambient L2 curve length infimum)
+#print axioms SphericalProofRequest7B5.angular_control
+#print axioms SphericalProofRequest7B5.path_lower_bound
+#print axioms SphericalProofRequest7B5.radial_minimizer
+#print axioms SphericalProofRequest7B5.north_distance
