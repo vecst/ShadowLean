@@ -1062,3 +1062,7 @@ import RequestProject.Main
 #print axioms SphericalProofRequest7B5.path_lower_bound
 #print axioms SphericalProofRequest7B5.radial_minimizer
 #print axioms SphericalProofRequest7B5.north_distance
+
+-- Spherical repair 7B.6 (Run 1): bundled tangent inclusion and equivalence
+#print axioms SphericalProofRequest7B6.tangent_inclusion
+#print axioms SphericalProofRequest7B6.tangent_equivalence
