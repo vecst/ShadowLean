@@ -105,6 +105,7 @@ import RequestProject.SphericalAngularPotential
 import RequestProject.SphericalPathDistance
 import RequestProject.SphericalBundledTangent
 import RequestProject.SphericalRoundMetric
+import RequestProject.SphericalBundledGradient
 
 open scoped BigOperators
 open scoped Real

@@ -1069,3 +1069,6 @@ import RequestProject.Main
 
 -- Spherical repair 7B.6 (Run 2): smooth round Riemannian metric
 #print axioms SphericalProofRequest7B6.round_metric
+
+-- Spherical repair 7B.6 (Run 3): bundled gradient of the angular potential
+#print axioms SphericalProofRequest7B6.bundled_gradient
