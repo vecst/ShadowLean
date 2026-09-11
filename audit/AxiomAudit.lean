@@ -1066,3 +1066,6 @@ import RequestProject.Main
 -- Spherical repair 7B.6 (Run 1): bundled tangent inclusion and equivalence
 #print axioms SphericalProofRequest7B6.tangent_inclusion
 #print axioms SphericalProofRequest7B6.tangent_equivalence
+
+-- Spherical repair 7B.6 (Run 2): smooth round Riemannian metric
+#print axioms SphericalProofRequest7B6.round_metric

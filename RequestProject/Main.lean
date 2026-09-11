@@ -104,6 +104,7 @@ import RequestProject.SphericalRadialTransport
 import RequestProject.SphericalAngularPotential
 import RequestProject.SphericalPathDistance
 import RequestProject.SphericalBundledTangent
+import RequestProject.SphericalRoundMetric
 
 open scoped BigOperators
 open scoped Real
