@@ -1007,3 +1007,20 @@ import RequestProject.Main
 #print axioms SilverFiniteRow.eventually_bounded_jointCenterGuardScore
 #print axioms SilverFiniteRow.eventually_jointCenterGuardRow_guards
 #print axioms SilverFiniteRow.eventually_jointCenterGuardRow_innerScale_lower
+
+-- Residue-packet channel dominance + generalized binomial biroot (arXiv:2508.14095, Conjecture 3.4)
+#print axioms ResidueSlices.polySlice_one_add_X_pow
+#print axioms ResidueSlices.polySlice_eq_sum_of_natDegree_lt
+#print axioms ResidueSlices.dagNode_eq_coeff
+#print axioms ResidueSlices.polySlice_roots_of_unity_filter
+#print axioms ResidueSlices.tendsto_polySlice_ratio_of_dominant_channel
+#print axioms ResidueSlices.tendsto_polySlice_ratio_of_dominance
+#print axioms ResidueSlices.polySlice_ratio_geometric_rate
+#print axioms ResidueSlices.nonneg_weights_channel_lt
+#print axioms ResidueSlices.nonneg_weights_channel_eq
+#print axioms ResidueSlices.nonneg_weights_dominance_iff
+#print axioms ResidueSlices.skipRow_slices
+#print axioms ResidueSlices.skipRow_ratio_not_tendsto
+#print axioms ResidueSlices.mixedSign_ratio_tendsto_neg
+#print axioms ResidueSlices.binomialBiroot_eq_slice_ratio
+#print axioms ResidueSlices.tendsto_binomialBiroot
