@@ -5,6 +5,7 @@ import RequestProject.QuantitativeSpectralGap
 import RequestProject.ExplicitSpectralRate
 import RequestProject.RpowCorollaries
 import RequestProject.BirootChannels
+import RequestProject.NonArchimedeanChannels
 import RequestProject.HeadTailZeta
 import RequestProject.SpinFactorCrossNorm
 import RequestProject.DiagonalZeta

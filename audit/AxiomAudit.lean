@@ -1024,3 +1024,10 @@ import RequestProject.Main
 #print axioms ResidueSlices.mixedSign_ratio_tendsto_neg
 #print axioms ResidueSlices.binomialBiroot_eq_slice_ratio
 #print axioms ResidueSlices.tendsto_binomialBiroot
+
+-- Non-archimedean channel rigidity: a strictly dominant residue-packet channel forces g = 2 at a finite place
+#print axioms ResidueSlices.NonArchimedean.valuation_one_sub_root_lt_one_iff
+#print axioms ResidueSlices.NonArchimedean.valuation_one_sub_distinct_in_tower
+#print axioms ResidueSlices.NonArchimedean.eq_two_of_dominant
+#print axioms ResidueSlices.NonArchimedean.dominant_two_iff
+#print axioms ResidueSlices.NonArchimedean.exists_dominant_two
